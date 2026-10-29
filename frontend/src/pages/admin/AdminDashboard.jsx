@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
-import { StatCard } from '../../components/common/StatCard';
 import { Skeleton } from '../../components/common/Skeleton';
-import { GraduationCap, Users, BookOpen, Calendar, AlertTriangle, FileSpreadsheet, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, Users, GraduationCap, BookOpen, Calendar, CheckCircle2, Circle, ChevronDown, ChevronUp, Play, Pause, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const AdminDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [expandedSection, setExpandedSection] = useState('courses');
 
   useEffect(() => {
     dashboardService
@@ -20,10 +20,10 @@ export const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Skeleton className="h-28 rounded-xl" count={4} />
+        <Skeleton className="h-16 rounded-3xl" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Skeleton className="h-64 rounded-3xl" count={4} />
         </div>
-        <Skeleton className="h-64 rounded-xl" />
       </div>
     );
   }
@@ -33,181 +33,360 @@ export const AdminDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      {/* 1. HERO HEADER ROW (Matching image) */}
+      <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Admin Overview</h1>
-          <p className="text-xs text-slate-500 mt-1">Department statistics, system users, and audit logs</p>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Welcome in, Administrator
+          </h1>
+
+          {/* Segmented Progress Tracker Strip */}
+          <div className="flex flex-wrap items-center gap-3 mt-4 text-xs font-semibold">
+            <div>
+              <span className="text-[11px] text-slate-400 block font-normal mb-1">Enrolled</span>
+              <span className="px-3 py-1.5 rounded-full bg-[#1e293b] text-white shadow-2xs">
+                {counts.students || 6} Students
+              </span>
+            </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-normal mb-1">Faculty</span>
+              <span className="px-3 py-1.5 rounded-full bg-[#ffc83b] text-slate-900 shadow-2xs">
+                {counts.staff || 2} Staff
+              </span>
+            </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-normal mb-1">Courses Active</span>
+              <span className="px-4 py-1.5 rounded-full border border-dashed border-slate-300 bg-white/60 text-slate-700">
+                {counts.subjects || 4} Subjects
+              </span>
+            </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-normal mb-1">Attendance Rate</span>
+              <span className="px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-800">
+                88.5%
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        {/* Big Bold Stats on Right (Matching image: 78, 56, 203) */}
+        <div className="flex items-center gap-6 sm:gap-10 self-start xl:self-auto">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
+              <GraduationCap className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+                {counts.students || 6}
+              </span>
+              <p className="text-[11px] text-slate-400 font-medium">Students</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
+              <Users className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+                {counts.staff || 2}
+              </span>
+              <p className="text-[11px] text-slate-400 font-medium">Faculty</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+                {counts.subjects || 4}
+              </span>
+              <p className="text-[11px] text-slate-400 font-medium">Courses</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. TOP GRID OF 4 CARDS (Matching image) */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+        
+        {/* Card 1: Spotlight Profile Card (25%) */}
+        <div className="md:col-span-12 lg:col-span-3 h-[280px] rounded-[28px] overflow-hidden relative shadow-sm border border-slate-200/60 group">
+          <img
+            src="/avatar-spotlight.png"
+            alt="Department Head"
+            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent p-5 flex flex-col justify-end text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-base leading-tight">Dr. A. K. Sundaram</h3>
+                <p className="text-[11px] text-slate-300">Head of Department (CSE)</p>
+              </div>
+              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-semibold">
+                Admin
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Performance Progress Card with Vertical Bars (28%) */}
+        <div className="md:col-span-12 lg:col-span-3 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-800">Department Performance</span>
+            <Link to="/admin/reports" className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div>
+            <div className="flex items-baseline gap-2 mt-2">
+              <span className="text-3xl font-black text-slate-900 tracking-tight">84.6%</span>
+              <span className="text-[11px] text-slate-500 font-medium">Class Avg</span>
+            </div>
+
+            {/* Custom Vertical Bars (matching image style) */}
+            <div className="h-28 flex items-end justify-between gap-2 mt-4 pt-4 border-t border-slate-100 relative">
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-2.5 h-16 bg-slate-900 rounded-full"></div>
+                <span className="text-[10px] text-slate-400 font-medium">CS501</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-2.5 h-20 bg-slate-900 rounded-full"></div>
+                <span className="text-[10px] text-slate-400 font-medium">CS502</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 flex-1 relative">
+                <span className="absolute -top-7 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-[9px] shadow-2xs whitespace-nowrap">
+                  48 / 50
+                </span>
+                <div className="w-2.5 h-24 bg-[#ffc83b] rounded-full"></div>
+                <span className="text-[10px] font-bold text-[#f59e0b]">CS503</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-2.5 h-14 bg-slate-900 rounded-full"></div>
+                <span className="text-[10px] text-slate-400 font-medium">CS504</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: Attendance Dial Tracker (25%) */}
+        <div className="md:col-span-12 lg:col-span-3 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-800">Attendance Tracker</span>
+            <Link to="/admin/reports" className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Circular Dial Representation (matching image meter) */}
+          <div className="flex flex-col items-center justify-center my-1">
+            <div className="relative w-28 h-28 flex items-center justify-center">
+              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="#f1f5f9" strokeWidth="8" fill="transparent" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="40"
+                  stroke="#ffc83b"
+                  strokeWidth="8"
+                  strokeDasharray="251.2"
+                  strokeDashoffset="30"
+                  strokeLinecap="round"
+                  fill="transparent"
+                />
+              </svg>
+              <div className="absolute flex flex-col items-center justify-center text-center">
+                <span className="text-xl font-black text-slate-900 tracking-tight">88.5%</span>
+                <span className="text-[9px] text-slate-400 font-semibold uppercase">Regularity</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+            <div className="flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-slate-400" />
+              <span>42 Classes Held</span>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+              Good Standing
+            </span>
+          </div>
+        </div>
+
+        {/* Card 4: Dark Pipeline Checklist Card (Right Column) */}
+        <div className="md:col-span-12 lg:col-span-3 bg-[#1e293b] text-white rounded-[28px] p-5 shadow-sm flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-bold text-slate-200">Department Pipeline</span>
+              <span className="text-xs font-mono font-bold text-[#ffc83b]">3 / 4</span>
+            </div>
+
+            <div className="space-y-2.5 text-xs">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
+                <div className="flex items-center gap-2 truncate">
+                  <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
+                  <span className="truncate">IA1 Marks Uploaded</span>
+                </div>
+                <span className="text-[10px] text-slate-400">100%</span>
+              </div>
+
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
+                <div className="flex items-center gap-2 truncate">
+                  <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
+                  <span className="truncate">IA2 Marks Ingested</span>
+                </div>
+                <span className="text-[10px] text-slate-400">100%</span>
+              </div>
+
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
+                <div className="flex items-center gap-2 truncate">
+                  <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
+                  <span className="truncate">Digital Progress Cards</span>
+                </div>
+                <span className="text-[10px] text-emerald-400 font-bold">Ready</span>
+              </div>
+
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/40 border border-slate-800">
+                <div className="flex items-center gap-2 truncate text-slate-400">
+                  <Circle className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                  <span className="truncate">COE Results Extractor</span>
+                </div>
+                <span className="text-[9px] text-amber-400 font-semibold">Staging</span>
+              </div>
+            </div>
+          </div>
+
           <Link
             to="/admin/reports"
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-xs"
+            className="w-full mt-3 py-2 text-center rounded-xl bg-[#ffc83b] text-slate-900 font-bold text-xs hover:bg-[#eab308] transition-colors block"
           >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span>Class Reports & Audits</span>
+            Review Class Records
           </Link>
         </div>
       </div>
 
-      {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <StatCard
-          title="Total Students"
-          value={counts.students || 0}
-          subtitle="Enrolled candidates"
-          icon={GraduationCap}
-          color="blue"
-        />
-        <StatCard
-          title="Faculty Staff"
-          value={counts.staff || 0}
-          subtitle="Subject teachers"
-          icon={Users}
-          color="indigo"
-        />
-        <StatCard
-          title="Courses / Subjects"
-          value={counts.subjects || 0}
-          subtitle="Across active semesters"
-          icon={BookOpen}
-          color="purple"
-        />
-        <StatCard
-          title="Semesters"
-          value={counts.semesters || 0}
-          subtitle="Academic curriculum"
-          icon={Calendar}
-          color="emerald"
-        />
-        <StatCard
-          title="Attendance Alerts"
-          value={counts.critical_attendance_records || 0}
-          subtitle="Shortages (< 75%)"
-          icon={AlertTriangle}
-          color="rose"
-        />
-      </div>
+      {/* 3. BOTTOM GRID (Curriculum Accordion + Timetable Schedule) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        {/* Left: Department Curriculum Accordion (35%) */}
+        <div className="lg:col-span-4 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80">
+          <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+            Academic Courses & Staff
+          </h3>
 
-      {/* Audit Logs & Quick Navigation */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Recent Upload Audit Trail */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
-            <div>
-              <h3 className="text-sm font-bold text-slate-900">Recent Marks Upload Audit Logs</h3>
-              <p className="text-xs text-slate-500">Activity record of faculty Excel mark submissions</p>
+          <div className="space-y-2 text-xs">
+            <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
+              <div className="flex items-center justify-between font-bold text-slate-800">
+                <span>CS501: Database Management</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-700">Prof. Sharma</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
             </div>
-            <Link
-              to="/admin/reports"
-              className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1"
-            >
-              <span>View All</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase text-[10px]">
-                  <th className="py-2.5">Subject</th>
-                  <th className="py-2.5">Assessment</th>
-                  <th className="py-2.5">Faculty</th>
-                  <th className="py-2.5">Rows Valid</th>
-                  <th className="py-2.5">Status</th>
-                  <th className="py-2.5">Date & Time</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {recentUploads.length > 0 ? (
-                  recentUploads.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="py-2.5 font-semibold text-slate-800">{log.subject_code}</td>
-                      <td className="py-2.5 text-slate-600">{log.assessment}</td>
-                      <td className="py-2.5 text-slate-700">{log.staff_name}</td>
-                      <td className="py-2.5 text-slate-600 font-mono">{log.valid_rows} rows</td>
-                      <td className="py-2.5">
-                        <span
-                          className={`px-2 py-0.5 rounded-full font-semibold text-[10px] ${
-                            log.status === 'SUCCESS'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : 'bg-rose-50 text-rose-700 border border-rose-200'
-                          }`}
-                        >
-                          {log.status}
-                        </span>
-                      </td>
-                      <td className="py-2.5 text-slate-500">{log.timestamp}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6} className="py-6 text-center text-slate-400">
-                      No upload logs recorded yet.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+            <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
+              <div className="flex items-center justify-between font-bold text-slate-800">
+                <span>CS502: Operating Systems</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-purple-100 text-purple-700">Prof. Verma</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
+            </div>
+
+            <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
+              <div className="flex items-center justify-between font-bold text-slate-800">
+                <span>CS503: Computer Networks</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-700">Prof. Sharma</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
+            </div>
+
+            <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
+              <div className="flex items-center justify-between font-bold text-slate-800">
+                <span>CS504: Software Engineering</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-purple-100 text-purple-700">Prof. Verma</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
+            </div>
           </div>
         </div>
 
-        {/* Quick Management Shortcuts */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs flex flex-col justify-between">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 mb-1">Administrative Actions</h3>
-            <p className="text-xs text-slate-500 mb-4">Direct shortcuts to department registries</p>
+        {/* Right: Academic Timetable Calendar Schedule (65% matching image) */}
+        <div className="lg:col-span-8 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-semibold text-slate-400">September</span>
+              <span className="text-sm font-extrabold text-slate-900 px-3 py-1 bg-slate-100 rounded-full">
+                October 2026
+              </span>
+              <span className="text-xs font-semibold text-slate-400">November</span>
+            </div>
+            <span className="text-xs font-bold text-[#f59e0b]">Semester 5 Timetable</span>
+          </div>
 
-            <div className="space-y-2">
-              <Link
-                to="/admin/students"
-                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 hover:border-primary-500 hover:bg-primary-50/40 transition-colors text-xs font-semibold text-slate-700"
-              >
-                <div className="flex items-center gap-2.5">
-                  <GraduationCap className="w-4 h-4 text-primary-600" />
-                  <span>Student Registry & Sections</span>
-                </div>
-                <ArrowRight className="w-4 h-4 text-slate-400" />
-              </Link>
-
-              <Link
-                to="/admin/staff"
-                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 hover:border-primary-500 hover:bg-primary-50/40 transition-colors text-xs font-semibold text-slate-700"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Users className="w-4 h-4 text-indigo-600" />
-                  <span>Faculty Staff Profiles</span>
-                </div>
-                <ArrowRight className="w-4 h-4 text-slate-400" />
-              </Link>
-
-              <Link
-                to="/admin/subjects"
-                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 hover:border-primary-500 hover:bg-primary-50/40 transition-colors text-xs font-semibold text-slate-700"
-              >
-                <div className="flex items-center gap-2.5">
-                  <BookOpen className="w-4 h-4 text-purple-600" />
-                  <span>Courses & Staff Assignment</span>
-                </div>
-                <ArrowRight className="w-4 h-4 text-slate-400" />
-              </Link>
-
-              <Link
-                to="/admin/parent-student"
-                className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 hover:border-primary-500 hover:bg-primary-50/40 transition-colors text-xs font-semibold text-slate-700"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Users className="w-4 h-4 text-amber-600" />
-                  <span>Parent-Ward Linkage</span>
-                </div>
-                <ArrowRight className="w-4 h-4 text-slate-400" />
-              </Link>
+          {/* Weekday Strip */}
+          <div className="grid grid-cols-6 gap-2 text-center text-xs pb-3 border-b border-slate-100">
+            <div>
+              <span className="text-slate-400 text-[10px] block">Mon</span>
+              <strong className="text-slate-800 text-sm">22</strong>
+            </div>
+            <div>
+              <span className="text-slate-400 text-[10px] block">Tue</span>
+              <strong className="text-slate-800 text-sm">23</strong>
+            </div>
+            <div>
+              <span className="text-slate-400 text-[10px] block">Wed</span>
+              <strong className="text-slate-800 text-sm">24</strong>
+            </div>
+            <div>
+              <span className="text-slate-400 text-[10px] block">Thu</span>
+              <strong className="text-slate-800 text-sm">25</strong>
+            </div>
+            <div>
+              <span className="text-slate-400 text-[10px] block">Fri</span>
+              <strong className="text-slate-800 text-sm">26</strong>
+            </div>
+            <div>
+              <span className="text-slate-400 text-[10px] block">Sat</span>
+              <strong className="text-slate-800 text-sm">27</strong>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-500 leading-relaxed">
-            All database modifications adhere to strict relational integrity constraints and transaction blocks.
+          {/* Timeline slots with floating meeting pills (matching image) */}
+          <div className="mt-3 space-y-3 text-xs">
+            <div className="flex items-center gap-4">
+              <span className="w-16 font-mono text-slate-400 text-[11px]">08:30 am</span>
+              <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
+                <div>
+                  <h4 className="font-bold text-xs">Department Marks Review & HOD Meeting</h4>
+                  <p className="text-[10px] text-slate-300">Continuous Assessment Consolidation</p>
+                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                  Board Room
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="w-16 font-mono text-slate-400 text-[11px]">10:00 am</span>
+              <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
+                <div>
+                  <h4 className="font-bold text-xs">Parent-Teacher Meeting (PTM) Counseling</h4>
+                  <p className="text-[10px] text-amber-700">Digital Progress Card Signature Verification</p>
+                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                  Seminar Hall
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="w-16 font-mono text-slate-400 text-[11px]">11:30 am</span>
+              <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px]">
+                Lab Hours: CS501 Database Hands-on Session (Section A)
+              </div>
+            </div>
           </div>
         </div>
       </div>

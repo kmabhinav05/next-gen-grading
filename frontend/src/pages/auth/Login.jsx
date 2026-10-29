@@ -1,28 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { GraduationCap, Lock, User, ArrowRight, ShieldCheck, UserCheck, HeartHandshake } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck, UserCheck, GraduationCap, HeartHandshake, X } from 'lucide-react';
 
 export const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!username || !password) return;
-    setSubmitting(true);
-    try {
-      const user = await login(username, password);
-      redirectByRole(user.role);
-    } catch (err) {
-      // toast shown in context
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const redirectByRole = (role) => {
     switch (role) {
@@ -43,6 +30,20 @@ export const Login = () => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!username || !password) return;
+    setSubmitting(true);
+    try {
+      const user = await login(username, password);
+      redirectByRole(user.role);
+    } catch (err) {
+      // Toast displayed by AuthContext
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleQuickLogin = async (u, p) => {
     setUsername(u);
     setPassword(p);
@@ -57,125 +58,161 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary-950 to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Card */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8 border border-white/10 backdrop-blur-sm">
-          {/* Brand header */}
-          <div className="text-center mb-8">
-            <img
-              src="/logo.png"
-              alt="Next Gen Grading"
-              className="h-12 mx-auto mb-2 object-contain"
-            />
-            <p className="text-xs text-slate-500 mt-1">Academic Department Assistance & Progress System</p>
+    <div className="min-h-screen bg-[#94a3b8] flex items-center justify-center p-4 sm:p-6 md:p-10 font-sans">
+      {/* Outer Card with rounded corners and warm glow */}
+      <div className="relative w-full max-w-[1000px] min-h-[580px] bg-gradient-to-br from-[#fbf8f1] via-[#fbf7ee] to-[#fef3c7]/60 rounded-[36px] shadow-2xl p-6 sm:p-8 md:p-10 flex flex-col justify-between border border-white/60">
+        
+        {/* Top bar with Brand Pill and Top Right Close button */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white/80 backdrop-blur-sm shadow-2xs">
+            <img src="/logo.png" alt="Next Gen Grading" className="h-5 object-contain" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                Username / Reg No
-              </label>
-              <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <div className="w-8 h-8 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-slate-500 shadow-2xs cursor-default">
+            <X className="w-4 h-4" />
+          </div>
+        </div>
+
+        {/* Main Grid: Form Left (45%) & Showcase Right (55%) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1 my-2">
+          
+          {/* Left Form Column */}
+          <div className="lg:col-span-5 max-w-md w-full mx-auto flex flex-col justify-center">
+            <div className="text-left mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Sign in to your account
+              </h1>
+              <p className="text-xs text-slate-500 mt-1.5">
+                Next Gen Grading • Academic Department System
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1 pl-1">
+                  Username or Register Number
+                </label>
                 <input
                   type="text"
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="e.g. admin, staff_sharma, student1"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+                  className="w-full px-5 py-3 text-sm bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#f59e0b]/40 focus:border-[#f59e0b] transition-all shadow-2xs placeholder:text-slate-400 text-slate-800"
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
-                />
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1 pl-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full pl-5 pr-12 py-3 text-sm bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#f59e0b]/40 focus:border-[#f59e0b] transition-all shadow-2xs placeholder:text-slate-400 text-slate-800"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-3.5 px-6 bg-[#ffc83b] hover:bg-[#f5b82e] active:scale-[0.99] text-slate-900 font-bold rounded-2xl transition-all shadow-sm hover:shadow text-sm disabled:opacity-60 mt-2"
+              >
+                {submitting ? 'Authenticating...' : 'Submit'}
+              </button>
+            </form>
+
+            {/* Quick Demo Role Selector Pills */}
+            <div className="mt-6 pt-5 border-t border-slate-200/60">
+              <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5 pl-1">
+                Demo Quick Logins
+              </p>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => handleQuickLogin('admin', 'admin123')}
+                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
+                >
+                  <ShieldCheck className="w-4 h-4 text-purple-600 flex-shrink-0" />
+                  <div className="text-left truncate">
+                    <div className="font-semibold text-slate-900 leading-none">Admin</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">admin123</div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickLogin('staff_sharma', 'staff123')}
+                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
+                >
+                  <UserCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <div className="text-left truncate">
+                    <div className="font-semibold text-slate-900 leading-none">Faculty</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">staff123</div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickLogin('student1', 'student123')}
+                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
+                >
+                  <GraduationCap className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <div className="text-left truncate">
+                    <div className="font-semibold text-slate-900 leading-none">Student</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">student123</div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickLogin('parent_patel', 'parent123')}
+                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
+                >
+                  <HeartHandshake className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <div className="text-left truncate">
+                    <div className="font-semibold text-slate-900 leading-none">Parent</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">parent123</div>
+                  </div>
+                </button>
               </div>
             </div>
+          </div>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-500/25 flex items-center justify-center gap-2 text-sm disabled:opacity-50 mt-2"
-            >
-              <span>{submitting ? 'Authenticating...' : 'Sign In to Portal'}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
-
-          {/* Quick Demo Login Buttons */}
-          <div className="mt-8 pt-6 border-t border-slate-100">
-            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center mb-3">
-              One-Click Demo Roles
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('admin', 'admin123')}
-                className="p-2 rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50/60 text-slate-700 text-left transition-colors flex items-center gap-2"
-              >
-                <ShieldCheck className="w-4 h-4 text-purple-600 flex-shrink-0" />
-                <div className="truncate">
-                  <div className="font-semibold text-slate-900 leading-none">Admin</div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">admin123</div>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('staff_sharma', 'staff123')}
-                className="p-2 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/60 text-slate-700 text-left transition-colors flex items-center gap-2"
-              >
-                <UserCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                <div className="truncate">
-                  <div className="font-semibold text-slate-900 leading-none">Staff</div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">Prof. Sharma</div>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('student1', 'student123')}
-                className="p-2 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/60 text-slate-700 text-left transition-colors flex items-center gap-2"
-              >
-                <GraduationCap className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <div className="truncate">
-                  <div className="font-semibold text-slate-900 leading-none">Student</div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">Aarav (21CS001)</div>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('parent_patel', 'parent123')}
-                className="p-2 rounded-xl border border-slate-200 hover:border-amber-300 hover:bg-amber-50/60 text-slate-700 text-left transition-colors flex items-center gap-2"
-              >
-                <HeartHandshake className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                <div className="truncate">
-                  <div className="font-semibold text-slate-900 leading-none">Parent</div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">Aarav's Father</div>
-                </div>
-              </button>
+          {/* Right Showcase Column (Visual Card from image) */}
+          <div className="lg:col-span-7 hidden lg:block h-full">
+            <div className="relative w-full h-[480px] rounded-[30px] overflow-hidden shadow-lg border border-slate-200/50 bg-slate-900">
+              <img
+                src="/login-showcase.png"
+                alt="Academic Collaboration Showcase"
+                className="w-full h-full object-cover object-center"
+              />
             </div>
           </div>
         </div>
 
-        <p className="text-center text-xs text-slate-500 mt-6">
-          Next Gen Grading &copy; 2026 Academic Department Assistance
-        </p>
+        {/* Footer row */}
+        <div className="flex items-center justify-between pt-4 border-t border-slate-200/50 text-[11px] text-slate-500">
+          <div>
+            Need assistance? <span className="underline cursor-pointer font-medium text-slate-700">Contact Department Office</span>
+          </div>
+          <div>
+            <span className="underline cursor-pointer font-medium text-slate-700">Terms & Academic Regulations</span>
+          </div>
+        </div>
       </div>
     </div>
   );

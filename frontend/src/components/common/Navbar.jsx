@@ -49,9 +49,14 @@ export const Navbar = ({ onToggleSidebar }) => {
         >
           <Menu className="w-5 h-5" />
         </button>
-        <div className="hidden sm:block">
-          <h2 className="text-sm font-semibold text-slate-800">Department of Computer Science & Engineering</h2>
-          <p className="text-xs text-slate-500">Internal Assessment & Attendance Management System</p>
+        <img
+          src="/logo-transparent.png"
+          alt="Next Gen Grading"
+          className="h-7 object-contain hidden sm:block mr-1"
+        />
+        <div className="hidden md:block border-l border-slate-200 pl-3">
+          <h2 className="text-sm font-semibold text-slate-800 leading-tight">Department of Computer Science & Engineering</h2>
+          <p className="text-[11px] text-slate-500">Internal Assessment & Attendance Management System</p>
         </div>
       </div>
 

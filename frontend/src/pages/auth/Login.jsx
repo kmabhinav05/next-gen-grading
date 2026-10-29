@@ -63,10 +63,11 @@ export const Login = () => {
         <div className="bg-white rounded-3xl shadow-2xl p-8 border border-white/10 backdrop-blur-sm">
           {/* Brand header */}
           <div className="text-center mb-8">
-            <div className="w-14 h-14 bg-gradient-to-tr from-primary-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-3 shadow-lg shadow-primary-600/30">
-              <GraduationCap className="w-8 h-8" />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Next Gen Grading</h1>
+            <img
+              src="/logo.png"
+              alt="Next Gen Grading"
+              className="h-12 mx-auto mb-2 object-contain"
+            />
             <p className="text-xs text-slate-500 mt-1">Academic Department Assistance & Progress System</p>
           </div>
 

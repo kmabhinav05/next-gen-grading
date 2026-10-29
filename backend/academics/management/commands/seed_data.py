@@ -56,11 +56,33 @@ class Command(BaseCommand):
             )
             staff1_user.set_password('staff123')
             staff1_user.save()
+
+            # Also allow username 'staff1' for quick demo login
+            staff1_alias, _ = User.objects.get_or_create(
+                username='staff1',
+                defaults={
+                    'email': 'staff1@college.edu',
+                    'first_name': 'Arjun',
+                    'last_name': 'Menon',
+                    'role': 'STAFF',
+                    'is_staff': True,
+                    'phone_number': '+91 9876500099',
+                }
+            )
+            staff1_alias.set_password('staff123')
+            staff1_alias.save()
             staff1, _ = Staff.objects.get_or_create(
                 user=staff1_user,
                 defaults={
                     'department': 'Computer Science & Engineering',
                     'designation': 'Associate Professor'
+                }
+            )
+            Staff.objects.get_or_create(
+                user=staff1_alias,
+                defaults={
+                    'department': 'Computer Science & Engineering',
+                    'designation': 'Senior Teacher'
                 }
             )
 
@@ -175,8 +197,25 @@ class Command(BaseCommand):
             )
             p1_user.set_password('parent123')
             p1_user.save()
+
+            # Also allow username 'parent1' for quick demo login
+            p1_alias, _ = User.objects.get_or_create(
+                username='parent1',
+                defaults={
+                    'email': 'parent1@college.edu',
+                    'first_name': 'Nadia',
+                    'last_name': 'Khan',
+                    'role': 'PARENT',
+                    'phone_number': '+91 9822114499'
+                }
+            )
+            p1_alias.set_password('parent123')
+            p1_alias.save()
+
             parent1, _ = Parent.objects.get_or_create(user=p1_user, defaults={'relationship': 'Father'})
+            parent_alias_obj, _ = Parent.objects.get_or_create(user=p1_alias, defaults={'relationship': 'Mother'})
             ParentStudent.objects.get_or_create(parent=parent1, student=created_students[0]) # Aarav
+            ParentStudent.objects.get_or_create(parent=parent_alias_obj, student=created_students[0]) # Aarav
 
             p2_user, _ = User.objects.get_or_create(
                 username='parent_sen',

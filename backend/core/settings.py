@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-nextgen-grading-super-secret-key-2026')
 DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -68,20 +68,43 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database configuration (MySQL accessed ONLY through Django ORM)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME', default='nextgen_grading'),
-        'USER': config('DB_USER', default='root'),
-        'PASSWORD': config('DB_PASSWORD', default='12345'),
-        'HOST': config('DB_HOST', default='127.0.0.1'),
-        'PORT': config('DB_PORT', default='3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+IS_VERCEL = 'VERCEL' in os.environ
+USE_SQLITE = config('USE_SQLITE', default=False, cast=bool) or (IS_VERCEL and not os.environ.get('DB_HOST'))
+
+if USE_SQLITE:
+    import shutil
+    if IS_VERCEL:
+        db_target = Path('/tmp/db.sqlite3')
+        orig_db = BASE_DIR / 'db.sqlite3'
+        if orig_db.exists() and not db_target.exists():
+            try:
+                shutil.copyfile(orig_db, db_target)
+            except Exception as e:
+                pass
+    else:
+        db_target = BASE_DIR / 'db.sqlite3'
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(db_target),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('DB_NAME', default='nextgen_grading'),
+            'USER': config('DB_USER', default='root'),
+            'PASSWORD': config('DB_PASSWORD', default='12345'),
+            'HOST': config('DB_HOST', default='127.0.0.1'),
+            'PORT': config('DB_PORT', default='3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+        }
+    }
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
@@ -132,9 +155,5 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = config(
-    'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000',
-    cast=Csv()
-)
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True

@@ -113,23 +113,12 @@ export const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
         
         {/* Card 1: Spotlight Profile Card (25%) */}
-        <div className="md:col-span-12 lg:col-span-3 h-[280px] rounded-[28px] overflow-hidden relative shadow-sm border border-slate-200/60 group">
+        <div className="md:col-span-12 lg:col-span-3 min-h-[290px] rounded-[28px] overflow-hidden shadow-2xs border border-slate-200/80 group flex items-center justify-center relative">
           <img
-            src="/avatar-spotlight.png"
-            alt="Department Head"
-            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+            src="/profile-admin.png"
+            alt="Meera Nair - Portal Administrator"
+            className="w-full h-full object-cover object-bottom group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent p-5 flex flex-col justify-end text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-base leading-tight">Dr. A. K. Sundaram</h3>
-                <p className="text-[11px] text-slate-300">Head of Department (CSE)</p>
-              </div>
-              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-semibold">
-                Admin
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* Card 2: Performance Progress Card with Vertical Bars (28%) */}

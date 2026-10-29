@@ -146,23 +146,12 @@ export const StudentDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
         
         {/* Card 1: Student Spotlight Profile Card (25%) */}
-        <div className="md:col-span-12 lg:col-span-3 h-[280px] rounded-[28px] overflow-hidden relative shadow-sm border border-slate-200/60 group">
+        <div className="md:col-span-12 lg:col-span-3 min-h-[290px] rounded-[28px] overflow-hidden shadow-2xs border border-slate-200/80 group flex items-center justify-center relative">
           <img
-            src="/avatar-spotlight.png"
-            alt="Student Avatar"
-            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+            src="/profile-student.png"
+            alt="Ayaan Khan - Student"
+            className="w-full h-full object-cover object-bottom group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent p-5 flex flex-col justify-end text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-base leading-tight">{student.name}</h3>
-                <p className="text-[11px] text-slate-300 font-mono">{student.reg_no}</p>
-              </div>
-              <span className="px-3 py-1 rounded-full bg-[#ffc83b] text-slate-950 text-xs font-bold shadow-xs">
-                Student
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* Card 2: Performance Progress Card with Vertical Bars (28%) */}

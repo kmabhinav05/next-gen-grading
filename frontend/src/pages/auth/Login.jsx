@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Eye, EyeOff, ShieldCheck, UserCheck, GraduationCap, HeartHandshake, X } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck, UserCheck, GraduationCap, HeartHandshake } from 'lucide-react';
 
 export const Login = () => {
   const [username, setUsername] = useState('');
@@ -38,7 +38,7 @@ export const Login = () => {
       const user = await login(username, password);
       redirectByRole(user.role);
     } catch (err) {
-      // Toast displayed by AuthContext
+      // Toast notification handled by AuthContext
     } finally {
       setSubmitting(false);
     }
@@ -58,160 +58,146 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#94a3b8] flex items-center justify-center p-4 sm:p-6 md:p-10 font-sans">
-      {/* Outer Card with rounded corners and warm glow */}
-      <div className="relative w-full max-w-[1000px] min-h-[580px] bg-gradient-to-br from-[#fbf8f1] via-[#fbf7ee] to-[#fef3c7]/60 rounded-[36px] shadow-2xl p-6 sm:p-8 md:p-10 flex flex-col justify-between border border-white/60">
+    <div className="min-h-screen bg-[#edf0f5] flex items-center justify-center p-4 sm:p-6 md:p-8 font-sans">
+      {/* Outer Card with 40px rounded corners and soft drop shadow */}
+      <div className="w-full max-w-[1020px] bg-white rounded-[38px] shadow-xl p-5 sm:p-7 md:p-8 border border-slate-100 flex flex-col lg:flex-row gap-8 lg:gap-10 items-center justify-between">
         
-        {/* Top bar with Brand Pill and Top Right Close button */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-slate-300/80 bg-white/90 backdrop-blur-sm shadow-2xs">
-            <img src="/logo.png" alt="Next Gen Grading" className="w-7 h-7 object-contain drop-shadow-2xs" />
-            <span className="text-xs font-bold text-slate-800 tracking-tight">Next Gen Grading</span>
-          </div>
-
-          <div className="w-8 h-8 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-slate-500 shadow-2xs cursor-default">
-            <X className="w-4 h-4" />
-          </div>
+        {/* Left Orange Banner Panel (Matching reference) */}
+        <div className="w-full lg:w-[48%] h-[380px] sm:h-[460px] lg:h-[550px] rounded-[30px] overflow-hidden shadow-sm flex-shrink-0 relative bg-gradient-to-br from-[#ff6b2b] to-[#ff8f3d]">
+          <img
+            src="/login-banner.png"
+            alt="Next Gen Grading Platform"
+            className="w-full h-full object-cover object-center"
+          />
         </div>
 
-        {/* Main Grid: Form Left (45%) & Showcase Right (55%) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1 my-2">
+        {/* Right Form Column (Matching reference) */}
+        <div className="w-full lg:w-[50%] flex flex-col justify-center px-2 sm:px-6 py-2">
           
-          {/* Left Form Column */}
-          <div className="lg:col-span-5 max-w-md w-full mx-auto flex flex-col justify-center">
-            <div className="text-left mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                Sign in to your account
-              </h1>
-              <p className="text-xs text-slate-500 mt-1.5">
-                Next Gen Grading • Academic Department System
-              </p>
+          {/* Brand Logo Header */}
+          <div className="flex items-center gap-2.5 mb-6">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#ff6426] to-[#ff8533] flex items-center justify-center p-1.5 shadow-sm shadow-orange-500/20">
+              <img src="/logo.png" alt="Next Gen Grading" className="w-full h-full object-contain filter brightness-0 invert" />
             </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1 pl-1">
-                  Username or Register Number
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="e.g. admin, staff_sharma, student1"
-                  className="w-full px-5 py-3 text-sm bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#f59e0b]/40 focus:border-[#f59e0b] transition-all shadow-2xs placeholder:text-slate-400 text-slate-800"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1 pl-1">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
-                    className="w-full pl-5 pr-12 py-3 text-sm bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#f59e0b]/40 focus:border-[#f59e0b] transition-all shadow-2xs placeholder:text-slate-400 text-slate-800"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-3.5 px-6 bg-[#ffc83b] hover:bg-[#f5b82e] active:scale-[0.99] text-slate-900 font-bold rounded-2xl transition-all shadow-sm hover:shadow text-sm disabled:opacity-60 mt-2"
-              >
-                {submitting ? 'Authenticating...' : 'Submit'}
-              </button>
-            </form>
-
-            {/* Quick Demo Role Selector Pills */}
-            <div className="mt-6 pt-5 border-t border-slate-200/60">
-              <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5 pl-1">
-                Demo Quick Logins
-              </p>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('admin', 'admin123')}
-                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
-                >
-                  <ShieldCheck className="w-4 h-4 text-purple-600 flex-shrink-0" />
-                  <div className="text-left truncate">
-                    <div className="font-semibold text-slate-900 leading-none">Admin</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">admin123</div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('staff_sharma', 'staff123')}
-                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
-                >
-                  <UserCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                  <div className="text-left truncate">
-                    <div className="font-semibold text-slate-900 leading-none">Faculty</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">staff123</div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('student1', 'student123')}
-                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
-                >
-                  <GraduationCap className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <div className="text-left truncate">
-                    <div className="font-semibold text-slate-900 leading-none">Student</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">student123</div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('parent_patel', 'parent123')}
-                  className="px-3 py-2 rounded-xl border border-slate-200/90 bg-white/70 hover:bg-white hover:border-[#f59e0b]/50 text-slate-700 transition-all flex items-center gap-2 shadow-2xs"
-                >
-                  <HeartHandshake className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <div className="text-left truncate">
-                    <div className="font-semibold text-slate-900 leading-none">Parent</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">parent123</div>
-                  </div>
-                </button>
-              </div>
-            </div>
+            <span className="text-base font-bold text-slate-900 tracking-tight">Next Gen Grading</span>
           </div>
 
-          {/* Right Showcase Column (Visual Card from image) */}
-          <div className="lg:col-span-7 hidden lg:block h-full">
-            <div className="relative w-full h-[480px] rounded-[30px] overflow-hidden shadow-lg border border-slate-200/50 bg-slate-900">
-              <img
-                src="/login-showcase.png"
-                alt="Academic Collaboration Showcase"
-                className="w-full h-full object-cover object-center"
+          {/* Heading */}
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Welcome Back
+            </h1>
+            <p className="text-xs text-slate-400 mt-1 font-medium">
+              Please login to your account
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <input
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username or Reg No"
+                className="w-full px-5 py-3.5 text-sm bg-[#f4f6f9] border border-transparent rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#ff6928]/30 focus:border-[#ff6928] focus:bg-white transition-all placeholder:text-slate-400 text-slate-800"
               />
             </div>
-          </div>
-        </div>
 
-        {/* Footer row */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-200/50 text-[11px] text-slate-500">
-          <div>
-            Need assistance? <span className="underline cursor-pointer font-medium text-slate-700">Contact Department Office</span>
+            <div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full pl-5 pr-12 py-3.5 text-sm bg-[#f4f6f9] border border-transparent rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#ff6928]/30 focus:border-[#ff6928] focus:bg-white transition-all placeholder:text-slate-400 text-slate-800"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <div className="flex justify-end mt-1.5">
+                <span className="text-[11px] text-slate-400 hover:text-slate-600 cursor-pointer font-medium">
+                  Forgot password?
+                </span>
+              </div>
+            </div>
+
+            {/* Solid Orange Submit Button */}
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3.5 px-6 bg-[#ff6928] hover:bg-[#f25916] active:scale-[0.99] text-white font-semibold rounded-2xl transition-all shadow-md shadow-[#ff6928]/25 text-sm disabled:opacity-60 mt-2"
+            >
+              {submitting ? 'Authenticating...' : 'Login'}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-6 text-center text-xs text-slate-400">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200"></div>
+            </div>
+            <span className="relative px-3 bg-white text-slate-400 text-[11px]">
+              Or Login with
+            </span>
           </div>
-          <div>
-            <span className="underline cursor-pointer font-medium text-slate-700">Terms & Academic Regulations</span>
+
+          {/* Quick Demo Login Pill Buttons */}
+          <div className="grid grid-cols-2 gap-3 text-xs mb-6">
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('admin', 'admin123')}
+              className="py-2.5 px-3 rounded-2xl border border-slate-200 bg-white hover:border-[#ff6928]/50 hover:bg-orange-50/20 text-slate-700 transition-all flex items-center justify-center gap-2 shadow-2xs"
+            >
+              <ShieldCheck className="w-4 h-4 text-purple-600 flex-shrink-0" />
+              <span className="font-semibold text-slate-800 text-xs">Admin</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('staff_sharma', 'staff123')}
+              className="py-2.5 px-3 rounded-2xl border border-slate-200 bg-white hover:border-[#ff6928]/50 hover:bg-orange-50/20 text-slate-700 transition-all flex items-center justify-center gap-2 shadow-2xs"
+            >
+              <UserCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
+              <span className="font-semibold text-slate-800 text-xs">Faculty</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('student1', 'student123')}
+              className="py-2.5 px-3 rounded-2xl border border-slate-200 bg-white hover:border-[#ff6928]/50 hover:bg-orange-50/20 text-slate-700 transition-all flex items-center justify-center gap-2 shadow-2xs"
+            >
+              <GraduationCap className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span className="font-semibold text-slate-800 text-xs">Student</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('parent_patel', 'parent123')}
+              className="py-2.5 px-3 rounded-2xl border border-slate-200 bg-white hover:border-[#ff6928]/50 hover:bg-orange-50/20 text-slate-700 transition-all flex items-center justify-center gap-2 shadow-2xs"
+            >
+              <HeartHandshake className="w-4 h-4 text-amber-600 flex-shrink-0" />
+              <span className="font-semibold text-slate-800 text-xs">Parent</span>
+            </button>
+          </div>
+
+          {/* Footer Signup / Help */}
+          <div className="text-center text-xs text-slate-400">
+            Don't have an account?{' '}
+            <span
+              onClick={() => handleQuickLogin('student1', 'student123')}
+              className="text-[#ff6928] font-bold cursor-pointer underline hover:text-[#e05315]"
+            >
+              Demo Access
+            </span>
           </div>
         </div>
       </div>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Progress Card - {{ student.reg_no }}</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            margin: 1.2cm;
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 8pt;
+                color: #64748b;
+            }
+        }
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            color: #1e293b;
+            font-size: 9.5pt;
+            line-height: 1.35;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        .college-title {
+            font-size: 15pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .college-subtitle {
+            font-size: 9pt;
+            color: #475569;
+            margin-top: 2px;
+        }
+        .report-title {
+            font-size: 11pt;
+            font-weight: bold;
+            color: #0f172a;
+            margin-top: 6px;
+            text-transform: uppercase;
+            background-color: #f1f5f9;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        .meta-table {
+            width: 100%;
+            margin-bottom: 12px;
+            border-collapse: collapse;
+        }
+        .meta-table td {
+            padding: 3px 6px;
+            font-size: 9pt;
+        }
+        .meta-label {
+            font-weight: bold;
+            color: #475569;
+            width: 18%;
+        }
+        .meta-val {
+            color: #0f172a;
+            width: 32%;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 14px;
+        }
+        .data-table th {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            font-size: 8.5pt;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: center;
+            border: 1px solid #1e3a8a;
+        }
+        .data-table td {
+            border: 1px solid #cbd5e1;
+            padding: 5px 4px;
+            font-size: 8.5pt;
+            text-align: center;
+        }
+        .text-left {
+            text-align: left !important;
+            padding-left: 8px !important;
+        }
+        .badge-danger {
+            color: #b91c1c;
+            font-weight: bold;
+        }
+        .badge-warning {
+            color: #b45309;
+            font-weight: bold;
+        }
+        .badge-normal {
+            color: #15803d;
+            font-weight: bold;
+        }
+        .summary-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+        .summary-title {
+            font-weight: bold;
+            font-size: 9.5pt;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+        }
+        .remarks-text {
+            font-size: 9pt;
+            color: #334155;
+            font-style: italic;
+        }
+        .signatures {
+            width: 100%;
+            margin-top: 40px;
+            border-collapse: collapse;
+        }
+        .signatures td {
+            text-align: center;
+            font-size: 8.5pt;
+            color: #334155;
+            width: 33.33%;
+            padding-top: 30px;
+            border-top: 1px dashed #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="college-title">National Institute of Engineering & Technology</div>
+        <div class="college-subtitle">Department of {{ student.department }} | Academic Year {{ student.academic_year }}</div>
+        <div class="report-title">Student Performance & Attendance Progress Card</div>
+    </div>
+
+    <table class="meta-table">
+        <tr>
+            <td class="meta-label">Student Name:</td>
+            <td class="meta-val"><strong>{{ student.name }}</strong></td>
+            <td class="meta-label">Register Number:</td>
+            <td class="meta-val"><strong>{{ student.reg_no }}</strong></td>
+        </tr>
+        <tr>
+            <td class="meta-label">Semester & Sec:</td>
+            <td class="meta-val">Semester {{ student.semester }} - Section {{ student.section }}</td>
+            <td class="meta-label">Department:</td>
+            <td class="meta-val">{{ student.department }}</td>
+        </tr>
+        <tr>
+            <td class="meta-label">Cumulative Scored:</td>
+            <td class="meta-val">{{ summary.total_scored }} / {{ summary.total_max }} ({{ summary.overall_marks_percentage }}%)</td>
+            <td class="meta-label">Overall Attendance:</td>
+            <td class="meta-val">
+                {% if summary.overall_attendance_status == 'CRITICAL' %}
+                    <span class="badge-danger">{{ summary.overall_attendance_percentage }}% (Shortage)</span>
+                {% elif summary.overall_attendance_status == 'WARNING' %}
+                    <span class="badge-warning">{{ summary.overall_attendance_percentage }}% (Average)</span>
+                {% else %}
+                    <span class="badge-normal">{{ summary.overall_attendance_percentage }}% (Good)</span>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th rowspan="2" style="width: 10%;">Course Code</th>
+                <th rowspan="2" style="width: 30%;" class="text-left">Subject Name</th>
+                <th colspan="4" style="width: 32%;">Internal Assessment Marks</th>
+                <th colspan="3" style="width: 28%;">Attendance Record</th>
+            </tr>
+            <tr>
+                <th style="width: 8%;">IA 1</th>
+                <th style="width: 8%;">IA 2</th>
+                <th style="width: 8%;">IA 3</th>
+                <th style="width: 8%;">Average</th>
+                <th style="width: 9%;">Held</th>
+                <th style="width: 9%;">Attended</th>
+                <th style="width: 10%;">%</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in subjects %}
+            <tr>
+                <td><strong>{{ s.code }}</strong></td>
+                <td class="text-left">{{ s.name }}</td>
+                <td>{{ s.ia1|default:"-" }}</td>
+                <td>{{ s.ia2|default:"-" }}</td>
+                <td>{{ s.ia3|default:"-" }}</td>
+                <td><strong>{{ s.average }}</strong></td>
+                <td>{{ s.classes_held }}</td>
+                <td>{{ s.classes_attended }}</td>
+                <td>
+                    {% if s.attendance_status == 'CRITICAL' %}
+                        <span class="badge-danger">{{ s.attendance_percentage }}%</span>
+                    {% elif s.attendance_status == 'WARNING' %}
+                        <span class="badge-warning">{{ s.attendance_percentage }}%</span>
+                    {% else %}
+                        <span class="badge-normal">{{ s.attendance_percentage }}%</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="summary-box">
+        <div class="summary-title">Faculty Counselor Assessment & Remarks:</div>
+        <div class="remarks-text">"{{ summary.remarks }}"</div>
+    </div>
+
+    <table class="signatures">
+        <tr>
+            <td>Class Counselor</td>
+            <td>Head of Department (HOD)</td>
+            <td>Parent / Guardian Signature</td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -64,10 +64,8 @@ export const Login = () => {
         
         {/* Top bar with Brand Pill and Top Right Close button */}
         <div className="flex items-center justify-between mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300/80 bg-white/80 backdrop-blur-sm shadow-2xs">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-primary-600 to-indigo-600 flex items-center justify-center text-white shadow-xs">
-              <GraduationCap className="w-3.5 h-3.5" />
-            </div>
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-slate-300/80 bg-white/90 backdrop-blur-sm shadow-2xs">
+            <img src="/logo.png" alt="Next Gen Grading" className="w-7 h-7 object-contain drop-shadow-2xs" />
             <span className="text-xs font-bold text-slate-800 tracking-tight">Next Gen Grading</span>
           </div>
 

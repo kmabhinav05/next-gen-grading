@@ -67,8 +67,8 @@ export const ProgressCard = ({ data, showActions = true }) => {
       >
         {/* Institutional Header */}
         <div className="text-center pb-6 border-b-2 border-primary-900 mb-6">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <GraduationCap className="w-7 h-7 text-primary-900" />
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <img src="/logo.png" alt="Next Gen Grading" className="w-10 h-10 object-contain" />
             <h1 className="text-xl sm:text-2xl font-black text-primary-900 tracking-tight uppercase">
               National Institute of Engineering & Technology
             </h1>

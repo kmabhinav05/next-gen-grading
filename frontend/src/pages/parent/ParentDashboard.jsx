@@ -125,6 +125,16 @@ export const ParentDashboard = () => {
                 {isAttendanceShortage ? 'Attendance Notice' : 'Clearance Verified'}
               </span>
             </div>
+            <div>
+              <span className="text-[11px] text-slate-400 block font-normal mb-1">Guardian ID</span>
+              <Link
+                to="/profile"
+                className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold shadow-2xs hover:shadow-xs transition-all inline-flex items-center gap-1.5"
+              >
+                <span>View Profile & ID</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </div>
 

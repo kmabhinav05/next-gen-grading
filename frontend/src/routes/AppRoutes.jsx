@@ -36,6 +36,9 @@ import { ParentDashboard } from '../pages/parent/ParentDashboard';
 import { ChildProgressCard } from '../pages/parent/ChildProgressCard';
 import { ChildAttendance } from '../pages/parent/ChildAttendance';
 
+// Profile Page (Digital ID & Lanyard for all 4 Portals)
+import { Profile } from '../pages/profile/Profile';
+
 // Root redirect handler
 const RootRedirect = () => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -239,6 +242,16 @@ export const AppRoutes = () => {
           element={
             <ProtectedRoute allowedRoles={['ADMIN', 'STAFF', 'STUDENT', 'PARENT']}>
               <SemesterResults />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* View Profile & 3D Physics Lanyard ID Badge (All 4 Portals) */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'STAFF', 'STUDENT', 'PARENT']}>
+              <Profile />
             </ProtectedRoute>
           }
         />

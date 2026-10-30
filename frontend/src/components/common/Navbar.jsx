@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import PillNav from './PillNav';
-import { Bell, Settings, LogOut } from 'lucide-react';
+import { Bell, Settings, LogOut, IdCard } from 'lucide-react';
 
 const RouterLink = ({ href, children, ...props }) => {
   if (!href) return <a {...props}>{children}</a>;
@@ -28,6 +28,7 @@ export const Navbar = () => {
           { label: 'Courses', href: '/admin/subjects' },
           { label: 'Linkages', href: '/admin/parent-student' },
           { label: 'Reports', href: '/admin/reports' },
+          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'STAFF':
@@ -36,6 +37,7 @@ export const Navbar = () => {
           { label: 'Upload Marks', href: '/staff/upload-marks' },
           { label: 'Attendance', href: '/staff/attendance' },
           { label: 'Class Reports', href: '/staff/class-report' },
+          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'STUDENT':
@@ -43,6 +45,7 @@ export const Navbar = () => {
           { label: 'Dashboard', href: '/student/dashboard' },
           { label: 'Progress Card', href: '/student/progress-card' },
           { label: 'Attendance', href: '/student/attendance' },
+          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'PARENT':
@@ -50,11 +53,13 @@ export const Navbar = () => {
           { label: 'Dashboard', href: '/parent/dashboard' },
           { label: 'Ward Progress', href: '/parent/progress-card' },
           { label: 'Ward Attendance', href: '/parent/attendance' },
+          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       default:
         return [
           { label: 'Home', href: '/' },
+          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
     }
@@ -119,21 +124,26 @@ export const Navbar = () => {
           <span className="w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white absolute top-2 right-2 animate-pulse"></span>
         </button>
 
-        {/* User Pill & Logout */}
+        {/* User Pill (Clicks to /profile with 3D Lanyard ID Badge) & Logout */}
         <div className="flex items-center gap-2 pl-1">
-          <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs backdrop-blur-md">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+          <Link
+            to="/profile"
+            title="View Profile & 3D Digital ID Badge"
+            className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all backdrop-blur-md group"
+          >
+            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs group-hover:scale-105 transition-transform">
               {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
             </div>
             <div className="hidden sm:flex flex-col text-left">
-              <span className="text-xs font-bold text-slate-800 truncate max-w-[120px] leading-tight">
+              <span className="text-xs font-bold text-slate-800 truncate max-w-[120px] leading-tight group-hover:text-primary-600 transition-colors">
                 {user?.full_name || user?.username}
               </span>
-              <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase">
-                {role}
+              <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase flex items-center gap-1">
+                <span>{role}</span>
+                <span className="text-primary-600 font-bold group-hover:underline">• ID</span>
               </span>
             </div>
-          </div>
+          </Link>
 
           <button
             type="button"

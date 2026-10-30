@@ -16,7 +16,8 @@ const DEMO_USERS = {
     email: 'staff1@college.edu',
     full_name: 'Arjun Menon',
     role: 'STAFF',
-    phone_number: '+91 9876500099'
+    phone_number: '+91 9876500099',
+    staff: { id: 1, department: 'Computer Science & Engineering', designation: 'Senior Teacher' }
   },
   staff_sharma: {
     id: 2,
@@ -24,7 +25,8 @@ const DEMO_USERS = {
     email: 'staff1@college.edu',
     full_name: 'Arjun Menon',
     role: 'STAFF',
-    phone_number: '+91 9876500099'
+    phone_number: '+91 9876500099',
+    staff: { id: 1, department: 'Computer Science & Engineering', designation: 'Senior Teacher' }
   },
   student1: {
     id: 3,
@@ -32,7 +34,8 @@ const DEMO_USERS = {
     email: 'student1@college.edu',
     full_name: 'Ayaan Khan',
     role: 'STUDENT',
-    phone_number: '+91 990001001'
+    phone_number: '+91 990001001',
+    student: { id: 1, reg_no: '21CS001', department: 'Computer Science & Engineering', semester: 5, section: 'A' }
   },
   parent1: {
     id: 4,
@@ -40,7 +43,8 @@ const DEMO_USERS = {
     email: 'parent1@college.edu',
     full_name: 'Nadia Khan',
     role: 'PARENT',
-    phone_number: '+91 9822114499'
+    phone_number: '+91 9822114499',
+    parent: { id: 1 }
   },
   parent_patel: {
     id: 4,
@@ -48,7 +52,8 @@ const DEMO_USERS = {
     email: 'parent1@college.edu',
     full_name: 'Nadia Khan',
     role: 'PARENT',
-    phone_number: '+91 9822114499'
+    phone_number: '+91 9822114499',
+    parent: { id: 1 }
   }
 };
 

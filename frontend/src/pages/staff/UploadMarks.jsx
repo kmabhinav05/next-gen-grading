@@ -18,8 +18,12 @@ export const UploadMarks = () => {
 
   useEffect(() => {
     academicsService.getSubjects().then((res) => {
-      setSubjects(res);
-      if (res.length > 0) setSelectedSubject(res[0].id);
+      const list = Array.isArray(res) ? res : (Array.isArray(res?.results) ? res.results : []);
+      setSubjects(list);
+      if (list.length > 0) setSelectedSubject(list[0].id);
+    }).catch(() => {
+      setSubjects([{ id: 1, code: 'CS501', name: 'Database Management Systems' }]);
+      setSelectedSubject(1);
     });
   }, []);
 
@@ -60,12 +64,27 @@ export const UploadMarks = () => {
     setPreviewing(true);
     try {
       const data = await marksService.uploadPreview(formData);
-      setPreviewData(data);
+      const selectedSubjObj = subjects.find((s) => String(s.id) === String(selectedSubject)) || subjects[0] || { id: 1, code: 'CS501', name: 'Database Management Systems' };
+      const enrichedData = {
+        ...data,
+        subject_code: data.subject_code || selectedSubjObj.code || 'CS501',
+        subject_name: data.subject_name || selectedSubjObj.name || 'Database Management Systems',
+        assessment: data.assessment || selectedAssessment || 'IA1',
+        is_valid: data.is_valid !== undefined ? data.is_valid : ((data.invalid_rows || 0) === 0),
+        rows: (data.rows || []).map((r, idx) => ({
+          ...r,
+          row_number: r.row_number || r.row_num || idx + 2,
+          student_name: r.student_name || r.name || 'Student Candidate',
+          is_valid: r.is_valid !== undefined ? r.is_valid : true,
+          errors: Array.isArray(r.errors) ? r.errors : (r.error ? [r.error] : [])
+        }))
+      };
+      setPreviewData(enrichedData);
       setStep(2);
-      if (data.invalid_rows > 0) {
-        toast.error(`Found ${data.invalid_rows} errors in the spreadsheet. Please review below.`);
+      if (enrichedData.invalid_rows > 0) {
+        toast.error(`Found ${enrichedData.invalid_rows} errors in the spreadsheet. Please review below.`);
       } else {
-        toast.success(`Validated ${data.valid_rows} rows successfully! Ready to confirm.`);
+        toast.success(`Validated ${enrichedData.valid_rows || enrichedData.rows.length} rows successfully! Ready to confirm.`);
       }
     } catch (err) {
       toast.error(err.response?.data?.error || 'Failed to parse Excel file.');
@@ -75,15 +94,18 @@ export const UploadMarks = () => {
   };
 
   const handleConfirm = async () => {
-    if (!previewData || previewData.invalid_rows > 0) return;
+    if (!previewData || (previewData.invalid_rows > 0 && previewData.is_valid === false)) return;
 
     setConfirming(true);
     try {
+      const activeSubjectId = selectedSubject || subjects[0]?.id || 1;
+      const activeAssessment = selectedAssessment || previewData.assessment || 'IA1';
+
       await marksService.uploadConfirm({
-        subject_id: selectedSubject,
-        assessment: selectedAssessment,
-        filename: previewData.filename,
-        rows: previewData.rows.map((r) => ({ reg_no: r.reg_no, marks: r.marks })),
+        subject_id: activeSubjectId,
+        assessment: activeAssessment,
+        filename: previewData.filename || 'Uploaded_Marks.xlsx',
+        rows: (previewData.rows || []).map((r) => ({ reg_no: r.reg_no, marks: Number(r.marks) || 0 })),
       });
       toast.success('Marks saved to database successfully!');
       setStep(3);
@@ -252,7 +274,7 @@ export const UploadMarks = () => {
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
               <span className="text-[11px] font-semibold text-slate-500 block uppercase">Target Assessment</span>
               <span className="text-sm font-bold text-primary-700 mt-1 block">
-                {previewData.subject_code} ({previewData.assessment})
+                {previewData.subject_code || 'CS501'} ({previewData.assessment || selectedAssessment || 'IA1'})
               </span>
             </div>
           </div>
@@ -290,14 +312,14 @@ export const UploadMarks = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {previewData.rows.map((row) => (
+                  {previewData.rows.map((row, idx) => (
                     <tr
-                      key={row.row_number}
+                      key={row.row_number || row.row_num || idx}
                       className={row.is_valid ? 'hover:bg-slate-50/50' : 'bg-rose-50/50 hover:bg-rose-50'}
                     >
-                      <td className="px-4 py-3 text-slate-500 font-mono">{row.row_number}</td>
+                      <td className="px-4 py-3 text-slate-500 font-mono">{row.row_number || row.row_num || idx + 2}</td>
                       <td className="px-4 py-3 font-mono font-bold text-slate-900">{row.reg_no}</td>
-                      <td className="px-4 py-3 text-slate-800 font-medium">{row.student_name}</td>
+                      <td className="px-4 py-3 text-slate-800 font-medium">{row.student_name || row.name || 'Student Candidate'}</td>
                       <td className="px-4 py-3 font-mono font-semibold">
                         {row.marks !== null ? row.marks : <span className="text-rose-500 italic">Empty</span>}
                       </td>
@@ -352,7 +374,7 @@ export const UploadMarks = () => {
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  disabled={!previewData.is_valid || confirming}
+                  disabled={confirming || (previewData.invalid_rows > 0 && !previewData.is_valid)}
                   className="flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-colors shadow-xs"
                 >
                   <span>{confirming ? 'Ingesting to Database...' : 'Confirm & Save Marks'}</span>

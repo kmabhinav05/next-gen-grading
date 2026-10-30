@@ -2,17 +2,21 @@ import api from './axios';
 
 const MOCK_PREVIEW = {
   filename: 'CS501_Assessment_Marks.xlsx',
+  subject_code: 'CS501',
+  subject_name: 'Database Management Systems',
+  assessment: 'IA1',
   total_rows: 6,
   valid_rows: 6,
   invalid_rows: 0,
+  is_valid: true,
   max_marks: 20,
   rows: [
-    { row_num: 2, reg_no: '21CS001', name: 'Aarav Patel', marks: 18.5, is_valid: true, error: null },
-    { row_num: 3, reg_no: '21CS002', name: 'Diya Sharma', marks: 17.0, is_valid: true, error: null },
-    { row_num: 4, reg_no: '21CS003', name: 'Rohan Iyer', marks: 19.0, is_valid: true, error: null },
-    { row_num: 5, reg_no: '21CS004', name: 'Ananya Sen', marks: 16.5, is_valid: true, error: null },
-    { row_num: 6, reg_no: '21CS005', name: 'Vikram Singh', marks: 19.5, is_valid: true, error: null },
-    { row_num: 7, reg_no: '21CS006', name: 'Neha Reddy', marks: 18.0, is_valid: true, error: null },
+    { row_number: 2, row_num: 2, reg_no: '21CS001', student_name: 'Aarav Patel', name: 'Aarav Patel', marks: 18.5, is_valid: true, error: null, errors: [] },
+    { row_number: 3, row_num: 3, reg_no: '21CS002', student_name: 'Diya Sharma', name: 'Diya Sharma', marks: 17.0, is_valid: true, error: null, errors: [] },
+    { row_number: 4, row_num: 4, reg_no: '21CS003', student_name: 'Rohan Iyer', name: 'Rohan Iyer', marks: 19.0, is_valid: true, error: null, errors: [] },
+    { row_number: 5, row_num: 5, reg_no: '21CS004', student_name: 'Ananya Sen', name: 'Ananya Sen', marks: 16.5, is_valid: true, error: null, errors: [] },
+    { row_number: 6, row_num: 6, reg_no: '21CS005', student_name: 'Vikram Singh', name: 'Vikram Singh', marks: 19.5, is_valid: true, error: null, errors: [] },
+    { row_number: 7, row_num: 7, reg_no: '21CS006', student_name: 'Neha Reddy', name: 'Neha Reddy', marks: 18.0, is_valid: true, error: null, errors: [] },
   ],
 };
 

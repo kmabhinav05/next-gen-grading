@@ -454,32 +454,35 @@ export const StudentDashboard = () => {
           </div>
         </div>
 
-        {/* Right: Academic Timetable Calendar Schedule (65%) */}
-        <div className="lg:col-span-8 space-y-4">
-          <GlassCalendar
-            selectedDate={selectedCalendarDate}
-            onDateSelect={(d) => {
-              setSelectedCalendarDate(d);
-              playHapticChime();
-            }}
-            onAddNote={(d) => {
-              const key = format(d, 'yyyy-MM-dd');
-              const text = window.prompt(`Add study note for ${format(d, 'MMM d, yyyy')}:`, calendarNotes[key] || '');
-              if (text !== null) {
-                setCalendarNotes((prev) => ({ ...prev, [key]: text }));
-                toast.success(`Note saved for ${format(d, 'MMM d')}`);
+        {/* Right: Academic Timetable & Glass Calendar (Side-by-Side) */}
+        <div className="lg:col-span-8 flex flex-col xl:flex-row items-start gap-5">
+          {/* Glass Calendar in authentic card shape */}
+          <div className="w-full xl:w-[360px] shrink-0 flex justify-center">
+            <GlassCalendar
+              selectedDate={selectedCalendarDate}
+              onDateSelect={(d) => {
+                setSelectedCalendarDate(d);
                 playHapticChime();
-              }
-            }}
-            onNewEvent={(d) => {
-              toast.success(`Event scheduler opened for ${format(d, 'MMM d, yyyy')}`);
-              playHapticChime();
-            }}
-            className="w-full"
-          />
+              }}
+              onAddNote={(d) => {
+                const key = format(d, 'yyyy-MM-dd');
+                const text = window.prompt(`Add study note for ${format(d, 'MMM d, yyyy')}:`, calendarNotes[key] || '');
+                if (text !== null) {
+                  setCalendarNotes((prev) => ({ ...prev, [key]: text }));
+                  toast.success(`Note saved for ${format(d, 'MMM d')}`);
+                  playHapticChime();
+                }
+              }}
+              onNewEvent={(d) => {
+                toast.success(`Event scheduler opened for ${format(d, 'MMM d, yyyy')}`);
+                playHapticChime();
+              }}
+              className="w-full max-w-[360px] hover:scale-[1.02] transition-transform duration-300 shadow-xl"
+            />
+          </div>
 
           {/* Daily Schedule Details for Selected Date */}
-          <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 space-y-3">
+          <div className="flex-1 w-full bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-indigo-600" />

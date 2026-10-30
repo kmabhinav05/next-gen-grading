@@ -462,9 +462,10 @@ export const StudentDashboard = () => {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* 4. STUDENT SMART TOOLS: ATTENDANCE & GPA WHAT-IF SIMULATORS */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-2">
+      {/* 4. STUDENT SMART TOOLS: ATTENDANCE & GPA WHAT-IF SIMULATORS */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-2">
           {/* Tool 1: Attendance Goal & Safe Leave Calculator */}
           <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -594,6 +595,5 @@ export const StudentDashboard = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };

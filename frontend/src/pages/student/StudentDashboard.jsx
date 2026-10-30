@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
+import { PortalHeaderBanner, getTimeBasedGreeting } from '../../components/dashboard/PortalHeaderBanner';
 import {
   ArrowUpRight,
   Award,
@@ -62,15 +63,23 @@ export const StudentDashboard = () => {
   const attendancePerc = summary.overall_attendance_percentage || 85.0;
   const isAttendanceShortage = attendancePerc < 75.0;
   const strokeOffset = 251.2 - (251.2 * Math.min(attendancePerc, 100)) / 100;
+  const timeGreeting = getTimeBasedGreeting();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* SECTION ABOVE WELCOME: Live Time, Date & Academic Status */}
+      <PortalHeaderBanner
+        role="STUDENT"
+        subtitle="Term: Odd Sem 2026-2027"
+        extraPill="Batch 2022-2026 • Section A"
+      />
+
       {/* 1. HERO HEADER ROW (Matching Reference Design) */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Welcome in, {student.name}
+              {timeGreeting.salutation}, welcome in, {student.name}
             </h1>
             <Link
               to="/profile"

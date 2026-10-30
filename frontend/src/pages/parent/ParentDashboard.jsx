@@ -3,6 +3,7 @@ import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
 import { Modal } from '../../components/common/Modal';
 import HoldButton from '../../components/common/HoldButton';
+import { PortalHeaderBanner, getTimeBasedGreeting } from '../../components/dashboard/PortalHeaderBanner';
 import {
   ArrowUpRight,
   Award,
@@ -111,12 +112,19 @@ export const ParentDashboard = () => {
         </div>
       )}
 
+      {/* SECTION ABOVE WELCOME: Live Time, Date & Guardian Hub */}
+      <PortalHeaderBanner
+        role="PARENT"
+        subtitle={`Ward: ${student.name} (${student.reg_no})`}
+        extraPill={`Semester ${student.semester} • Section ${student.section}`}
+      />
+
       {/* 1. HERO HEADER ROW (Matching Reference Design) */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Welcome in, Parent Portal
+              {getTimeBasedGreeting().salutation}, welcome in, {student.name ? `${student.name}'s Guardian` : 'Parent Guardian'}
             </h1>
             <Link
               to="/profile"

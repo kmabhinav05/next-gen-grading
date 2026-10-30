@@ -3,6 +3,7 @@ import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
 import { ArrowUpRight, Users, GraduationCap, BookOpen, Calendar, CheckCircle2, Circle, ChevronDown, ChevronUp, Play, Pause, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PortalHeaderBanner, getTimeBasedGreeting } from '../../components/dashboard/PortalHeaderBanner';
 
 export const AdminDashboard = () => {
   const [data, setData] = useState(null);
@@ -30,15 +31,23 @@ export const AdminDashboard = () => {
 
   const counts = data?.counts || {};
   const recentUploads = data?.recent_uploads || [];
+  const timeGreeting = getTimeBasedGreeting();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* SECTION ABOVE WELCOME: Live Time, Date & Controller Governance Console */}
+      <PortalHeaderBanner
+        role="ADMIN"
+        subtitle="Autonomous Controller Console"
+        extraPill="Term: Odd Sem 2026-2027 • COE Live"
+      />
+
       {/* 1. HERO HEADER ROW (Matching image) */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Welcome in, Administrator
+              {timeGreeting.salutation}, welcome in, Administrator
             </h1>
             <Link
               to="/profile"

@@ -48,45 +48,45 @@ export const StaffDashboard = () => {
       {/* 1. HERO HEADER ROW (Matching Reference Design) */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Welcome in, {data?.staff_name || 'Faculty Member'}
-          </h1>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Welcome in, {data?.staff_name || 'Faculty Member'}
+            </h1>
+            <Link
+              to="/profile"
+              title="View Profile & 3D ID Badge"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
+            >
+              <span>View Profile & ID</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
-          {/* Segmented Progress Tracker Strip */}
-          <div className="flex flex-wrap items-center gap-3 mt-4 text-xs font-semibold">
+          {/* Segmented Progress Tracker Strip - Exact 4 Pills Design */}
+          <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-semibold">
             <div>
-              <span className="text-[11px] text-slate-400 block font-normal mb-1">Teaching</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-[#1e293b] text-white shadow-2xs">
+              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Teaching</span>
+              <span className="px-4 py-1.5 rounded-full bg-[#1e293b] text-white font-bold text-xs shadow-2xs inline-block">
                 {assignedSubjects.length || 2} Courses Assigned
               </span>
             </div>
             <div>
-              <span className="text-[11px] text-slate-400 block font-normal mb-1">IA Assessment</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-[#ffc83b] text-slate-900 shadow-2xs">
+              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">IA Assessment</span>
+              <span className="px-4 py-1.5 rounded-full bg-[#fbc02d] text-slate-900 font-bold text-xs shadow-2xs inline-block">
                 IA1 & IA2 Active
               </span>
             </div>
             <div>
-              <span className="text-[11px] text-slate-400 block font-normal mb-1">Enrolled</span>
-              <span className="px-4 py-1.5 rounded-full border border-dashed border-slate-300 bg-white/60 text-slate-700">
+              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Enrolled</span>
+              <span className="px-4 py-1.5 rounded-full border border-dashed border-slate-300/90 bg-white/50 text-slate-700 font-semibold text-xs inline-block">
                 {totalEnrolled} Registered Students
               </span>
             </div>
             <div>
-              <span className="text-[11px] text-slate-400 block font-normal mb-1">Department</span>
-              <span className="px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-800">
+              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Department</span>
+              <span className="px-4 py-1.5 rounded-full border border-slate-200/90 bg-white text-slate-800 font-bold text-xs shadow-2xs inline-block">
                 {data?.department || 'Computer Science & Engineering'}
               </span>
-            </div>
-            <div>
-              <span className="text-[11px] text-slate-400 block font-normal mb-1">Faculty ID</span>
-              <Link
-                to="/profile"
-                className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold shadow-2xs hover:shadow-xs transition-all inline-flex items-center gap-1.5"
-              >
-                <span>View Profile & ID</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
             </div>
           </div>
         </div>

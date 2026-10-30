@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
+import { communicationsService } from '../../api/communications';
 import { Skeleton } from '../../components/common/Skeleton';
 import { Modal } from '../../components/common/Modal';
 import HoldButton from '../../components/common/HoldButton';
@@ -560,7 +561,17 @@ export const ParentDashboard = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            toast.success(`Consultation request submitted! The faculty will confirm via SMS.`);
+            communicationsService.sendConsultation({
+              parentName: `${student.name}'s Guardian`,
+              studentName: student.name,
+              regNo: student.reg_no,
+              faculty: ptmForm.faculty,
+              date: ptmForm.date,
+              timeSlot: ptmForm.time,
+              mode: ptmForm.mode,
+              notes: ptmForm.query
+            });
+            toast.success(`Consultation request submitted! Sent directly to ${ptmForm.faculty}.`);
             setIsPtmOpen(false);
           }}
           className="space-y-4 text-xs"
@@ -636,7 +647,16 @@ export const ParentDashboard = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            toast.success(`Absence note for ${student.name} recorded! Department informed.`);
+            communicationsService.sendAbsenceNote({
+              parentName: `${student.name}'s Guardian`,
+              studentName: student.name,
+              regNo: student.reg_no,
+              type: leaveForm.type,
+              startDate: leaveForm.startDate,
+              endDate: leaveForm.endDate,
+              reason: leaveForm.reason
+            });
+            toast.success(`Absence note for ${student.name} dispatched to faculty and department administration!`);
             setIsLeaveOpen(false);
           }}
           className="space-y-4 text-xs"

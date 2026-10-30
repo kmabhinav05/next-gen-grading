@@ -64,6 +64,37 @@ export const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Sync real-time Parent Communications & PTM consultation bookings
+  useEffect(() => {
+    const handleCommUpdated = () => {
+      try {
+        const raw = localStorage.getItem('demo_parent_communications');
+        if (!raw) return;
+        const list = JSON.parse(raw);
+        if (list && list.length > 0) {
+          const latest = list[0];
+          setNotifications((prev) => {
+            const alreadyExists = prev.some((n) => n.id === `comm-${latest.id}`);
+            if (alreadyExists) return prev;
+            const newNotif = {
+              id: `comm-${latest.id}`,
+              title: latest.type === 'PTM' ? `PTM Request: ${latest.parentName}` : `Ward Leave: ${latest.parentName}`,
+              msg: latest.type === 'PTM'
+                ? `Requested consultation for ${latest.studentName} on ${latest.date} (${latest.timeSlot})`
+                : `Absence note submitted for ${latest.studentName} (${latest.startDate} - ${latest.endDate})`,
+              time: 'Just now',
+              unread: true
+            };
+            return [newNotif, ...prev];
+          });
+        }
+      } catch (e) {}
+    };
+
+    window.addEventListener('communications-updated', handleCommUpdated);
+    return () => window.removeEventListener('communications-updated', handleCommUpdated);
+  }, [role]);
+
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   const markAllRead = () => {

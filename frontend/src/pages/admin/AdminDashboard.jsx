@@ -1,14 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
-import { ArrowUpRight, Users, GraduationCap, BookOpen, Calendar, CheckCircle2, Circle, ChevronDown, ChevronUp, Play, Pause, Clock } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Users,
+  GraduationCap,
+  BookOpen,
+  Calendar,
+  CheckCircle2,
+  Circle,
+  ChevronDown,
+  ChevronUp,
+  Play,
+  Pause,
+  Clock,
+  MessageSquare,
+  Check,
+  X,
+  FileText,
+  Video
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getTimeGreeting } from '../../utils/greeting';
+import { communicationsService } from '../../api/communications';
+import { playHapticChime } from '../../utils/sound';
+import toast from 'react-hot-toast';
 
 export const AdminDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expandedSection, setExpandedSection] = useState('courses');
+  const [communications, setCommunications] = useState(() => communicationsService.getAll());
+  const [commFilter, setCommFilter] = useState('ALL');
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setCommunications(communicationsService.getAll());
+    };
+    window.addEventListener('communications-updated', handleUpdate);
+    return () => window.removeEventListener('communications-updated', handleUpdate);
+  }, []);
+
+  const handleAdminStatusChange = (id, newStatus) => {
+    communicationsService.updateStatus(id, newStatus);
+    playHapticChime();
+    toast.success(`Communication record marked as ${newStatus}`);
+  };
 
   useEffect(() => {
     dashboardService
@@ -400,7 +437,185 @@ export const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* 4. ADMIN SYSTEM HEALTH & SETTINGS STRIP */}
+      {/* 4. INSTITUTIONAL PARENT COMMUNICATIONS & ABSENCE CENTRAL REGISTER */}
+      <div className="bg-white/90 backdrop-blur-md rounded-[32px] p-6 border border-slate-200/80 shadow-2xs space-y-5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-purple-50 border border-purple-100 text-purple-700">
+                <MessageSquare className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                  <span>Parent Communications, PTM & Absence Central Oversight</span>
+                  {communications.filter((c) => c.status === 'Pending').length > 0 && (
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-black uppercase tracking-wider animate-pulse">
+                      {communications.filter((c) => c.status === 'Pending').length} Pending Review
+                    </span>
+                  )}
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Institutional record of all consultation bookings and ward leave notes filed by parents across departments.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-slate-100/80 border border-slate-200/70 text-xs font-semibold">
+            {[
+              { id: 'ALL', label: `All Requests (${communications.length})` },
+              { id: 'PTM', label: `PTM Consultations (${communications.filter((c) => c.type === 'PTM').length})` },
+              { id: 'LEAVE', label: `Absence Notes (${communications.filter((c) => c.type === 'LEAVE').length})` },
+              { id: 'PENDING', label: `Pending (${communications.filter((c) => c.status === 'Pending').length})` }
+            ].map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setCommFilter(f.id)}
+                className={`px-3 py-1.5 rounded-xl transition-all ${
+                  commFilter === f.id
+                    ? 'bg-white text-slate-900 shadow-2xs font-bold border border-slate-200/60'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Requests Table / List */}
+        {communications.length === 0 ? (
+          <div className="p-8 text-center rounded-2xl bg-slate-50/60 border border-dashed border-slate-200 text-slate-400 text-xs">
+            No parent communications logged across the institution yet.
+          </div>
+        ) : (
+          <div className="overflow-x-auto rounded-2xl border border-slate-200/80">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px] font-bold">
+                <tr>
+                  <th className="px-4 py-3">Category</th>
+                  <th className="px-4 py-3">Parent & Ward Info</th>
+                  <th className="px-4 py-3">Assigned Faculty / Subject</th>
+                  <th className="px-4 py-3">Details & Scheduled Time</th>
+                  <th className="px-4 py-3">Current Status</th>
+                  <th className="px-4 py-3 text-right">Admin Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 bg-white">
+                {communications
+                  .filter((c) => {
+                    if (commFilter === 'PTM') return c.type === 'PTM';
+                    if (commFilter === 'LEAVE') return c.type === 'LEAVE';
+                    if (commFilter === 'PENDING') return c.status === 'Pending';
+                    return true;
+                  })
+                  .map((item) => (
+                    <tr key={item.id} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="px-4 py-3.5 whitespace-nowrap">
+                        <span
+                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                            item.type === 'PTM'
+                              ? 'bg-purple-100 text-purple-800 border border-purple-200'
+                              : 'bg-amber-100 text-amber-800 border border-amber-200'
+                          }`}
+                        >
+                          {item.type === 'PTM' ? 'PTM Consultation' : 'Leave Note'}
+                        </span>
+                        <div className="text-[10px] text-slate-400 mt-1 font-mono">{item.createdAt}</div>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <div className="font-bold text-slate-900">{item.parentName}</div>
+                        <div className="text-slate-500 text-[11px] mt-0.5">
+                          Ward: <strong className="text-slate-700">{item.studentName}</strong> ({item.regNo})
+                        </div>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <div className="font-bold text-slate-800">{item.faculty}</div>
+                        <div className="text-slate-500 text-[11px]">{item.subject}</div>
+                      </td>
+                      <td className="px-4 py-3.5 max-w-xs">
+                        {item.type === 'PTM' ? (
+                          <div className="space-y-1">
+                            <div className="font-medium text-slate-800 flex items-center gap-1">
+                              <Calendar className="w-3.5 h-3.5 text-indigo-500" />
+                              <span>{item.date} • {item.timeSlot}</span>
+                            </div>
+                            <p className="text-slate-600 text-[11px] line-clamp-2">{item.notes}</p>
+                            <span className="text-[10px] text-slate-400">{item.mode}</span>
+                          </div>
+                        ) : (
+                          <div className="space-y-1">
+                            <div className="font-medium text-amber-900">
+                              {item.startDate} to {item.endDate} ({item.leaveType})
+                            </div>
+                            <p className="text-slate-600 text-[11px] line-clamp-2">{item.reason}</p>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3.5 whitespace-nowrap">
+                        {item.status === 'Pending' ? (
+                          <span className="px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-bold text-[10px]">
+                            Pending Action
+                          </span>
+                        ) : item.status === 'Confirmed' || item.status === 'Approved' ? (
+                          <span className="px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-[10px]">
+                            Confirmed / Approved
+                          </span>
+                        ) : item.status === 'Acknowledged' ? (
+                          <span className="px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 font-bold text-[10px]">
+                            Acknowledged
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-bold text-[10px]">
+                            Declined
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3.5 whitespace-nowrap text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {item.status === 'Pending' && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => handleAdminStatusChange(item.id, item.type === 'PTM' ? 'Confirmed' : 'Acknowledged')}
+                                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] shadow-2xs transition-all flex items-center gap-1"
+                                title="Approve"
+                              >
+                                <Check className="w-3 h-3" />
+                                <span>Confirm</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleAdminStatusChange(item.id, 'Declined')}
+                                className="px-2 py-1 rounded-lg bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 font-bold text-[11px] shadow-2xs transition-all flex items-center gap-1"
+                                title="Decline"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </>
+                          )}
+                          {item.status !== 'Pending' && (
+                            <button
+                              type="button"
+                              onClick={() => handleAdminStatusChange(item.id, 'Pending')}
+                              className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium text-[10px] transition-all"
+                            >
+                              Reset
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* 5. ADMIN SYSTEM HEALTH & SETTINGS STRIP */}
       <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4 text-xs">
           <div className="flex items-center gap-2">

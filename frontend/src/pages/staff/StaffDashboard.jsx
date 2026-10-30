@@ -18,15 +18,50 @@ import {
   AlertTriangle,
   Send,
   Mail,
-  HelpCircle
+  HelpCircle,
+  MessageSquare,
+  CalendarCheck,
+  Calendar,
+  Check,
+  X,
+  FileText,
+  Video
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { communicationsService } from '../../api/communications';
+import { playHapticChime } from '../../utils/sound';
 
 export const StaffDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isShortageModalOpen, setIsShortageModalOpen] = useState(false);
+  const [communications, setCommunications] = useState(() => communicationsService.getAll());
+  const [commFilter, setCommFilter] = useState('ALL');
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setCommunications(communicationsService.getAll());
+    };
+    window.addEventListener('communications-updated', handleUpdate);
+    return () => window.removeEventListener('communications-updated', handleUpdate);
+  }, []);
+
+  const handleApproveComm = (id, type) => {
+    communicationsService.updateStatus(id, type === 'PTM' ? 'Confirmed' : 'Acknowledged');
+    playHapticChime();
+    toast.success(
+      type === 'PTM'
+        ? 'PTM Consultation slot confirmed and meeting link emailed to parent!'
+        : 'Ward medical absence note acknowledged.'
+    );
+  };
+
+  const handleDeclineComm = (id) => {
+    communicationsService.updateStatus(id, 'Declined');
+    playHapticChime();
+    toast.error('Consultation request declined. Notification sent to parent.');
+  };
 
   useEffect(() => {
     dashboardService
@@ -466,6 +501,170 @@ export const StaffDashboard = () => {
             <span>Open Class Performance Register</span>
           </Link>
         </div>
+      </div>
+
+      {/* 4. PARENT COMMUNICATIONS & PTM CONSULTATION INBOX */}
+      <div className="bg-white/90 backdrop-blur-md rounded-[32px] p-6 border border-slate-200/80 shadow-2xs space-y-5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-700">
+                <MessageSquare className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                  <span>Parent Communications & PTM Consultation Inbox</span>
+                  {communications.filter((c) => c.status === 'Pending').length > 0 && (
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-black uppercase tracking-wider animate-pulse">
+                      {communications.filter((c) => c.status === 'Pending').length} Pending Action
+                    </span>
+                  )}
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Direct requests from registered parents: Online/Offline PTM consultation slots and medical absence intimations.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-slate-100/80 border border-slate-200/70 text-xs font-semibold">
+            {[
+              { id: 'ALL', label: `All (${communications.length})` },
+              { id: 'PTM', label: `PTM Meetings (${communications.filter((c) => c.type === 'PTM').length})` },
+              { id: 'LEAVE', label: `Absence Notes (${communications.filter((c) => c.type === 'LEAVE').length})` },
+              { id: 'PENDING', label: `Needs Review (${communications.filter((c) => c.status === 'Pending').length})` }
+            ].map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setCommFilter(f.id)}
+                className={`px-3 py-1.5 rounded-xl transition-all ${
+                  commFilter === f.id
+                    ? 'bg-white text-slate-900 shadow-2xs font-bold border border-slate-200/60'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* List of Parent Communications */}
+        {communications.length === 0 ? (
+          <div className="p-8 text-center rounded-2xl bg-slate-50/60 border border-dashed border-slate-200 text-slate-400 text-xs">
+            No parent communications or consultation requests received yet.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {communications
+              .filter((c) => {
+                if (commFilter === 'PTM') return c.type === 'PTM';
+                if (commFilter === 'LEAVE') return c.type === 'LEAVE';
+                if (commFilter === 'PENDING') return c.status === 'Pending';
+                return true;
+              })
+              .map((item) => (
+                <div
+                  key={item.id}
+                  className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:bg-white transition-all shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4"
+                >
+                  <div className="space-y-1.5 flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span
+                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                          item.type === 'PTM'
+                            ? 'bg-purple-100 text-purple-800 border border-purple-200'
+                            : 'bg-amber-100 text-amber-800 border border-amber-200'
+                        }`}
+                      >
+                        {item.type === 'PTM' ? 'PTM Consultation' : 'Absence Intimation'}
+                      </span>
+                      <span className="text-xs font-bold text-slate-900">{item.parentName}</span>
+                      <span className="text-slate-400 text-xs">•</span>
+                      <span className="text-xs text-slate-600">
+                        Ward: <strong className="text-slate-800">{item.studentName}</strong> ({item.regNo})
+                      </span>
+                      <span className="text-[11px] text-slate-400 ml-auto font-mono">{item.createdAt}</span>
+                    </div>
+
+                    <p className="text-xs text-slate-700 bg-white/70 p-2.5 rounded-xl border border-slate-100">
+                      {item.type === 'PTM' ? item.notes : item.reason}
+                    </p>
+
+                    <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-500">
+                      {item.type === 'PTM' ? (
+                        <>
+                          <span className="flex items-center gap-1 font-medium text-slate-700">
+                            <Calendar className="w-3.5 h-3.5 text-indigo-500" />
+                            {item.date} • {item.timeSlot}
+                          </span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <Video className="w-3.5 h-3.5 text-slate-400" />
+                            {item.mode}
+                          </span>
+                          <span>•</span>
+                          <span>Subject: {item.subject}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex items-center gap-1 font-medium text-slate-700">
+                            <Calendar className="w-3.5 h-3.5 text-amber-500" />
+                            Leave Duration: {item.startDate} to {item.endDate}
+                          </span>
+                          <span>•</span>
+                          <span className="text-amber-800 font-semibold">{item.leaveType}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Actions / Status */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    {item.status === 'Pending' ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => handleApproveComm(item.id, item.type)}
+                          className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>{item.type === 'PTM' ? 'Approve & Confirm Slot' : 'Acknowledge Leave'}</span>
+                        </button>
+                        {item.type === 'PTM' && (
+                          <button
+                            type="button"
+                            onClick={() => handleDeclineComm(item.id)}
+                            className="px-3 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 text-xs font-bold shadow-2xs transition-all flex items-center gap-1"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                            <span>Decline</span>
+                          </button>
+                        )}
+                      </>
+                    ) : item.status === 'Confirmed' || item.status === 'Approved' ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Slot Confirmed</span>
+                      </span>
+                    ) : item.status === 'Acknowledged' ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold">
+                        <Check className="w-3.5 h-3.5 text-blue-600" />
+                        <span>Leave Excused</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold">
+                        <X className="w-3.5 h-3.5 text-rose-500" />
+                        <span>Declined</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
 
       {/* Shortage Advisory Modal */}

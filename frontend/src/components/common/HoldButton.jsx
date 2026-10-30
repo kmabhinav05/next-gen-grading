@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { playHapticChime } from '../../utils/sound';
 
 import './HoldButton.css';
 
@@ -81,6 +82,7 @@ export default function HoldButton({
     if (performance.now() - gesture.current.start < holdTime - 50) return;
     clearTimers();
     go('done', inputRef.current);
+    playHapticChime();
     onHold?.();
     if (resetAfter > 0) {
       timers.current.reset = setTimeout(() => {

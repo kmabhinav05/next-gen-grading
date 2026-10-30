@@ -325,18 +325,35 @@ export function Component({
                 }}
               />
 
-              {/* Logo and header */}
+              {/* Logo and header with high quality 3D effect */}
               <div className="text-center space-y-1 mb-5">
                 <motion.div
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: "spring", duration: 0.8 }}
-                  className="mx-auto w-10 h-10 rounded-full border border-white/10 flex items-center justify-center relative overflow-hidden bg-purple-500/10 shadow-lg shadow-purple-500/20"
+                  initial={{ scale: 0.5, opacity: 0, y: -10 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  whileHover={{ scale: 1.1, rotateY: 15, z: 20 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="mx-auto w-14 h-14 rounded-2xl p-[1.5px] bg-gradient-to-b from-purple-400 via-indigo-500/40 to-white/10 shadow-[0_10px_25px_-5px_rgba(168,85,247,0.4),0_0_15px_1px_rgba(255,255,255,0.15)] relative flex items-center justify-center group/logo cursor-pointer"
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
-                  <span className="text-lg font-black bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
-                    N
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
+                  {/* Outer Ambient Glow Ring */}
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 opacity-40 blur-md group-hover/logo:opacity-75 transition-opacity duration-500 -z-10" />
+
+                  {/* Inner 3D Glass Well */}
+                  <div className="w-full h-full rounded-[14px] bg-gradient-to-b from-slate-900/90 via-[#0d0915] to-black flex items-center justify-center relative overflow-hidden border border-white/10 backdrop-blur-md">
+                    {/* Top Specular Glare Arc */}
+                    <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/25 via-white/5 to-transparent rounded-t-[14px] pointer-events-none" />
+
+                    {/* Official Website Brand Logo with 3D Depth */}
+                    <img
+                      src="/logo.png"
+                      alt="Next Gen Grading Logo"
+                      className="w-8 h-8 object-contain relative z-10 drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover/logo:scale-105 transition-transform duration-300 filter brightness-110"
+                      draggable={false}
+                    />
+
+                    {/* Subtle Diagonal Hologram Sheen */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  </div>
                 </motion.div>
 
                 <motion.h1

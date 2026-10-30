@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
+import { Modal } from '../../components/common/Modal';
 import {
   ArrowUpRight,
   BookOpen,
@@ -12,13 +13,19 @@ import {
   Clock,
   GraduationCap,
   FileSpreadsheet,
-  Award
+  Award,
+  AlertTriangle,
+  Send,
+  Mail,
+  HelpCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const StaffDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isShortageModalOpen, setIsShortageModalOpen] = useState(false);
 
   useEffect(() => {
     dashboardService
@@ -404,6 +411,102 @@ export const StaffDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* 3. STAFF SHORTAGE & REMEDIAL ADVISORY CENTER */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600" />
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Attendance Defaulter Warning Center
+              </h3>
+            </div>
+            <p className="text-xs text-slate-500">
+              Students identified below the mandatory 75% threshold in your assigned courses.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsShortageModalOpen(true)}
+            className="w-full py-2.5 px-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold hover:bg-rose-100 transition-all shadow-xs flex items-center justify-center gap-2"
+          >
+            <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+            <span>Review Shortage List & Send Notices</span>
+          </button>
+        </div>
+
+        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <ClipboardCheck className="w-4 h-4 text-indigo-600" />
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Remedial Class Counseling Group
+              </h3>
+            </div>
+            <p className="text-xs text-slate-500">
+              Organize special tutoring sessions for students scoring below 40% in internal tests.
+            </p>
+          </div>
+          <Link
+            to="/staff/class-report"
+            className="w-full py-2.5 px-4 rounded-2xl bg-white text-slate-800 border border-slate-300 hover:bg-slate-50 text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-2"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Open Class Performance Register</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Shortage Advisory Modal */}
+      <Modal isOpen={isShortageModalOpen} onClose={() => setIsShortageModalOpen(false)} title="Attendance Shortage Advisory Notice">
+        <div className="space-y-4 text-xs">
+          <p className="text-slate-600">
+            The following student(s) currently fail to meet the mandatory 75% lecture attendance threshold in your classes:
+          </p>
+
+          <div className="p-3 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-2">
+            <div className="flex items-center justify-between font-bold text-slate-900">
+              <span>Ananya Sen (21CS004)</span>
+              <span className="text-rose-700 font-mono">70.0% Critical</span>
+            </div>
+            <div className="text-[11px] text-slate-500 flex items-center justify-between">
+              <span>Course: CS502 Operating Systems (Sem 5, Sec A)</span>
+              <span>28 Attended / 40 Held</span>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600 space-y-1">
+            <span className="font-bold text-slate-800 block">Notice Actions:</span>
+            <ul className="list-disc list-inside space-y-0.5 text-[11px]">
+              <li>Dispatches official email advisory to student institutional inbox.</li>
+              <li>Alerts registered parent guardian mobile number.</li>
+              <li>Generates audit entry for Controller of Examinations (COE).</li>
+            </ul>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsShortageModalOpen(false)}
+              className="px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                toast.success('Official Shortage Warning dispatched to student & guardian!');
+                setIsShortageModalOpen(false);
+              }}
+              className="px-4 py-2 bg-rose-600 text-white rounded-xl font-bold shadow-xs hover:bg-rose-700 flex items-center gap-1.5"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>Dispatch Warning Notice</span>
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

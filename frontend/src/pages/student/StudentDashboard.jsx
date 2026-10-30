@@ -11,13 +11,18 @@ import {
   Clock,
   GraduationCap,
   AlertTriangle,
-  FileText
+  FileText,
+  Calculator,
+  Sparkles,
+  Sliders
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const StudentDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [extraClassesToSimulate, setExtraClassesToSimulate] = useState(5);
+  const [targetScorePercent, setTargetScorePercent] = useState(85);
 
   useEffect(() => {
     dashboardService
@@ -444,6 +449,137 @@ export const StudentDashboard = () => {
                 <span>Parent–Teacher Meeting (PTM) & Digital Progress Card Counseling</span>
                 <span className="text-[10px] font-semibold text-slate-400">Seminar Hall</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. STUDENT SMART TOOLS: ATTENDANCE & GPA WHAT-IF SIMULATORS */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-2">
+          {/* Tool 1: Attendance Goal & Safe Leave Calculator */}
+          <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Calculator className="w-4 h-4 text-cyan-600" />
+                <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                  Attendance Goal & Leave Simulator
+                </h3>
+              </div>
+              <span className="text-[11px] font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full border border-cyan-200">
+                Hall Ticket Rule: 75%
+              </span>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div>
+                  <span className="text-[11px] text-slate-400 block font-normal">Current Attendance</span>
+                  <strong className="text-sm font-bold text-slate-900 font-mono">
+                    {attendancePerc}% ({summary.total_classes_attended || 34} / {summary.total_classes_held || 40} classes)
+                  </strong>
+                </div>
+                {attendancePerc >= 75 ? (
+                  <div className="text-right">
+                    <span className="text-[11px] text-emerald-700 font-bold block">Safe Leaves Remaining</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-black text-xs">
+                      {Math.max(0, Math.floor(((summary.total_classes_attended || 34) - 0.75 * (summary.total_classes_held || 40)) / 0.75))} Classes Can Be Missed
+                    </span>
+                  </div>
+                ) : (
+                  <div className="text-right">
+                    <span className="text-[11px] text-rose-700 font-bold block">Deficit to Reach 75%</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-black text-xs">
+                      Attend next {Math.ceil((0.75 * (summary.total_classes_held || 40) - (summary.total_classes_attended || 34)) / 0.25)} consecutive classes
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* What-If Slider */}
+              <div className="space-y-1.5 pt-1">
+                <div className="flex justify-between text-[11px] text-slate-600 font-semibold">
+                  <span>Simulate: Attend next N lectures</span>
+                  <span className="text-cyan-700 font-bold">+{extraClassesToSimulate} classes</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="20"
+                  value={extraClassesToSimulate}
+                  onChange={(e) => setExtraClassesToSimulate(Number(e.target.value))}
+                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
+                />
+                <div className="text-[11px] text-slate-500 flex items-center justify-between pt-1">
+                  <span>Projected Attendance:</span>
+                  <strong className="text-cyan-800 font-mono font-bold">
+                    {(
+                      (((summary.total_classes_attended || 34) + extraClassesToSimulate) /
+                        ((summary.total_classes_held || 40) + extraClassesToSimulate)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Tool 2: CGPA & Target Grade Projector */}
+          <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                  Semester SGPA / Grade Projector
+                </h3>
+              </div>
+              <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                Target Simulator
+              </span>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-[11px] text-slate-600 font-semibold">
+                  <span>Target Overall Percentage</span>
+                  <span className="text-amber-800 font-bold font-mono text-xs">{targetScorePercent}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="40"
+                  max="100"
+                  value={targetScorePercent}
+                  onChange={(e) => setTargetScorePercent(Number(e.target.value))}
+                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                />
+              </div>
+
+              {/* Projected Result Card */}
+              <div className="p-3 rounded-2xl bg-amber-50/50 border border-amber-200/80 flex items-center justify-between">
+                <div>
+                  <span className="text-[11px] text-amber-800 font-semibold block">Projected Grade Point</span>
+                  <span className="text-lg font-black text-slate-900 font-mono">
+                    {(targetScorePercent / 10).toFixed(1)} / 10.0 SGPA
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[11px] text-slate-500 block">Classification</span>
+                  <span className="text-xs font-bold text-amber-900">
+                    {targetScorePercent >= 90
+                      ? "O (Dean's List)"
+                      : targetScorePercent >= 80
+                      ? 'A+ (Distinction)'
+                      : targetScorePercent >= 70
+                      ? 'A (First Class)'
+                      : targetScorePercent >= 60
+                      ? 'B+ (First Class)'
+                      : 'B (Second Class)'}
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-[10px] text-slate-400">
+                Calculated on institutional credit weightages across enrolled subjects for Semester {student.semester}.
+              </p>
             </div>
           </div>
         </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
+import { Modal } from '../../components/common/Modal';
+import HoldButton from '../../components/common/HoldButton';
 import {
   ArrowUpRight,
   Award,
@@ -12,14 +14,37 @@ import {
   GraduationCap,
   AlertTriangle,
   UserCheck,
-  Calendar
+  Calendar,
+  MessageSquare,
+  FileCheck,
+  Send
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const ParentDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
+
+  // New Features: PTM & Leave Modals
+  const [isPtmOpen, setIsPtmOpen] = useState(false);
+  const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+
+  const [ptmForm, setPtmForm] = useState({
+    faculty: 'Prof. Arjun Menon (Senior Teacher - CS)',
+    date: '2026-11-05',
+    time: '11:00 AM',
+    mode: 'Online (Google Meet)',
+    query: ''
+  });
+
+  const [leaveForm, setLeaveForm] = useState({
+    type: 'Medical Leave',
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: new Date().toISOString().split('T')[0],
+    reason: ''
+  });
 
   useEffect(() => {
     dashboardService
@@ -473,6 +498,206 @@ export const ParentDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* 3. PARENT ACTION CENTER: FACULTY CONSULTATION & ABSENCE INTIMATION */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 text-emerald-600" />
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Faculty Consultation & PTM Booking
+              </h3>
+            </div>
+            <p className="text-xs text-slate-500">
+              Request an online video or on-campus meeting with {student.name}'s subject professors.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsPtmOpen(true)}
+            className="w-full py-2.5 px-4 rounded-2xl bg-[#1e293b] text-white text-xs font-bold hover:bg-slate-800 transition-all shadow-xs flex items-center justify-center gap-2"
+          >
+            <Calendar className="w-3.5 h-3.5 text-amber-400" />
+            <span>Schedule Faculty Consultation</span>
+          </button>
+        </div>
+
+        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <FileCheck className="w-4 h-4 text-primary-600" />
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Submit Ward Absence / Leave Note
+              </h3>
+            </div>
+            <p className="text-xs text-slate-500">
+              Inform class teachers and department administration in advance for medical or emergency leave.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsLeaveOpen(true)}
+            className="w-full py-2.5 px-4 rounded-2xl bg-white text-slate-800 border border-slate-300 hover:bg-slate-50 text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-2"
+          >
+            <Send className="w-3.5 h-3.5 text-primary-600" />
+            <span>Submit Absence Intimation Note</span>
+          </button>
+        </div>
+      </div>
+
+      {/* PTM Consultation Modal */}
+      <Modal isOpen={isPtmOpen} onClose={() => setIsPtmOpen(false)} title="Schedule Faculty Consultation">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            toast.success(`Consultation request submitted! The faculty will confirm via SMS.`);
+            setIsPtmOpen(false);
+          }}
+          className="space-y-4 text-xs"
+        >
+          <div>
+            <label className="font-semibold text-slate-700 block mb-1">Select Professor / Course</label>
+            <select
+              value={ptmForm.faculty}
+              onChange={(e) => setPtmForm({ ...ptmForm, faculty: e.target.value })}
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+            >
+              <option>Prof. Arjun Menon (Senior Teacher - Operating Systems)</option>
+              <option>Dr. Meera Nair (Dean - Academic Affairs)</option>
+              <option>Class Advisor & Attendance Counselor</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">Preferred Date</label>
+              <input
+                type="date"
+                required
+                value={ptmForm.date}
+                onChange={(e) => setPtmForm({ ...ptmForm, date: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+              />
+            </div>
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">Preferred Time</label>
+              <input
+                type="text"
+                required
+                value={ptmForm.time}
+                onChange={(e) => setPtmForm({ ...ptmForm, time: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="font-semibold text-slate-700 block mb-1">Discussion Topic or Question</label>
+            <textarea
+              rows="3"
+              required
+              placeholder="e.g. Inquiring regarding internal marks in Database Systems and practical attendance clearance..."
+              value={ptmForm.query}
+              onChange={(e) => setPtmForm({ ...ptmForm, query: e.target.value })}
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsPtmOpen(false)}
+              className="px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-slate-900 text-white rounded-xl font-bold shadow-xs hover:bg-slate-800"
+            >
+              Confirm & Submit Request
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Leave Intimation Modal */}
+      <Modal isOpen={isLeaveOpen} onClose={() => setIsLeaveOpen(false)} title="Submit Ward Absence Intimation">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            toast.success(`Absence note for ${student.name} recorded! Department informed.`);
+            setIsLeaveOpen(false);
+          }}
+          className="space-y-4 text-xs"
+        >
+          <div>
+            <label className="font-semibold text-slate-700 block mb-1">Reason / Nature of Absence</label>
+            <select
+              value={leaveForm.type}
+              onChange={(e) => setLeaveForm({ ...leaveForm, type: e.target.value })}
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+            >
+              <option>Medical Leave (Fever / Health Recovery)</option>
+              <option>Family Emergency / Bereavement</option>
+              <option>Official Competition / Sports Event</option>
+              <option>Personal Leave</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">From Date</label>
+              <input
+                type="date"
+                required
+                value={leaveForm.startDate}
+                onChange={(e) => setLeaveForm({ ...leaveForm, startDate: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+              />
+            </div>
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">To Date</label>
+              <input
+                type="date"
+                required
+                value={leaveForm.endDate}
+                onChange={(e) => setLeaveForm({ ...leaveForm, endDate: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="font-semibold text-slate-700 block mb-1">Detailed Explanation & Doctor Note</label>
+            <textarea
+              rows="3"
+              required
+              placeholder="e.g. Ayaan has mild fever and advised 2 days bed rest. Medical certificate will be submitted on return..."
+              value={leaveForm.reason}
+              onChange={(e) => setLeaveForm({ ...leaveForm, reason: e.target.value })}
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white"
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsLeaveOpen(false)}
+              className="px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold shadow-xs hover:bg-emerald-700"
+            >
+              Submit Absence Note
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

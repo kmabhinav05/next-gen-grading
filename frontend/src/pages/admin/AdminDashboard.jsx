@@ -81,9 +81,9 @@ export const AdminDashboard = () => {
 
         {/* Big Bold Stats on Right (Matching image: 78, 56, 203) */}
         <div className="flex items-center gap-6 sm:gap-10 self-start xl:self-auto">
-          <div className="flex items-center gap-2">
+          <Link to="/admin/students" className="flex items-center gap-2 hover:opacity-80 transition-opacity" title="Manage Students Registry">
             <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <GraduationCap className="w-5 h-5" />
+              <GraduationCap className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
               <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
@@ -91,11 +91,11 @@ export const AdminDashboard = () => {
               </span>
               <p className="text-[11px] text-slate-400 font-medium">Students</p>
             </div>
-          </div>
+          </Link>
 
-          <div className="flex items-center gap-2">
+          <Link to="/admin/staff" className="flex items-center gap-2 hover:opacity-80 transition-opacity" title="Manage Faculty Directory">
             <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <Users className="w-5 h-5" />
+              <Users className="w-5 h-5 text-amber-500" />
             </div>
             <div>
               <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
@@ -103,11 +103,11 @@ export const AdminDashboard = () => {
               </span>
               <p className="text-[11px] text-slate-400 font-medium">Faculty</p>
             </div>
-          </div>
+          </Link>
 
-          <div className="flex items-center gap-2">
+          <Link to="/admin/subjects" className="flex items-center gap-2 hover:opacity-80 transition-opacity" title="Manage Courses & Curriculum">
             <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <BookOpen className="w-5 h-5" />
+              <BookOpen className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
               <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
@@ -115,7 +115,7 @@ export const AdminDashboard = () => {
               </span>
               <p className="text-[11px] text-slate-400 font-medium">Courses</p>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
 
@@ -388,6 +388,33 @@ export const AdminDashboard = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* 4. ADMIN SYSTEM HEALTH & SETTINGS STRIP */}
+      <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-4 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="font-bold text-slate-800">COE Engine Online</span>
+            <span className="text-slate-400 font-mono text-[11px]">Latency 12ms</span>
+          </div>
+          <div className="hidden sm:block text-slate-300">|</div>
+          <div className="text-slate-600">
+            Current Session: <strong className="text-slate-900">Odd Sem 2026-2027</strong>
+          </div>
+          <div className="hidden sm:block text-slate-300">|</div>
+          <div className="text-slate-600">
+            Attendance Defaulter Threshold: <strong className="text-rose-600">75%</strong>
+          </div>
+        </div>
+
+        <Link
+          to="/settings"
+          className="px-4 py-2 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-2"
+        >
+          <span>Open Academic Configuration & Settings</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
     </div>
   );

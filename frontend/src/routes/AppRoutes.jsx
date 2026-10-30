@@ -39,6 +39,9 @@ import { ChildAttendance } from '../pages/parent/ChildAttendance';
 // Profile Page (Digital ID & Lanyard for all 4 Portals)
 import { Profile } from '../pages/profile/Profile';
 
+// Settings Page (All 4 Portals)
+import { Settings } from '../pages/settings/Settings';
+
 // Root redirect handler
 const RootRedirect = () => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -252,6 +255,16 @@ export const AppRoutes = () => {
           element={
             <ProtectedRoute allowedRoles={['ADMIN', 'STAFF', 'STUDENT', 'PARENT']}>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Settings & System Preferences (All 4 Portals) */}
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN', 'STAFF', 'STUDENT', 'PARENT']}>
+              <Settings />
             </ProtectedRoute>
           }
         />

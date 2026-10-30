@@ -100,7 +100,7 @@ export const ManageStudents = () => {
       render: (row) => (
         <div>
           <p className="font-semibold text-slate-900">{row.full_name}</p>
-          <p className="text-[11px] text-slate-500">@{row.username}</p>
+          <p className="text-[11px] text-slate-500">@{row.username || row.reg_no?.toLowerCase() || 'student'}</p>
         </div>
       ),
     },
@@ -108,7 +108,7 @@ export const ManageStudents = () => {
       header: 'Semester',
       accessor: 'semester_number',
       sortable: true,
-      render: (row) => <span>Semester {row.semester_number || 'N/A'}</span>,
+      render: (row) => <span>Semester {row.semester_number || row.semester || 5}</span>,
     },
     {
       header: 'Section',

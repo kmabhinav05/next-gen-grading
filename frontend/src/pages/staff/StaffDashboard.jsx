@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
 import { Modal } from '../../components/common/Modal';
-import { PortalHeaderBanner, getTimeBasedGreeting } from '../../components/dashboard/PortalHeaderBanner';
+import { getTimeGreeting } from '../../utils/greeting';
 import {
   ArrowUpRight,
   BookOpen,
@@ -50,32 +50,33 @@ export const StaffDashboard = () => {
   const assignedSubjects = data?.assigned_subjects || [];
   const recentLogs = data?.recent_logs || [];
   const totalEnrolled = assignedSubjects.reduce((acc, s) => acc + (s.enrolled_students || 0), 0) || 6;
-  const timeGreeting = getTimeBasedGreeting();
+  const timeGreeting = getTimeGreeting();
 
   return (
-    <div className="space-y-5">
-      {/* SECTION ABOVE WELCOME: Live Time, Date & Faculty Academic Station */}
-      <PortalHeaderBanner
-        role="STAFF"
-        subtitle="Department of CSE"
-        extraPill={`${assignedSubjects.length || 2} Assigned Courses • Section A`}
-      />
-
+    <div className="space-y-6">
       {/* 1. HERO HEADER ROW (Matching Reference Design) */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              {timeGreeting.salutation}, welcome in, {data?.staff_name || 'Faculty Member'}
-            </h1>
-            <Link
-              to="/profile"
-              title="View Profile & 3D ID Badge"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
-            >
-              <span>View Profile & ID</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
+          <div>
+            <span className="text-sm sm:text-base font-bold text-[#f59e0b] block tracking-wide">
+              {timeGreeting},
+            </span>
+            <span className="text-xl sm:text-2xl font-bold text-slate-500 block mt-0.5">
+              Welcome in,
+            </span>
+            <div className="flex flex-wrap items-center gap-3 mt-1">
+              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                {data?.staff_name || 'Arjun Menon'}
+              </h1>
+              <Link
+                to="/profile"
+                title="View Profile & 3D ID Badge"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
+              >
+                <span>View Profile & ID</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
           {/* Segmented Progress Tracker Strip - Exact 4 Pills Design */}

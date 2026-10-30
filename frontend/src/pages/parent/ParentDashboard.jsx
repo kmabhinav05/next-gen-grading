@@ -3,7 +3,7 @@ import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
 import { Modal } from '../../components/common/Modal';
 import HoldButton from '../../components/common/HoldButton';
-import { PortalHeaderBanner, getTimeBasedGreeting } from '../../components/dashboard/PortalHeaderBanner';
+import { getTimeGreeting } from '../../utils/greeting';
 import {
   ArrowUpRight,
   Award,
@@ -112,28 +112,29 @@ export const ParentDashboard = () => {
         </div>
       )}
 
-      {/* SECTION ABOVE WELCOME: Live Time, Date & Guardian Hub */}
-      <PortalHeaderBanner
-        role="PARENT"
-        subtitle={`Ward: ${student.name} (${student.reg_no})`}
-        extraPill={`Semester ${student.semester} • Section ${student.section}`}
-      />
-
       {/* 1. HERO HEADER ROW (Matching Reference Design) */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              {getTimeBasedGreeting().salutation}, welcome in, {student.name ? `${student.name}'s Guardian` : 'Parent Guardian'}
-            </h1>
-            <Link
-              to="/profile"
-              title="View Profile & 3D ID Badge"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
-            >
-              <span>View Profile & ID</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
+          <div>
+            <span className="text-sm sm:text-base font-bold text-[#f59e0b] block tracking-wide">
+              {getTimeGreeting()},
+            </span>
+            <span className="text-xl sm:text-2xl font-bold text-slate-500 block mt-0.5">
+              Welcome in,
+            </span>
+            <div className="flex flex-wrap items-center gap-3 mt-1">
+              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                {student.name ? `${student.name}'s Guardian` : 'Parent Guardian'}
+              </h1>
+              <Link
+                to="/profile"
+                title="View Profile & 3D ID Badge"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
+              >
+                <span>View Profile & ID</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
           {/* Segmented Progress Tracker Strip - Exact 4 Pills Design */}

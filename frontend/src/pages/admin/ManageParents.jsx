@@ -26,7 +26,7 @@ export const ManageParents = () => {
     try {
       setLoading(true);
       const res = await academicsService.getParents();
-      setParents(res.results || res);
+      setParents(Array.isArray(res?.results) ? res.results : (Array.isArray(res) ? res : []));
     } catch (err) {
       toast.error('Failed to load parents registry');
     } finally {

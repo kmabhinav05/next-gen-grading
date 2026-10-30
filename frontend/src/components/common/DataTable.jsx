@@ -14,16 +14,23 @@ export const DataTable = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
+  // Safe array conversion
+  const listData = useMemo(() => {
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray(data.results)) return data.results;
+    return [];
+  }, [data]);
+
   // Filtered data
   const filteredData = useMemo(() => {
-    if (!search.trim()) return data;
+    if (!search.trim()) return listData;
     const query = search.toLowerCase();
-    return data.filter((row) =>
-      Object.values(row).some((val) =>
+    return listData.filter((row) =>
+      row && typeof row === 'object' && Object.values(row).some((val) =>
         String(val || '').toLowerCase().includes(query)
       )
     );
-  }, [data, search]);
+  }, [listData, search]);
 
   // Sorted data
   const sortedData = useMemo(() => {

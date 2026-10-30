@@ -33,8 +33,8 @@ export const ManageStudents = () => {
         academicsService.getStudents(),
         academicsService.getSemesters(),
       ]);
-      setStudents(stuRes.results || stuRes);
-      setSemesters(semRes);
+      setStudents(Array.isArray(stuRes?.results) ? stuRes.results : (Array.isArray(stuRes) ? stuRes : []));
+      setSemesters(Array.isArray(semRes) ? semRes : []);
     } catch (err) {
       toast.error('Failed to load student registry');
     } finally {

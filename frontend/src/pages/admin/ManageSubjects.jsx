@@ -30,9 +30,9 @@ export const ManageSubjects = () => {
         academicsService.getSemesters(),
         academicsService.getStaff(),
       ]);
-      setSubjects(subjRes);
-      setSemesters(semRes);
-      setStaffList(staffRes.results || staffRes);
+      setSubjects(Array.isArray(subjRes) ? subjRes : []);
+      setSemesters(Array.isArray(semRes) ? semRes : []);
+      setStaffList(Array.isArray(staffRes?.results) ? staffRes.results : (Array.isArray(staffRes) ? staffRes : []));
     } catch (err) {
       toast.error('Failed to load courses');
     } finally {

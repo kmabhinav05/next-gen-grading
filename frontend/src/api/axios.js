@@ -37,7 +37,16 @@ const processQueue = (error, token = null) => {
 };
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Detect Vercel SPA html rewrites when an API route is missing
+    if (
+      typeof response.data === 'string' &&
+      (response.data.includes('<!DOCTYPE') || response.data.includes('<html') || response.data.includes('<head'))
+    ) {
+      return Promise.reject(new Error('API route returned HTML SPA fallback'));
+    }
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
 

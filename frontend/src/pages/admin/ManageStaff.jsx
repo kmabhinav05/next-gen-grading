@@ -27,7 +27,7 @@ export const ManageStaff = () => {
     try {
       setLoading(true);
       const res = await academicsService.getStaff();
-      setStaffList(res.results || res);
+      setStaffList(Array.isArray(res?.results) ? res.results : (Array.isArray(res) ? res : []));
     } catch (err) {
       toast.error('Failed to load faculty registry');
     } finally {

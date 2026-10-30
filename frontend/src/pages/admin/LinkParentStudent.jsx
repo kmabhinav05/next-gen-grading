@@ -27,9 +27,9 @@ export const LinkParentStudent = () => {
         academicsService.getParents(),
         academicsService.getStudents(),
       ]);
-      setLinks(linksRes.results || linksRes);
-      setParents(pRes.results || pRes);
-      setStudents(sRes.results || sRes);
+      setLinks(Array.isArray(linksRes?.results) ? linksRes.results : (Array.isArray(linksRes) ? linksRes : []));
+      setParents(Array.isArray(pRes?.results) ? pRes.results : (Array.isArray(pRes) ? pRes : []));
+      setStudents(Array.isArray(sRes?.results) ? sRes.results : (Array.isArray(sRes) ? sRes : []));
     } catch (err) {
       toast.error('Failed to load parent-student relationships');
     } finally {

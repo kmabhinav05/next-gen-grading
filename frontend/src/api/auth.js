@@ -37,6 +37,24 @@ const DEMO_USERS = {
     phone_number: '+91 990001001',
     student: { id: 1, reg_no: '21CS001', department: 'Computer Science & Engineering', semester: 5, section: 'A' }
   },
+  student: {
+    id: 3,
+    username: 'student1',
+    email: 'student1@college.edu',
+    full_name: 'Ayaan Khan',
+    role: 'STUDENT',
+    phone_number: '+91 990001001',
+    student: { id: 1, reg_no: '21CS001', department: 'Computer Science & Engineering', semester: 5, section: 'A' }
+  },
+  '21cs001': {
+    id: 3,
+    username: 'student1',
+    email: 'student1@college.edu',
+    full_name: 'Ayaan Khan',
+    role: 'STUDENT',
+    phone_number: '+91 990001001',
+    student: { id: 1, reg_no: '21CS001', department: 'Computer Science & Engineering', semester: 5, section: 'A' }
+  },
   parent1: {
     id: 4,
     username: 'parent1',

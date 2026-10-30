@@ -113,7 +113,6 @@ export const Navbar = () => {
           { label: 'Linkages', href: '/admin/parent-student' },
           { label: 'Reports', href: '/admin/reports' },
           { label: 'Profile', href: '/profile' },
-          { label: 'Settings', href: '/settings' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'STAFF':
@@ -123,7 +122,6 @@ export const Navbar = () => {
           { label: 'Attendance', href: '/staff/attendance' },
           { label: 'Class Reports', href: '/staff/class-report' },
           { label: 'Profile', href: '/profile' },
-          { label: 'Settings', href: '/settings' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'STUDENT':
@@ -132,7 +130,6 @@ export const Navbar = () => {
           { label: 'Progress Card', href: '/student/progress-card' },
           { label: 'Attendance', href: '/student/attendance' },
           { label: 'Profile', href: '/profile' },
-          { label: 'Settings', href: '/settings' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'PARENT':
@@ -141,14 +138,12 @@ export const Navbar = () => {
           { label: 'Ward Progress', href: '/parent/progress-card' },
           { label: 'Ward Attendance', href: '/parent/attendance' },
           { label: 'Profile', href: '/profile' },
-          { label: 'Settings', href: '/settings' },
           { label: 'COE Results', href: '/results' },
         ];
       default:
         return [
           { label: 'Home', href: '/' },
           { label: 'Profile', href: '/profile' },
-          { label: 'Settings', href: '/settings' },
           { label: 'COE Results', href: '/results' },
         ];
     }
@@ -196,11 +191,11 @@ export const Navbar = () => {
 
       {/* Right Controls */}
       <div className="flex items-center gap-2.5 self-end lg:self-auto shrink-0 relative" ref={notifRef}>
-        {/* Settings Button */}
+        {/* Settings Icon Button */}
         <Link
           to="/settings"
           title="System Settings & Preferences"
-          className="p-2.5 rounded-full bg-white/80 border border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-white shadow-2xs hover:shadow-xs transition-all hidden sm:flex items-center justify-center backdrop-blur-md"
+          className="p-2.5 rounded-full bg-white/80 border border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-white shadow-2xs hover:shadow-xs transition-all flex items-center justify-center backdrop-blur-md"
         >
           <SettingsIcon className="w-4 h-4" />
         </Link>

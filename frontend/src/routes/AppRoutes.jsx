@@ -209,7 +209,23 @@ export const AppRoutes = () => {
           }
         />
         <Route
+          path="/parent/child-progress-card"
+          element={
+            <ProtectedRoute allowedRoles={['PARENT']}>
+              <ChildProgressCard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/parent/attendance"
+          element={
+            <ProtectedRoute allowedRoles={['PARENT']}>
+              <ChildAttendance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/parent/child-attendance"
           element={
             <ProtectedRoute allowedRoles={['PARENT']}>
               <ChildAttendance />

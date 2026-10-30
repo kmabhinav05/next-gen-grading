@@ -31,6 +31,8 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { communicationsService } from '../../api/communications';
 import { playHapticChime } from '../../utils/sound';
+import { GlassCalendar } from '@/components/ui/glass-calendar';
+import { format } from 'date-fns';
 
 export const StaffDashboard = () => {
   const [data, setData] = useState(null);
@@ -38,6 +40,10 @@ export const StaffDashboard = () => {
   const [isShortageModalOpen, setIsShortageModalOpen] = useState(false);
   const [communications, setCommunications] = useState(() => communicationsService.getAll());
   const [commFilter, setCommFilter] = useState('ALL');
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState(new Date(2026, 9, 30));
+  const [calendarNotes, setCalendarNotes] = useState({
+    '2026-10-30': 'Finalize IA2 mark entry and submit shortage list'
+  });
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -378,79 +384,95 @@ export const StaffDashboard = () => {
         </div>
 
         {/* Right: Faculty Timetable & Counseling Schedule (65%) */}
-        <div className="lg:col-span-8 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-semibold text-slate-400">September</span>
-              <span className="text-sm font-extrabold text-slate-900 px-3 py-1 bg-slate-100 rounded-full">
-                October 2026
+        <div className="lg:col-span-8 space-y-4">
+          <GlassCalendar
+            selectedDate={selectedCalendarDate}
+            onDateSelect={(d) => {
+              setSelectedCalendarDate(d);
+              playHapticChime();
+            }}
+            onAddNote={(d) => {
+              const key = format(d, 'yyyy-MM-dd');
+              const text = window.prompt(`Add faculty reminder for ${format(d, 'MMM d, yyyy')}:`, calendarNotes[key] || '');
+              if (text !== null) {
+                setCalendarNotes((prev) => ({ ...prev, [key]: text }));
+                toast.success(`Faculty note saved for ${format(d, 'MMM d')}`);
+                playHapticChime();
+              }
+            }}
+            onNewEvent={(d) => {
+              toast.success(`Lecture / Office hours scheduler opened for ${format(d, 'MMM d, yyyy')}`);
+              playHapticChime();
+            }}
+            className="w-full"
+          />
+
+          {/* Daily Schedule Details for Selected Date */}
+          <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-indigo-600" />
+                <h3 className="text-xs font-bold text-slate-900">
+                  Teaching Timetable: <span className="text-indigo-600 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
+                </h3>
+              </div>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                Department of CSE
               </span>
-              <span className="text-xs font-semibold text-slate-400">November</span>
             </div>
-            <span className="text-xs font-bold text-[#f59e0b]">Teaching Timetable</span>
-          </div>
 
-          {/* Weekday Strip */}
-          <div className="grid grid-cols-6 gap-2 text-center text-xs pb-3 border-b border-slate-100">
-            <div>
-              <span className="text-slate-400 text-[10px] block">Mon</span>
-              <strong className="text-slate-800 text-sm">22</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Tue</span>
-              <strong className="text-slate-800 text-sm">23</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Wed</span>
-              <strong className="text-slate-800 text-sm">24</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Thu</span>
-              <strong className="text-slate-800 text-sm">25</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Fri</span>
-              <strong className="text-slate-800 text-sm">26</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Sat</span>
-              <strong className="text-slate-800 text-sm">27</strong>
-            </div>
-          </div>
-
-          {/* Timeline slots */}
-          <div className="mt-3 space-y-3 text-xs">
-            <div className="flex items-center gap-4">
-              <span className="w-16 font-mono text-slate-400 text-[11px]">09:00 am</span>
-              <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
-                <div>
-                  <h4 className="font-bold text-xs">CS501: Database Management Lecture</h4>
-                  <p className="text-[10px] text-slate-300">Section A • Room 304 (Query Optimization)</p>
-                </div>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
-                  Lecture
-                </span>
+            {/* Note badge if present */}
+            {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')] && (
+              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between">
+                <span className="font-medium">📌 Faculty Memo: {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')]}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const key = format(selectedCalendarDate, 'yyyy-MM-dd');
+                    const next = { ...calendarNotes };
+                    delete next[key];
+                    setCalendarNotes(next);
+                  }}
+                  className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
+                >
+                  Clear
+                </button>
               </div>
-            </div>
+            )}
 
-            <div className="flex items-center gap-4">
-              <span className="w-16 font-mono text-slate-400 text-[11px]">11:00 am</span>
-              <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
-                <div>
-                  <h4 className="font-bold text-xs">Lab Session: SQL Indexing Practical</h4>
-                  <p className="text-[10px] text-amber-700">Lab 2 • Attendance register verification</p>
+            <div className="space-y-2.5 text-xs">
+              <div className="flex items-center gap-4">
+                <span className="w-16 font-mono text-slate-400 text-[11px]">09:00 am</span>
+                <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
+                  <div>
+                    <h4 className="font-bold text-xs">CS501: Database Management Lecture</h4>
+                    <p className="text-[10px] text-slate-300">Section A • Room 304 (Query Optimization)</p>
+                  </div>
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                    Lecture
+                  </span>
                 </div>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
-                  Lab Session
-                </span>
               </div>
-            </div>
 
-            <div className="flex items-center gap-4">
-              <span className="w-16 font-mono text-slate-400 text-[11px]">02:30 pm</span>
-              <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
-                <span>Student Academic Mentoring & Parent Counseling Clinic</span>
-                <span className="text-[10px] font-semibold text-slate-400">Office Hours</span>
+              <div className="flex items-center gap-4">
+                <span className="w-16 font-mono text-slate-400 text-[11px]">11:00 am</span>
+                <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
+                  <div>
+                    <h4 className="font-bold text-xs">Lab Session: SQL Indexing Practical</h4>
+                    <p className="text-[10px] text-amber-700">Lab 2 • Attendance register verification</p>
+                  </div>
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                    Lab Session
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="w-16 font-mono text-slate-400 text-[11px]">02:30 pm</span>
+                <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
+                  <span>Student Academic Mentoring & Parent Counseling Clinic</span>
+                  <span className="text-[10px] font-semibold text-slate-400">Office Hours</span>
+                </div>
               </div>
             </div>
           </div>

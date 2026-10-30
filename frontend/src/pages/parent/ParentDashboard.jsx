@@ -23,11 +23,18 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { GlassCalendar } from '@/components/ui/glass-calendar';
+import { format } from 'date-fns';
+import { playHapticChime } from '../../utils/sound';
 
 export const ParentDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState(new Date(2026, 9, 30));
+  const [calendarNotes, setCalendarNotes] = useState({
+    '2026-10-30': 'PTM General Assembly & Progress Review with Class Advisor'
+  });
 
   // New Features: PTM & Leave Modals
   const [isPtmOpen, setIsPtmOpen] = useState(false);
@@ -430,79 +437,95 @@ export const ParentDashboard = () => {
         </div>
 
         {/* Right: Academic Consultation & PTM Schedule (65%) */}
-        <div className="lg:col-span-8 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-semibold text-slate-400">September</span>
-              <span className="text-sm font-extrabold text-slate-900 px-3 py-1 bg-slate-100 rounded-full">
-                October 2026
+        <div className="lg:col-span-8 space-y-4">
+          <GlassCalendar
+            selectedDate={selectedCalendarDate}
+            onDateSelect={(d) => {
+              setSelectedCalendarDate(d);
+              playHapticChime();
+            }}
+            onAddNote={(d) => {
+              const key = format(d, 'yyyy-MM-dd');
+              const text = window.prompt(`Add parent reminder for ${format(d, 'MMM d, yyyy')}:`, calendarNotes[key] || '');
+              if (text !== null) {
+                setCalendarNotes((prev) => ({ ...prev, [key]: text }));
+                toast.success(`Note saved for ${format(d, 'MMM d')}`);
+                playHapticChime();
+              }
+            }}
+            onNewEvent={() => {
+              setIsPtmOpen(true);
+              playHapticChime();
+            }}
+            className="w-full"
+          />
+
+          {/* Daily Schedule Details for Selected Date */}
+          <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-emerald-600" />
+                <h3 className="text-xs font-bold text-slate-900">
+                  PTM & Consultation Agenda: <span className="text-emerald-700 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
+                </h3>
+              </div>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                Guardian Portal
               </span>
-              <span className="text-xs font-semibold text-slate-400">November</span>
             </div>
-            <span className="text-xs font-bold text-[#f59e0b]">PTM & Department Schedule</span>
-          </div>
 
-          {/* Weekday Strip */}
-          <div className="grid grid-cols-6 gap-2 text-center text-xs pb-3 border-b border-slate-100">
-            <div>
-              <span className="text-slate-400 text-[10px] block">Mon</span>
-              <strong className="text-slate-800 text-sm">22</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Tue</span>
-              <strong className="text-slate-800 text-sm">23</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Wed</span>
-              <strong className="text-slate-800 text-sm">24</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Thu</span>
-              <strong className="text-slate-800 text-sm">25</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Fri</span>
-              <strong className="text-slate-800 text-sm">26</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 text-[10px] block">Sat</span>
-              <strong className="text-slate-800 text-sm">27</strong>
-            </div>
-          </div>
-
-          {/* Timeline slots */}
-          <div className="mt-3 space-y-3 text-xs">
-            <div className="flex items-center gap-4">
-              <span className="w-16 font-mono text-slate-400 text-[11px]">10:00 am</span>
-              <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
-                <div>
-                  <h4 className="font-bold text-xs">Parent-Teacher Meeting (PTM) General Assembly</h4>
-                  <p className="text-[10px] text-slate-300">Auditorium • Continuous Assessment Briefing</p>
-                </div>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
-                  Assembly
-                </span>
+            {/* Note badge if present */}
+            {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')] && (
+              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between">
+                <span className="font-medium">📌 Guardian Reminder: {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')]}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const key = format(selectedCalendarDate, 'yyyy-MM-dd');
+                    const next = { ...calendarNotes };
+                    delete next[key];
+                    setCalendarNotes(next);
+                  }}
+                  className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
+                >
+                  Clear
+                </button>
               </div>
-            </div>
+            )}
 
-            <div className="flex items-center gap-4">
-              <span className="w-16 font-mono text-slate-400 text-[11px]">11:30 am</span>
-              <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
-                <div>
-                  <h4 className="font-bold text-xs">Individual Faculty Consultation & Progress Card Signoff</h4>
-                  <p className="text-[10px] text-amber-700">Department Seminar Room 1 • Review with Class Advisor</p>
+            <div className="space-y-2.5 text-xs">
+              <div className="flex items-center gap-4">
+                <span className="w-16 font-mono text-slate-400 text-[11px]">10:00 am</span>
+                <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
+                  <div>
+                    <h4 className="font-bold text-xs">Parent-Teacher Meeting (PTM) General Assembly</h4>
+                    <p className="text-[10px] text-slate-300">Auditorium • Continuous Assessment Briefing</p>
+                  </div>
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                    Assembly
+                  </span>
                 </div>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
-                  1-on-1 Review
-                </span>
               </div>
-            </div>
 
-            <div className="flex items-center gap-4">
-              <span className="w-16 font-mono text-slate-400 text-[11px]">02:00 pm</span>
-              <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
-                <span>Placement Cell & Industry Internship Orientation for Parents & Students</span>
-                <span className="text-[10px] font-semibold text-slate-400">Media Center</span>
+              <div className="flex items-center gap-4">
+                <span className="w-16 font-mono text-slate-400 text-[11px]">11:30 am</span>
+                <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
+                  <div>
+                    <h4 className="font-bold text-xs">Individual Faculty Consultation & Progress Card Signoff</h4>
+                    <p className="text-[10px] text-amber-700">Department Seminar Room 1 • Review with Class Advisor</p>
+                  </div>
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                    1-on-1 Review
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="w-16 font-mono text-slate-400 text-[11px]">02:00 pm</span>
+                <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
+                  <span>Placement Cell & Industry Internship Orientation for Parents & Students</span>
+                  <span className="text-[10px] font-semibold text-slate-400">Media Center</span>
+                </div>
               </div>
             </div>
           </div>

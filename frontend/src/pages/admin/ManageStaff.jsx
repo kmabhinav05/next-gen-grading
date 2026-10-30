@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { academicsService } from '../../api/academics';
 import { DataTable } from '../../components/common/DataTable';
 import { Modal } from '../../components/common/Modal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
+import HoldButton from '../../components/common/HoldButton';
 import { Plus, Trash2, Users } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -11,6 +12,7 @@ export const ManageStaff = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const formRef = useRef(null);
 
   const [formData, setFormData] = useState({
     username: '',
@@ -40,7 +42,7 @@ export const ManageStaff = () => {
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     try {
       await academicsService.createStaff(formData);
       toast.success(`Faculty ${formData.first_name} ${formData.last_name} created successfully!`);
@@ -143,7 +145,7 @@ export const ManageStaff = () => {
       />
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Register Faculty Staff">
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-slate-700 mb-1">First Name</label>
@@ -214,7 +216,7 @@ export const ManageStaff = () => {
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
@@ -222,12 +224,33 @@ export const ManageStaff = () => {
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium shadow-xs"
+            <HoldButton
+              onHold={() => {
+                if (formRef.current && !formRef.current.checkValidity()) {
+                  formRef.current.reportValidity();
+                  return;
+                }
+                handleSubmit();
+              }}
+              onTap={() => {
+                if (formRef.current && !formRef.current.checkValidity()) {
+                  formRef.current.reportValidity();
+                } else {
+                  toast('Hold button to confirm adding faculty', { icon: '👆' });
+                }
+              }}
+              doneLabel="Faculty Added!"
+              backgroundColor="#0f172a"
+              fillColor="#6366f1"
+              textColor="#ffffff"
+              fillTextColor="#ffffff"
+              holdTime={1100}
+              radius={10}
+              size="sm"
+              icon={<Plus className="w-3.5 h-3.5" />}
             >
-              Save Faculty
-            </button>
+              Hold to Add Faculty
+            </HoldButton>
           </div>
         </form>
       </Modal>

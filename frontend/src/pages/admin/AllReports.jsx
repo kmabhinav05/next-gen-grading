@@ -4,6 +4,7 @@ import { reportsService } from '../../api/reports';
 import { academicsService } from '../../api/academics';
 import { DataTable } from '../../components/common/DataTable';
 import { AttendanceBadge } from '../../components/common/AttendanceBadge';
+import HoldButton from '../../components/common/HoldButton';
 import { FileSpreadsheet, Eye, Download, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -167,14 +168,28 @@ export const AllReports = () => {
         </div>
 
         {activeTab === 'class' && (
-          <button
-            onClick={handleBulkPdfDownload}
+          <HoldButton
+            onHold={handleBulkPdfDownload}
+            onTap={() => {
+              if (classData.length === 0) {
+                toast.error('No class records available to compile');
+              } else {
+                toast('Hold button to compile and download PDF report', { icon: '👆' });
+              }
+            }}
             disabled={classData.length === 0}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 disabled:opacity-50 transition-colors shadow-xs"
+            doneLabel="Report Downloaded!"
+            backgroundColor="#0f172a"
+            fillColor="#3b82f6"
+            textColor="#ffffff"
+            fillTextColor="#ffffff"
+            holdTime={1100}
+            radius={12}
+            size="sm"
+            icon={<Download className="w-3.5 h-3.5" />}
           >
-            <Download className="w-4 h-4" />
-            <span>Download Class Bulk PDF</span>
-          </button>
+            Hold to Download Report
+          </HoldButton>
         )}
       </div>
 

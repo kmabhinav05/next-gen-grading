@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { academicsService } from '../../api/academics';
 import { DataTable } from '../../components/common/DataTable';
 import { Modal } from '../../components/common/Modal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
+import HoldButton from '../../components/common/HoldButton';
 import { Plus, Trash2, Link as LinkIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -13,6 +14,7 @@ export const LinkParentStudent = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const formRef = useRef(null);
 
   const [formData, setFormData] = useState({
     parent: '',
@@ -42,7 +44,7 @@ export const LinkParentStudent = () => {
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     try {
       await academicsService.linkParentStudent(formData);
       toast.success('Successfully linked parent with student ward!');
@@ -129,7 +131,7 @@ export const LinkParentStudent = () => {
       />
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Link Parent to Student Ward">
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
             <label className="block font-semibold text-slate-700 mb-1">Select Parent</label>
             <select
@@ -164,7 +166,7 @@ export const LinkParentStudent = () => {
             </select>
           </div>
 
-          <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
@@ -172,12 +174,33 @@ export const LinkParentStudent = () => {
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium shadow-xs"
+            <HoldButton
+              onHold={() => {
+                if (formRef.current && !formRef.current.checkValidity()) {
+                  formRef.current.reportValidity();
+                  return;
+                }
+                handleSubmit();
+              }}
+              onTap={() => {
+                if (formRef.current && !formRef.current.checkValidity()) {
+                  formRef.current.reportValidity();
+                } else {
+                  toast('Hold button to establish linkage', { icon: '👆' });
+                }
+              }}
+              doneLabel="Link Established!"
+              backgroundColor="#0f172a"
+              fillColor="#f59e0b"
+              textColor="#ffffff"
+              fillTextColor="#ffffff"
+              holdTime={1100}
+              radius={10}
+              size="sm"
+              icon={<LinkIcon className="w-3.5 h-3.5" />}
             >
-              Establish Link
-            </button>
+              Hold to Link Parent & Ward
+            </HoldButton>
           </div>
         </form>
       </Modal>

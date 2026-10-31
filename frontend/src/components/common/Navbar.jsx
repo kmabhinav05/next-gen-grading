@@ -204,6 +204,8 @@ export const Navbar = () => {
               hoverEffect="fill"
               indicator="dot"
               size="md"
+              collapse="never"
+              intro={false}
             />
           </div>
 

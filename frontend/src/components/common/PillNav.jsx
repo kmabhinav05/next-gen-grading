@@ -544,15 +544,14 @@ export const PillNav = ({
         ? pad * 2 + (hasLogo ? inner + 2 : 0) + listWidth
         : (hasLogo ? height + gap : 0) + listWidth + pad * 2;
       const next = need > available + 0.5;
-      if (introRef.current && next !== collapsed) pendingRef.current = next;
-      setCollapsed(next);
+      setCollapsed((prev) => (prev !== next ? next : prev));
     };
     evaluate();
     const observer = new ResizeObserver(evaluate);
     if (root.parentElement) observer.observe(root.parentElement);
     observer.observe(measureEl);
     return () => observer.disconnect();
-  }, [collapse, collapsed, joined, hasLogo, size]);
+  }, [collapse, joined, hasLogo, size]);
 
   useLayoutEffect(() => {
     const root = rootRef.current;

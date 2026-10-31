@@ -94,20 +94,22 @@ export const Profile = () => {
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              User Profile & Digital ID Badge
+              {is3DCardSupported ? 'User Profile & Digital ID Badge' : 'User Profile & Account Information'}
             </h1>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <button
-            onClick={handleDownloadCard}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e293b] text-white text-xs font-bold hover:bg-slate-800 shadow-sm transition-all"
-          >
-            <Download className="w-3.5 h-3.5" />
-            Download Digital ID
-          </button>
-        </div>
+        {is3DCardSupported && (
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <button
+              onClick={handleDownloadCard}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e293b] text-white text-xs font-bold hover:bg-slate-800 shadow-sm transition-all"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Download Digital ID
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Main Grid: 2-Column for Faculty/Student with 3D Metallic Gold Card, Centered for Admin/Parent */}

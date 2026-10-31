@@ -54,7 +54,7 @@ export const BottomNav = () => {
           { label: 'Progress', href: '/parent/progress-card', icon: Award },
           { label: 'Attendance', href: '/parent/attendance', icon: Clock },
           { label: 'Results', href: '/results', icon: BookOpen },
-          { label: 'Settings', href: '/settings', icon: Settings }
+          { label: 'Profile', href: '/profile', icon: User }
         ];
       default:
         return [];

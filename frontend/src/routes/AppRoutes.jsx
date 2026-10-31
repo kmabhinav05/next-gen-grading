@@ -253,11 +253,11 @@ export const AppRoutes = () => {
             }
           />
 
-          {/* 3D Digital ID Profile (Restricted strictly to Faculty and Students) */}
+          {/* User Profile & Credentials across all 4 portals (3D card auto-restricted to Faculty & Students inside) */}
           <Route
             path="/profile"
             element={
-              <ProtectedRoute allowedRoles={['STAFF', 'STUDENT']}>
+              <ProtectedRoute allowedRoles={['ADMIN', 'STAFF', 'STUDENT', 'PARENT']}>
                 <Profile />
               </ProtectedRoute>
             }

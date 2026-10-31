@@ -233,43 +233,28 @@ export const Navbar = () => {
 
             {/* User Pill & Logout */}
             <div className="flex items-center gap-2 pl-1">
-              {isProfileSupported ? (
-                <Link
-                  to="/profile"
-                  title="View Profile & 3D Digital ID Badge"
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all backdrop-blur-md group min-h-[44px]"
-                >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs group-hover:scale-105 transition-transform">
-                    {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-bold text-slate-800 truncate max-w-[120px] leading-tight group-hover:text-primary-600 transition-colors">
-                      {user?.full_name || user?.username}
-                    </span>
-                    <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase flex items-center gap-1">
-                      <span>{role}</span>
-                      <span className="text-primary-600 font-bold group-hover:underline">• ID</span>
-                    </span>
-                  </div>
-                </Link>
-              ) : (
-                <div
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs backdrop-blur-md min-h-[44px]"
-                  title={`${user?.full_name || user?.username} (${role})`}
-                >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs">
-                    {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-bold text-slate-800 truncate max-w-[120px] leading-tight">
-                      {user?.full_name || user?.username}
-                    </span>
-                    <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase">
-                      {role}
-                    </span>
-                  </div>
+              <Link
+                to="/profile"
+                title={isProfileSupported ? "View Profile & 3D Digital ID Badge" : "View Profile & Account Details"}
+                className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all backdrop-blur-md group min-h-[44px]"
+              >
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs group-hover:scale-105 transition-transform">
+                  {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
                 </div>
-              )}
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-bold text-slate-800 truncate max-w-[120px] leading-tight group-hover:text-primary-600 transition-colors">
+                    {user?.full_name || user?.username}
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase flex items-center gap-1">
+                    <span>{role}</span>
+                    {isProfileSupported ? (
+                      <span className="text-primary-600 font-bold group-hover:underline">• ID</span>
+                    ) : (
+                      <span className="text-slate-400 group-hover:text-primary-600 font-medium transition-colors">• Profile</span>
+                    )}
+                  </span>
+                </div>
+              </Link>
 
               <button
                 type="button"
@@ -334,22 +319,13 @@ export const Navbar = () => {
               )}
             </button>
 
-            {isProfileSupported ? (
-              <Link
-                to="/profile"
-                title="Profile & 3D ID"
-                className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs ml-1"
-              >
-                {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
-              </Link>
-            ) : (
-              <div
-                className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs ml-1 select-none"
-                title={`${user?.full_name || user?.username} (${role})`}
-              >
-                {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
-              </div>
-            )}
+            <Link
+              to="/profile"
+              title="Profile"
+              className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs ml-1"
+            >
+              {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
+            </Link>
           </div>
         </div>
 
@@ -435,46 +411,26 @@ export const Navbar = () => {
               </div>
 
               {/* User Profile Card */}
-              {isProfileSupported ? (
-                <Link
-                  to="/profile"
-                  onClick={() => setIsMobileDrawerOpen(false)}
-                  className="p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 flex items-center justify-between transition-colors block"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                      {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
-                    </div>
-                    <div className="text-left">
-                      <span className="text-xs font-bold text-slate-900 block truncate max-w-[140px]">
-                        {user?.full_name || user?.username}
-                      </span>
-                      <span className="text-[10px] text-primary-600 font-semibold uppercase tracking-wider block">
-                        {role} • View 3D ID
-                      </span>
-                    </div>
+              <Link
+                to="/profile"
+                onClick={() => setIsMobileDrawerOpen(false)}
+                className="p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 flex items-center justify-between transition-colors block"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                    {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
-                </Link>
-              ) : (
-                <div
-                  className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                      {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
-                    </div>
-                    <div className="text-left">
-                      <span className="text-xs font-bold text-slate-900 block truncate max-w-[140px]">
-                        {user?.full_name || user?.username}
-                      </span>
-                      <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">
-                        {role} Account
-                      </span>
-                    </div>
+                  <div className="text-left">
+                    <span className="text-xs font-bold text-slate-900 block truncate max-w-[140px]">
+                      {user?.full_name || user?.username}
+                    </span>
+                    <span className="text-[10px] text-primary-600 font-semibold uppercase tracking-wider block">
+                      {isProfileSupported ? `${role} • View 3D ID` : `${role} • View Profile`}
+                    </span>
                   </div>
                 </div>
-              )}
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </Link>
 
               {/* Navigation Links */}
               <div className="space-y-1">

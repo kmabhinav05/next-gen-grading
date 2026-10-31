@@ -134,6 +134,14 @@ export const ParentDashboard = () => {
               <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
                 {student.name ? `${student.name}'s Guardian` : 'Parent Guardian'}
               </h1>
+              <Link
+                to="/profile"
+                title="View Profile & Guardian Details"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
+              >
+                <span>View Profile</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
 

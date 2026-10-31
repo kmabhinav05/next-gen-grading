@@ -11,6 +11,30 @@ export class ErrorBoundary extends React.Component {
     return { hasError: true, error };
   }
 
+  handleHardReload = async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.unregister();
+        }
+      }
+      if ('caches' in window) {
+        const names = await caches.keys();
+        for (const name of names) {
+          await caches.delete(name);
+        }
+      }
+      sessionStorage.removeItem('chunk_retry');
+    } catch (e) {
+      console.error(e);
+    }
+    // Force cache-busting reload
+    const targetUrl = new URL(window.location.href);
+    targetUrl.searchParams.set('v', Date.now().toString());
+    window.location.href = targetUrl.toString();
+  };
+
   componentDidCatch(error, errorInfo) {
     console.error('NextGenGrading ErrorBoundary caught an exception:', error, errorInfo);
 
@@ -26,7 +50,7 @@ export class ErrorBoundary extends React.Component {
         const hasRetried = sessionStorage.getItem('chunk_retry');
         if (!hasRetried) {
           sessionStorage.setItem('chunk_retry', 'true');
-          window.location.reload();
+          this.handleHardReload();
         }
       }
     } catch {}
@@ -67,12 +91,7 @@ export class ErrorBoundary extends React.Component {
             <div className="flex items-center justify-center gap-3 pt-2">
               <button
                 type="button"
-                onClick={() => {
-                  try {
-                    sessionStorage.removeItem('chunk_retry');
-                  } catch {}
-                  window.location.reload();
-                }}
+                onClick={this.handleHardReload}
                 className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-2"
               >
                 <RefreshCw className="w-3.5 h-3.5" />

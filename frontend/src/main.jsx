@@ -8,9 +8,21 @@ import './index.css';
 import { registerSW } from 'virtual:pwa-register';
 
 // Auto-recover from stale deployment chunk hash changes
-window.addEventListener('vite:preloadError', (event) => {
+window.addEventListener('vite:preloadError', async (event) => {
   event.preventDefault();
-  window.location.reload();
+  try {
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const reg of registrations) await reg.unregister();
+    }
+    if ('caches' in window) {
+      const names = await caches.keys();
+      for (const name of names) await caches.delete(name);
+    }
+  } catch {}
+  const targetUrl = new URL(window.location.href);
+  targetUrl.searchParams.set('v', Date.now().toString());
+  window.location.href = targetUrl.toString();
 });
 
 registerSW({

@@ -22,41 +22,59 @@ const PageLoadingSkeleton = () => (
   </div>
 );
 
+// Resilient dynamic chunk loader that auto-reloads on stale deployment hashes
+const lazyRetry = (importFn) =>
+  lazy(async () => {
+    try {
+      const module = await importFn();
+      sessionStorage.removeItem('chunk_retry');
+      return module;
+    } catch (error) {
+      const hasRetried = sessionStorage.getItem('chunk_retry');
+      if (!hasRetried) {
+        sessionStorage.setItem('chunk_retry', 'true');
+        window.location.reload();
+        return new Promise(() => {}); // Hold suspense boundary during reload
+      }
+      throw error;
+    }
+  });
+
 // Lazy Loaded Auth & Public Pages
-const Login = lazy(() => import('../pages/auth/Login').then(m => ({ default: m.Login })));
-const Unauthorized = lazy(() => import('../pages/Unauthorized').then(m => ({ default: m.Unauthorized })));
-const NotFound = lazy(() => import('../pages/NotFound').then(m => ({ default: m.NotFound })));
-const SemesterResults = lazy(() => import('../pages/results/SemesterResults').then(m => ({ default: m.SemesterResults })));
+const Login = lazyRetry(() => import('../pages/auth/Login').then(m => ({ default: m.Login })));
+const Unauthorized = lazyRetry(() => import('../pages/Unauthorized').then(m => ({ default: m.Unauthorized })));
+const NotFound = lazyRetry(() => import('../pages/NotFound').then(m => ({ default: m.NotFound })));
+const SemesterResults = lazyRetry(() => import('../pages/results/SemesterResults').then(m => ({ default: m.SemesterResults })));
 
 // Lazy Loaded Admin Pages
-const AdminDashboard = lazy(() => import('../pages/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
-const ManageStudents = lazy(() => import('../pages/admin/ManageStudents').then(m => ({ default: m.ManageStudents })));
-const ManageStaff = lazy(() => import('../pages/admin/ManageStaff').then(m => ({ default: m.ManageStaff })));
-const ManageParents = lazy(() => import('../pages/admin/ManageParents').then(m => ({ default: m.ManageParents })));
-const ManageSubjects = lazy(() => import('../pages/admin/ManageSubjects').then(m => ({ default: m.ManageSubjects })));
-const LinkParentStudent = lazy(() => import('../pages/admin/LinkParentStudent').then(m => ({ default: m.LinkParentStudent })));
-const AllReports = lazy(() => import('../pages/admin/AllReports').then(m => ({ default: m.AllReports })));
+const AdminDashboard = lazyRetry(() => import('../pages/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
+const ManageStudents = lazyRetry(() => import('../pages/admin/ManageStudents').then(m => ({ default: m.ManageStudents })));
+const ManageStaff = lazyRetry(() => import('../pages/admin/ManageStaff').then(m => ({ default: m.ManageStaff })));
+const ManageParents = lazyRetry(() => import('../pages/admin/ManageParents').then(m => ({ default: m.ManageParents })));
+const ManageSubjects = lazyRetry(() => import('../pages/admin/ManageSubjects').then(m => ({ default: m.ManageSubjects })));
+const LinkParentStudent = lazyRetry(() => import('../pages/admin/LinkParentStudent').then(m => ({ default: m.LinkParentStudent })));
+const AllReports = lazyRetry(() => import('../pages/admin/AllReports').then(m => ({ default: m.AllReports })));
 
 // Lazy Loaded Staff Pages
-const StaffDashboard = lazy(() => import('../pages/staff/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
-const UploadMarks = lazy(() => import('../pages/staff/UploadMarks').then(m => ({ default: m.UploadMarks })));
-const EnterAttendance = lazy(() => import('../pages/staff/EnterAttendance').then(m => ({ default: m.EnterAttendance })));
-const ClassReport = lazy(() => import('../pages/staff/ClassReport').then(m => ({ default: m.ClassReport })));
-const StudentProgressCard = lazy(() => import('../pages/staff/StudentProgressCard').then(m => ({ default: m.StudentProgressCard })));
+const StaffDashboard = lazyRetry(() => import('../pages/staff/StaffDashboard').then(m => ({ default: m.StaffDashboard })));
+const UploadMarks = lazyRetry(() => import('../pages/staff/UploadMarks').then(m => ({ default: m.UploadMarks })));
+const EnterAttendance = lazyRetry(() => import('../pages/staff/EnterAttendance').then(m => ({ default: m.EnterAttendance })));
+const ClassReport = lazyRetry(() => import('../pages/staff/ClassReport').then(m => ({ default: m.ClassReport })));
+const StudentProgressCard = lazyRetry(() => import('../pages/staff/StudentProgressCard').then(m => ({ default: m.StudentProgressCard })));
 
 // Lazy Loaded Student Pages
-const StudentDashboard = lazy(() => import('../pages/student/StudentDashboard').then(m => ({ default: m.StudentDashboard })));
-const MyProgressCard = lazy(() => import('../pages/student/MyProgressCard').then(m => ({ default: m.MyProgressCard })));
-const MyAttendance = lazy(() => import('../pages/student/MyAttendance').then(m => ({ default: m.MyAttendance })));
+const StudentDashboard = lazyRetry(() => import('../pages/student/StudentDashboard').then(m => ({ default: m.StudentDashboard })));
+const MyProgressCard = lazyRetry(() => import('../pages/student/MyProgressCard').then(m => ({ default: m.MyProgressCard })));
+const MyAttendance = lazyRetry(() => import('../pages/student/MyAttendance').then(m => ({ default: m.MyAttendance })));
 
 // Lazy Loaded Parent Pages
-const ParentDashboard = lazy(() => import('../pages/parent/ParentDashboard').then(m => ({ default: m.ParentDashboard })));
-const ChildProgressCard = lazy(() => import('../pages/parent/ChildProgressCard').then(m => ({ default: m.ChildProgressCard })));
-const ChildAttendance = lazy(() => import('../pages/parent/ChildAttendance').then(m => ({ default: m.ChildAttendance })));
+const ParentDashboard = lazyRetry(() => import('../pages/parent/ParentDashboard').then(m => ({ default: m.ParentDashboard })));
+const ChildProgressCard = lazyRetry(() => import('../pages/parent/ChildProgressCard').then(m => ({ default: m.ChildProgressCard })));
+const ChildAttendance = lazyRetry(() => import('../pages/parent/ChildAttendance').then(m => ({ default: m.ChildAttendance })));
 
 // Lazy Loaded Shared Pages (Profile ID & Settings)
-const Profile = lazy(() => import('../pages/profile/Profile').then(m => ({ default: m.Profile })));
-const Settings = lazy(() => import('../pages/settings/Settings').then(m => ({ default: m.Settings })));
+const Profile = lazyRetry(() => import('../pages/profile/Profile').then(m => ({ default: m.Profile })));
+const Settings = lazyRetry(() => import('../pages/settings/Settings').then(m => ({ default: m.Settings })));
 
 // Root redirect handler
 const RootRedirect = () => {

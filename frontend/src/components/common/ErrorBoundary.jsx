@@ -13,9 +13,25 @@ export class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('NextGenGrading ErrorBoundary caught an exception:', error, errorInfo);
+
+    // Auto-recover from stale deployment / Vite chunk fetch errors
+    const isChunkLoadFailed =
+      error?.message &&
+      (/dynamically imported module/i.test(error.message) ||
+        /loading chunk/i.test(error.message) ||
+        /failed to fetch/i.test(error.message));
+
+    if (isChunkLoadFailed) {
+      const hasRetried = sessionStorage.getItem('chunk_retry');
+      if (!hasRetried) {
+        sessionStorage.setItem('chunk_retry', 'true');
+        window.location.reload();
+      }
+    }
   }
 
   handleReset = () => {
+    sessionStorage.removeItem('chunk_retry');
     this.setState({ hasError: false, error: null });
     window.location.href = '/';
   };
@@ -47,7 +63,10 @@ export class ErrorBoundary extends React.Component {
             <div className="flex items-center justify-center gap-3 pt-2">
               <button
                 type="button"
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  sessionStorage.removeItem('chunk_retry');
+                  window.location.reload();
+                }}
                 className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-2"
               >
                 <RefreshCw className="w-3.5 h-3.5" />

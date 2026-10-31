@@ -1,28 +1,10 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { BottomNav } from '../components/common/BottomNav';
 import { ChatbotWidget } from '../components/chatbot/ChatbotWidget';
-import { Skeleton } from '../components/common/Skeleton';
 import { useAuth } from '../context/AuthContext';
 import { Toaster } from 'react-hot-toast';
-
-// Gentle inner-canvas page skeleton fallback (keeps layout & navbar mounted)
-const PageContentSkeleton = () => (
-  <div className="space-y-5 p-2 animate-in fade-in duration-150">
-    <div className="flex items-center justify-between gap-4">
-      <Skeleton className="h-10 w-48 rounded-2xl bg-slate-200/80" />
-      <Skeleton className="h-10 w-28 rounded-2xl bg-slate-200/80" />
-    </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
-      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
-      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
-      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
-    </div>
-    <Skeleton className="h-72 w-full rounded-3xl bg-slate-200/80" />
-  </div>
-);
 
 const THEMES = {
   cream: {
@@ -87,11 +69,9 @@ export const DashboardLayout = () => {
         {/* Top Floating Pill Navigation & Mobile Header */}
         <Navbar />
 
-        {/* Dynamic Route Content with isolated Suspense boundary to prevent layout unmounting */}
+        {/* Dynamic Route Content */}
         <main className="flex-1 min-w-0">
-          <Suspense fallback={<PageContentSkeleton />}>
-            <Outlet />
-          </Suspense>
+          <Outlet />
         </main>
       </div>
 

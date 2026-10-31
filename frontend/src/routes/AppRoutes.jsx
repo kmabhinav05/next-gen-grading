@@ -253,8 +253,15 @@ export const AppRoutes = () => {
             }
           />
 
-          {/* Shared Routes Across All 4 Portals */}
-          <Route path="/profile" element={<Profile />} />
+          {/* 3D Digital ID Profile (Restricted strictly to Faculty and Students) */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute allowedRoles={['STAFF', 'STUDENT']}>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/settings" element={<Settings />} />
           <Route path="/results" element={<SemesterResults />} />
         </Route>

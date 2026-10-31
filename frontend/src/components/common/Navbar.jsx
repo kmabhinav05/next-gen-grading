@@ -129,7 +129,6 @@ export const Navbar = () => {
           { label: 'Courses', href: '/admin/subjects' },
           { label: 'Linkages', href: '/admin/parent-student' },
           { label: 'Reports', href: '/admin/reports' },
-          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'STAFF':
@@ -138,7 +137,6 @@ export const Navbar = () => {
           { label: 'Upload Marks', href: '/staff/upload-marks' },
           { label: 'Attendance', href: '/staff/attendance' },
           { label: 'Class Reports', href: '/staff/class-report' },
-          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'STUDENT':
@@ -146,7 +144,6 @@ export const Navbar = () => {
           { label: 'Dashboard', href: '/student/dashboard' },
           { label: 'Progress Card', href: '/student/progress-card' },
           { label: 'Attendance', href: '/student/attendance' },
-          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'PARENT':
@@ -154,13 +151,11 @@ export const Navbar = () => {
           { label: 'Dashboard', href: '/parent/dashboard' },
           { label: 'Ward Progress', href: '/parent/progress-card' },
           { label: 'Ward Attendance', href: '/parent/attendance' },
-          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
       default:
         return [
           { label: 'Home', href: '/' },
-          { label: 'Profile', href: '/profile' },
           { label: 'COE Results', href: '/results' },
         ];
     }

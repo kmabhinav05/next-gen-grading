@@ -13,12 +13,8 @@ window.addEventListener('vite:preloadError', (event) => {
   window.location.reload();
 });
 
-const updateSW = registerSW({
+registerSW({
   immediate: true,
-  onNeedRefresh() {
-    console.log('New NextGenGrading content available - refreshing assets');
-    updateSW(true);
-  },
   onOfflineReady() {
     console.log('NextGenGrading is ready for offline usage');
   }

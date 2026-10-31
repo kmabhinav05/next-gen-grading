@@ -22,23 +22,46 @@ const PageLoadingSkeleton = () => (
   </div>
 );
 
-// Resilient dynamic chunk loader that auto-reloads on stale deployment hashes
-const lazyRetry = (importFn) =>
-  lazy(async () => {
+// Safe session helper to prevent DOMException in privacy modes
+const safeSession = {
+  get: () => {
     try {
-      const module = await importFn();
-      sessionStorage.removeItem('chunk_retry');
-      return module;
-    } catch (error) {
-      const hasRetried = sessionStorage.getItem('chunk_retry');
-      if (!hasRetried) {
-        sessionStorage.setItem('chunk_retry', 'true');
-        window.location.reload();
-        return new Promise(() => {}); // Hold suspense boundary during reload
-      }
-      throw error;
+      return sessionStorage.getItem('chunk_retry') === 'true';
+    } catch {
+      return false;
     }
-  });
+  },
+  set: (val) => {
+    try {
+      if (val) sessionStorage.setItem('chunk_retry', 'true');
+      else sessionStorage.removeItem('chunk_retry');
+    } catch {}
+  }
+};
+
+// Resilient dynamic chunk loader that auto-reloads once on stale deployment hashes
+const lazyRetry = (importFn) =>
+  lazy(() =>
+    importFn()
+      .then((module) => {
+        safeSession.set(false);
+        return module;
+      })
+      .catch((error) => {
+        const isChunkError =
+          error?.message &&
+          (/dynamically imported module/i.test(error.message) ||
+            /loading chunk/i.test(error.message) ||
+            /failed to fetch/i.test(error.message));
+
+        if (isChunkError && !safeSession.get()) {
+          safeSession.set(true);
+          window.location.reload();
+          return new Promise(() => {}); // Hold suspense boundary during reload
+        }
+        throw error;
+      })
+  );
 
 // Lazy Loaded Auth & Public Pages
 const Login = lazyRetry(() => import('../pages/auth/Login').then(m => ({ default: m.Login })));

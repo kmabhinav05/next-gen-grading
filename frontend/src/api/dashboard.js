@@ -82,8 +82,15 @@ export const dashboardService = {
       return res.data;
     } catch (err) {
       // Fallback based on logged-in user role
-      const rawUser = localStorage.getItem('demo_user');
-      const role = rawUser ? JSON.parse(rawUser).role : 'ADMIN';
+      const rawUser = localStorage.getItem('user_profile') || localStorage.getItem('demo_user');
+      let role = 'ADMIN';
+      if (rawUser) {
+        try {
+          role = JSON.parse(rawUser).role || 'ADMIN';
+        } catch {
+          role = 'ADMIN';
+        }
+      }
 
       if (role === 'STAFF') {
         return {

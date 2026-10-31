@@ -1,27 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { BottomNav } from '../components/common/BottomNav';
 import { ChatbotWidget } from '../components/chatbot/ChatbotWidget';
+import { Skeleton } from '../components/common/Skeleton';
 import { useAuth } from '../context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 
+// Gentle inner-canvas page skeleton fallback (keeps layout & navbar mounted)
+const PageContentSkeleton = () => (
+  <div className="space-y-5 p-2 animate-in fade-in duration-150">
+    <div className="flex items-center justify-between gap-4">
+      <Skeleton className="h-10 w-48 rounded-2xl bg-slate-200/80" />
+      <Skeleton className="h-10 w-28 rounded-2xl bg-slate-200/80" />
+    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
+      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
+      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
+      <Skeleton className="h-32 rounded-3xl bg-slate-200/80" />
+    </div>
+    <Skeleton className="h-72 w-full rounded-3xl bg-slate-200/80" />
+  </div>
+);
+
 const THEMES = {
   cream: {
-    outer: 'bg-[#94a3b8]',
-    canvas: 'bg-gradient-to-br from-[#fbf8f1] via-[#faf6ed] to-[#fef3c7]/40 border-white/60',
+    outer: 'bg-[#e8e4da]',
+    canvas: 'bg-gradient-to-br from-[#fbf8f1] via-[#faf6ed] to-[#fef3c7]/40 border-white/80',
   },
   slate: {
-    outer: 'bg-[#64748b]',
-    canvas: 'bg-gradient-to-br from-[#f8fafc] via-[#f1f5f9] to-[#e2e8f0]/60 border-slate-200/80',
+    outer: 'bg-[#e2e8f0]',
+    canvas: 'bg-gradient-to-br from-[#f8fafc] via-[#f1f5f9] to-[#e2e8f0]/60 border-slate-200/90',
   },
   indigo: {
-    outer: 'bg-[#3730a3]',
-    canvas: 'bg-gradient-to-br from-[#f5f7ff] via-[#eef2ff] to-[#e0e7ff]/70 border-indigo-200/70',
+    outer: 'bg-[#e0e7ff]',
+    canvas: 'bg-gradient-to-br from-[#f5f7ff] via-[#eef2ff] to-[#e0e7ff]/70 border-indigo-200/80',
   },
   emerald: {
-    outer: 'bg-[#064e3b]',
-    canvas: 'bg-gradient-to-br from-[#f0fdf4] via-[#ecfdf5] to-[#d1fae5]/60 border-emerald-200/70',
+    outer: 'bg-[#d1fae5]',
+    canvas: 'bg-gradient-to-br from-[#f0fdf4] via-[#ecfdf5] to-[#d1fae5]/60 border-emerald-200/80',
   },
 };
 
@@ -69,9 +87,11 @@ export const DashboardLayout = () => {
         {/* Top Floating Pill Navigation & Mobile Header */}
         <Navbar />
 
-        {/* Dynamic Route Content */}
+        {/* Dynamic Route Content with isolated Suspense boundary to prevent layout unmounting */}
         <main className="flex-1 min-w-0">
-          <Outlet />
+          <Suspense fallback={<PageContentSkeleton />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 

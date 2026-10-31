@@ -80,14 +80,27 @@ const RootRedirect = () => {
 
 export const AppRoutes = () => {
   return (
-    <Suspense fallback={<PageLoadingSkeleton />}>
-      <Routes>
-        <Route path="/" element={<RootRedirect />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
+    <Routes>
+      <Route path="/" element={<RootRedirect />} />
+      <Route
+        path="/login"
+        element={
+          <Suspense fallback={<div className="min-h-screen bg-slate-900" />}>
+            <Login />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/unauthorized"
+        element={
+          <Suspense fallback={null}>
+            <Unauthorized />
+          </Suspense>
+        }
+      />
 
-        {/* App Workspace Layout */}
-        <Route element={<DashboardLayout />}>
+      {/* App Workspace Layout (Maintains persistent outer shell & navbar without flickering) */}
+      <Route element={<DashboardLayout />}>
           {/* Admin Routes */}
           <Route
             path="/admin/dashboard"
@@ -246,9 +259,15 @@ export const AppRoutes = () => {
           <Route path="/results" element={<SemesterResults />} />
         </Route>
 
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={null}>
+              <NotFound />
+            </Suspense>
+          }
+        />
       </Routes>
-    </Suspense>
   );
 };
 

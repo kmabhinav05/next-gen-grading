@@ -18,7 +18,6 @@ import {
   Layers,
   ArrowLeft,
   CheckCircle2,
-  Sliders,
   ExternalLink
 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -26,10 +25,8 @@ import toast from 'react-hot-toast';
 export const Profile = () => {
   const { user, role } = useAuth();
 
-  // Lanyard interactive customization state
-  const [finish, setFinish] = useState('holographic');
-  const [metal, setMetal] = useState('silver');
-  const [breeze, setBreeze] = useState(0.5);
+  // 3D Metallic Gold Pass only enabled for Faculty (STAFF) and Student (STUDENT)
+  const is3DCardSupported = role === 'STAFF' || role === 'STUDENT';
 
   // Generate dynamic 3D ID card textures
   const textures = useMemo(() => {
@@ -113,110 +110,59 @@ export const Profile = () => {
         </div>
       </div>
 
-      {/* Main 2-Column Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: 3D Physics Lanyard Interactive Badge Canvas (5 Cols) */}
-        <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 rounded-[32px] border border-slate-800 shadow-xl overflow-hidden p-2">
-            {/* Top Interactive Ribbon & Instruction */}
-            <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 backdrop-blur-md border border-slate-700/80 shadow-md">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-                <span className="text-[11px] font-semibold text-slate-200">3D Physics Lanyard</span>
-              </div>
-              <span className="text-[10px] font-medium text-slate-400 bg-slate-800/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-slate-700/60 hidden sm:inline">
-                Drag to swing • Click to flip
-              </span>
-            </div>
-
-            {/* 3D Lanyard Viewport */}
-            <div className="w-full h-[540px] sm:h-[600px] relative">
-              <Lanyard
-                frontImage={textures.frontImage}
-                backImage={textures.backImage}
-                strapImage={textures.strapImage}
-                strapColor={textures.strapColor}
-                cardColor="#ffffff"
-                orientation="portrait"
-                finish={finish}
-                metal={metal}
-                breeze={breeze}
-                gravity={0.9}
-                damping={0.45}
-                elasticity={0.5}
-                interactive={true}
-                intro={true}
-              />
-            </div>
-
-            {/* Bottom Floating Control Bar */}
-            <div className="bg-slate-900/90 backdrop-blur-md rounded-[24px] border border-slate-800/90 p-3 mx-2 mb-2 flex flex-col gap-2.5">
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <span className="flex items-center gap-1.5 font-bold text-slate-300">
-                  <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-                  Badge Surface Finish:
+      {/* Main Grid: 2-Column for Faculty/Student with 3D Metallic Gold Card, Centered for Admin/Parent */}
+      <div className={is3DCardSupported ? "grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" : "max-w-4xl mx-auto space-y-6"}>
+        {/* Left Column: 3D Physics Lanyard Interactive Badge Canvas (Exclusively for Faculty & Student) */}
+        {is3DCardSupported && (
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            <div className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 rounded-[32px] border border-amber-500/20 shadow-xl overflow-hidden p-2">
+              {/* Top Interactive Ribbon */}
+              <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 backdrop-blur-md border border-amber-500/30 shadow-md">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-[11px] font-semibold text-amber-200">Metallic Gold Pass</span>
+                </div>
+                <span className="text-[10px] font-medium text-slate-300 bg-slate-800/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-slate-700/60 hidden sm:inline">
+                  Drag to swing • Click to flip
                 </span>
-                <span className="text-[11px] text-slate-400 uppercase font-semibold">{finish}</span>
               </div>
 
-              {/* Finish Options Pill Group */}
-              <div className="grid grid-cols-4 gap-1.5">
-                {[
-                  { id: 'holographic', label: 'Holo ✨' },
-                  { id: 'glossy', label: 'Glossy' },
-                  { id: 'metallic', label: 'Metallic' },
-                  { id: 'matte', label: 'Matte' }
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setFinish(item.id)}
-                    className={`py-1.5 px-2 rounded-xl text-[11px] font-bold transition-all ${
-                      finish === item.id
-                        ? 'bg-cyan-500 text-slate-950 shadow-xs'
-                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+              {/* 3D Lanyard Viewport: Locked to Metallic Finish & Gold Clip */}
+              <div className="w-full h-[540px] sm:h-[600px] relative">
+                <Lanyard
+                  frontImage={textures.frontImage}
+                  backImage={textures.backImage}
+                  strapImage={textures.strapImage}
+                  strapColor={textures.strapColor}
+                  cardColor="#ffffff"
+                  orientation="portrait"
+                  finish="metallic"
+                  metal="gold"
+                  breeze={0.4}
+                  gravity={0.9}
+                  damping={0.45}
+                  elasticity={0.5}
+                  interactive={true}
+                  intro={true}
+                />
               </div>
 
-              {/* Metal Clip & Breeze Controls */}
-              <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-[11px]">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-slate-400">Clip Metal:</span>
-                  {['silver', 'gold', 'graphite'].map((m) => (
-                    <button
-                      key={m}
-                      onClick={() => setMetal(m)}
-                      className={`px-2 py-0.5 rounded-md font-semibold capitalize ${
-                        metal === m ? 'bg-slate-700 text-amber-400 ring-1 ring-amber-400/50' : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      {m}
-                    </button>
-                  ))}
+              {/* Bottom Fixed Status Bar (Customization removed as requested) */}
+              <div className="bg-slate-900/90 backdrop-blur-md rounded-[20px] border border-amber-500/25 px-4 py-3 mx-2 mb-2 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50"></span>
+                  <span className="font-bold text-slate-200">Official Metallic Finish</span>
                 </div>
-
-                <div className="flex items-center gap-1.5">
-                  <span className="text-slate-400">Wind:</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value={breeze}
-                    onChange={(e) => setBreeze(parseFloat(e.target.value))}
-                    className="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
-                  />
-                </div>
+                <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider">
+                  Gold Hardware Clip
+                </span>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Right Column: Detailed Academic Profile Information (7 Cols) */}
-        <div className="lg:col-span-7 space-y-6">
+        {/* Right / Main Column: Detailed Academic Profile Information */}
+        <div className={is3DCardSupported ? "lg:col-span-7 space-y-6" : "space-y-6"}>
           {/* User Hero Identity Card */}
           <div className="bg-white/90 backdrop-blur-md rounded-[32px] p-6 border border-slate-200/90 shadow-2xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">

@@ -69,8 +69,8 @@ export const Login = () => {
 
   return (
     <SignInCard2
-      brandTitle="Next Gen Grading"
-      brandSubtitle="Sign in to access your Academic Portal"
+      brandTitle="Login"
+      brandSubtitle="Welcome back please login to your account"
       onLoginSubmit={handleLoginSubmit}
       onRoleQuickSelect={handleRoleQuickSelect}
     />

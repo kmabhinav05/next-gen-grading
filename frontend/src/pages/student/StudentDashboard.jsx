@@ -438,7 +438,7 @@ export const StudentDashboard = () => {
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200/60">
-                  <span className="truncate">Faculty: {sub.staff_name || 'Prof. Faculty'}</span>
+                  <span className="truncate">Faculty: {sub.staff_name ? `Prof. ${sub.staff_name.replace(/^((Prof\.|Prof|Professor)\s*)+/gi, '').trim()}` : 'Prof. Faculty'}</span>
                   <span
                     className={`font-semibold px-2 py-0.5 rounded-full text-[10px] ${
                       (sub.attendance_percentage || 0) < 75

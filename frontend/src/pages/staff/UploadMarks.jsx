@@ -204,13 +204,34 @@ export const UploadMarks = () => {
             </div>
           </div>
 
-          {/* Drag & Drop Area */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
-            <h3 className="text-sm font-bold text-slate-900 mb-2">Upload Completed Excel Sheet</h3>
+          {/* Drag & Drop Area on Desktop / Mobile Native Picker Button */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs">
+            <h3 className="text-sm font-bold text-slate-900 mb-1.5">Upload Completed Excel Sheet</h3>
             <p className="text-xs text-slate-500 mb-4">
               Columns must include "Register Number" and "Marks". The system will immediately validate each student and range.
             </p>
 
+            {/* Mobile-First File Picker Button */}
+            <div className="block md:hidden mb-4">
+              <input
+                type="file"
+                id="mobile-excel-picker"
+                accept=".xlsx, .xls"
+                className="sr-only"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) handleFileUpload(e.target.files[0]);
+                }}
+              />
+              <label
+                htmlFor="mobile-excel-picker"
+                className="w-full py-3.5 px-4 rounded-xl bg-primary-600 active:bg-primary-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs cursor-pointer min-h-[44px]"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                <span>{previewing ? 'Parsing spreadsheet...' : 'Choose Excel File (.xlsx)'}</span>
+              </label>
+            </div>
+
+            {/* Desktop Drag & Drop Box */}
             <div
               onDragOver={(e) => {
                 e.preventDefault();
@@ -225,7 +246,7 @@ export const UploadMarks = () => {
                 }
               }}
               onClick={() => fileInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all ${
+              className={`border-2 border-dashed rounded-2xl p-6 sm:p-10 text-center cursor-pointer transition-all ${
                 dragActive ? 'border-primary-600 bg-primary-50/50' : 'border-slate-300 hover:border-primary-400 bg-slate-50/50'
               }`}
             >
@@ -300,7 +321,60 @@ export const UploadMarks = () => {
               </button>
             </div>
 
-            <div className="overflow-x-auto max-h-[420px]">
+            {/* Mobile Stacked Card List for small screens */}
+            <div className="block md:hidden divide-y divide-slate-100 max-h-[420px] overflow-y-auto p-3 space-y-2.5">
+              {previewData.rows.map((row, idx) => (
+                <div
+                  key={row.row_number || row.row_num || idx}
+                  className={`p-3.5 rounded-xl border transition-all ${
+                    row.is_valid
+                      ? 'bg-slate-50/70 border-slate-200/80'
+                      : 'bg-rose-50/70 border-rose-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">
+                        Row {row.row_number || row.row_num || idx + 2}
+                      </span>
+                      <span className="font-mono font-bold text-slate-900">{row.reg_no}</span>
+                    </div>
+                    <span className="font-mono font-bold text-sm text-slate-900">
+                      {row.marks !== null ? `${row.marks} marks` : <span className="text-rose-500 italic">Empty</span>}
+                    </span>
+                  </div>
+
+                  <div className="text-xs font-semibold text-slate-800 mb-2">
+                    {row.student_name || row.name || 'Student Candidate'}
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                    <span className="text-[11px] text-slate-500">Status:</span>
+                    {row.is_valid ? (
+                      <span className="inline-flex items-center gap-1 text-emerald-700 font-bold text-[11px]">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Valid</span>
+                      </span>
+                    ) : (
+                      <div className="flex flex-wrap gap-1">
+                        {row.errors.map((err, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200"
+                          >
+                            <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+                            <span>{err}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto max-h-[420px]">
               <table className="w-full text-left text-xs border-collapse">
                 <thead className="sticky top-0 bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px]">
                   <tr>

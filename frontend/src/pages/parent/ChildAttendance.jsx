@@ -68,7 +68,8 @@ export const ChildAttendance = () => {
 
   const sanitizeFacultyName = (name) => {
     if (!name) return 'Course Instructor';
-    return name.replace(/^(Prof\.\s*)+/i, 'Prof. ').trim();
+    const clean = name.replace(/^((Prof\.|Prof|Professor)\s*)+/gi, '').trim();
+    return clean ? `Prof. ${clean}` : 'Course Instructor';
   };
 
   const strokeOffset = 251.2 - (251.2 * Math.min(overallPerc, 100)) / 100;

@@ -552,9 +552,9 @@ export const ParentDashboard = () => {
           <button
             type="button"
             onClick={() => setIsPtmOpen(true)}
-            className="w-full py-2.5 px-4 rounded-2xl bg-[#1e293b] text-white text-xs font-bold hover:bg-slate-800 transition-all shadow-xs flex items-center justify-center gap-2"
+            className="w-full min-h-[44px] py-2.5 px-4 rounded-2xl bg-[#1e293b] hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-[0.98]"
           >
-            <Calendar className="w-3.5 h-3.5 text-amber-400" />
+            <Calendar className="w-4 h-4 text-amber-400" />
             <span>Schedule Faculty Consultation</span>
           </button>
         </div>
@@ -574,9 +574,9 @@ export const ParentDashboard = () => {
           <button
             type="button"
             onClick={() => setIsLeaveOpen(true)}
-            className="w-full py-2.5 px-4 rounded-2xl bg-white text-slate-800 border border-slate-300 hover:bg-slate-50 text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-2"
+            className="w-full min-h-[44px] py-2.5 px-4 rounded-2xl bg-white text-slate-800 border border-slate-300 hover:border-primary-500 hover:bg-slate-50 text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-2 active:scale-[0.98]"
           >
-            <Send className="w-3.5 h-3.5 text-primary-600" />
+            <Send className="w-4 h-4 text-primary-600" />
             <span>Submit Absence Intimation Note</span>
           </button>
         </div>

@@ -63,7 +63,8 @@ export const MyAttendance = () => {
 
   const sanitizeFacultyName = (name) => {
     if (!name) return 'Course Instructor';
-    return name.replace(/^(Prof\.\s*)+/i, 'Prof. ').trim();
+    const clean = name.replace(/^((Prof\.|Prof|Professor)\s*)+/gi, '').trim();
+    return clean ? `Prof. ${clean}` : 'Course Instructor';
   };
 
   // SVG Dial offset (r=40 -> circumference 251.2)

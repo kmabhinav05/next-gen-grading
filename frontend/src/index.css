@@ -3,39 +3,145 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --sat: env(safe-area-inset-top, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply text-slate-800 bg-slate-50 min-h-screen;
+    @apply text-slate-800 bg-slate-900 min-h-[100dvh] overflow-x-hidden;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Prevent iOS input auto-zoom by enforcing 16px min on mobile */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  @screen md {
+    input, select, textarea {
+      font-size: 0.875rem; /* 14px */
+    }
+  }
+
+  /* Minimum 44x44 touch targets for buttons/links on mobile */
+  @media (pointer: coarse) {
+    button, a[role="button"], input[type="button"], input[type="submit"] {
+      min-height: 44px;
+    }
   }
 }
 
-/* Print styling */
+/* 60 FPS Animation Compositing Rules */
+@layer utilities {
+  .gpu-composited {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .pt-safe {
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+
+  .pb-safe {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .h-dvh {
+    height: 100dvh;
+  }
+
+  .min-h-dvh {
+    min-height: 100dvh;
+  }
+
+  /* Responsive fluid clamp helpers */
+  .text-fluid-title {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.2;
+  }
+
+  .text-fluid-hero {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.15;
+  }
+}
+
+/* Reduced Motion Mode for Accessibility & Battery Conservation */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High Contrast Mode for Low Vision */
+.high-contrast {
+  filter: contrast(1.25);
+}
+.high-contrast input,
+.high-contrast button,
+.high-contrast .border {
+  border-width: 2px !important;
+  border-color: #0f172a !important;
+}
+
+/* Print / PDF Output Styling: Fixed A4 Output with @page */
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
 @media print {
-  body {
+  html, body {
     background: white !important;
     color: black !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  .no-print {
+
+  .no-print, nav, footer, header, button, .bottom-nav, .chatbot-widget {
     display: none !important;
   }
+
   .print-only {
     display: block !important;
   }
+
   .print-card-container {
     box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 15px !important;
     margin: 0 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 
-/* Custom scrollbars */
+/* Custom Lean Scrollbars (GPU composited) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;

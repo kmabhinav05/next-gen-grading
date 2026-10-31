@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
+import { BottomNav } from '../components/common/BottomNav';
 import { ChatbotWidget } from '../components/chatbot/ChatbotWidget';
 import { useAuth } from '../context/AuthContext';
 import { Toaster } from 'react-hot-toast';
@@ -58,11 +59,14 @@ export const DashboardLayout = () => {
   const activeTheme = THEMES[themeKey] || THEMES.cream;
 
   return (
-    <div className={`min-h-screen ${activeTheme.outer} py-3 sm:py-6 px-3 sm:px-6 md:px-8 font-sans transition-colors duration-300 selection:bg-[#ffc83b] selection:text-slate-900`}>
+    <div
+      className={`min-h-[100dvh] ${activeTheme.outer} py-2 sm:py-6 px-2 sm:px-6 md:px-8 pb-24 md:pb-6 font-sans transition-colors duration-300 selection:bg-[#ffc83b] selection:text-slate-900 overflow-x-hidden`}
+    >
       {/* Outer Dashboard Rounded Canvas Shell with Dynamic Theme Tint */}
-      <div className={`max-w-[1440px] mx-auto min-h-[95vh] ${activeTheme.canvas} rounded-[38px] p-5 sm:p-7 md:p-8 shadow-2xl border transition-all duration-300 flex flex-col justify-between`}>
-        
-        {/* Top Floating Pill Navigation */}
+      <div
+        className={`max-w-[1440px] mx-auto min-h-[92dvh] ${activeTheme.canvas} rounded-[28px] sm:rounded-[38px] p-3.5 sm:p-7 md:p-8 shadow-2xl border transition-all duration-300 flex flex-col justify-between`}
+      >
+        {/* Top Floating Pill Navigation & Mobile Header */}
         <Navbar />
 
         {/* Dynamic Route Content */}
@@ -71,11 +75,16 @@ export const DashboardLayout = () => {
         </main>
       </div>
 
-      {/* Student chatbot widget */}
+      {/* Student chatbot widget with responsive full-sheet mobile mode */}
       {role === 'STUDENT' && <ChatbotWidget />}
+
+      {/* Mobile Bottom Navigation Bar (4-5 most used links per role) */}
+      <BottomNav />
 
       {/* Toast notifications */}
       <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
     </div>
   );
 };
+
+export default DashboardLayout;

@@ -59,11 +59,12 @@ export const ChatbotWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-50">
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white rounded-full shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 transform hover:-translate-y-0.5 transition-all text-sm font-semibold"
+          className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white rounded-full shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 transform hover:-translate-y-0.5 transition-all text-xs sm:text-sm font-semibold min-h-[44px] active:scale-95"
+          aria-label="Open Academic AI Assistant"
         >
           <Bot className="w-5 h-5 animate-pulse" />
           <span>Ask Assistant</span>
@@ -71,9 +72,9 @@ export const ChatbotWidget = () => {
       )}
 
       {isOpen && (
-        <div className="w-[360px] sm:w-[420px] h-[550px] bg-white rounded-2xl shadow-2xl border border-slate-200/80 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
+        <div className="fixed inset-0 sm:static w-full h-[100dvh] sm:w-[380px] sm:h-[550px] bg-white sm:rounded-2xl shadow-2xl border-0 sm:border sm:border-slate-200/80 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 z-50">
           {/* Header */}
-          <div className="bg-gradient-to-r from-primary-700 to-indigo-800 text-white p-4 flex items-center justify-between shadow-sm">
+          <div className="bg-gradient-to-r from-primary-700 to-indigo-800 text-white p-3.5 sm:p-4 flex items-center justify-between shadow-sm pt-safe">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-xl bg-white/10 backdrop-blur-md">
                 <Sparkles className="w-4 h-4 text-amber-300" />
@@ -85,20 +86,21 @@ export const ChatbotWidget = () => {
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg text-primary-200 hover:text-white hover:bg-white/10 transition-colors"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-primary-200 hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Close Chatbot"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Quick Prompts */}
-          <div className="p-2.5 bg-slate-50 border-b border-slate-100 flex items-center gap-1.5 overflow-x-auto text-[11px]">
+          <div className="p-2.5 bg-slate-50 border-b border-slate-100 flex items-center gap-1.5 overflow-x-auto text-[11px] scrollbar-none">
             {quickPrompts.map((prompt, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSend(prompt)}
                 disabled={loading}
-                className="whitespace-nowrap px-2.5 py-1 bg-white border border-slate-200 rounded-full text-slate-700 hover:border-primary-500 hover:text-primary-600 transition-colors shadow-2xs disabled:opacity-50"
+                className="whitespace-nowrap px-3 py-1.5 bg-white border border-slate-200 rounded-full text-slate-700 hover:border-primary-500 hover:text-primary-600 transition-colors shadow-2xs disabled:opacity-50 min-h-[36px]"
               >
                 {prompt}
               </button>
@@ -106,7 +108,7 @@ export const ChatbotWidget = () => {
           </div>
 
           {/* Messages body */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/50 text-xs">
+          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/50 text-xs sm:text-xs">
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -118,7 +120,7 @@ export const ChatbotWidget = () => {
                   </div>
                 )}
                 <div
-                  className={`p-3 rounded-2xl max-w-[82%] leading-relaxed ${
+                  className={`p-3 rounded-2xl max-w-[85%] leading-relaxed ${
                     msg.sender === 'user'
                       ? 'bg-primary-600 text-white rounded-br-xs shadow-xs'
                       : 'bg-white text-slate-800 border border-slate-200/80 rounded-bl-xs shadow-xs whitespace-pre-line'
@@ -147,25 +149,27 @@ export const ChatbotWidget = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input field */}
+          {/* Input field (keyboard-safe with pb-safe) */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSend();
             }}
-            className="p-3 bg-white border-t border-slate-100 flex items-center gap-2"
+            className="p-3 bg-white border-t border-slate-100 flex items-center gap-2 pb-safe"
           >
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask attendance or marks question..."
-              className="flex-1 px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              className="flex-1 px-3.5 py-2.5 text-base sm:text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 min-h-[44px]"
+              autoComplete="off"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="p-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-40 transition-colors shadow-xs"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-40 transition-colors shadow-xs active:scale-95"
+              aria-label="Send query"
             >
               <Send className="w-4 h-4" />
             </button>

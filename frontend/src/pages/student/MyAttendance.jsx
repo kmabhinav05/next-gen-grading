@@ -12,7 +12,16 @@ import {
   Sparkles,
   ShieldCheck,
   Award,
-  ArrowUpRight
+  ArrowUpRight,
+  Database,
+  Cpu,
+  Network,
+  Code2,
+  LayoutGrid,
+  Table as TableIcon,
+  Shield,
+  Layers,
+  Filter
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -21,6 +30,8 @@ export const MyAttendance = () => {
   const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('table'); // 'table' | 'cards'
+  const [filterStatus, setFilterStatus] = useState('ALL'); // 'ALL' | 'SAFE' | 'NORMAL' | 'SHORTAGE'
 
   useEffect(() => {
     const studentId = user?.student?.id || 1;
@@ -66,6 +77,61 @@ export const MyAttendance = () => {
     const clean = name.replace(/^((Prof\.|Prof|Professor)\s*)+/gi, '').trim();
     return clean ? `Prof. ${clean}` : 'Course Instructor';
   };
+
+  const getCourseTheme = (code, name) => {
+    const text = `${code || ''} ${name || ''}`.toUpperCase();
+    if (text.includes('501') || text.includes('DATA') || text.includes('DBMS')) {
+      return {
+        icon: Database,
+        iconBg: 'bg-indigo-500/10 text-indigo-600 border-indigo-200/80',
+        pillBg: 'bg-indigo-600 text-white',
+        barColor: 'from-blue-600 via-indigo-500 to-indigo-600',
+        glow: 'shadow-[0_0_12px_rgba(99,102,241,0.25)]'
+      };
+    }
+    if (text.includes('502') || text.includes('OPERAT') || text.includes('OS')) {
+      return {
+        icon: Cpu,
+        iconBg: 'bg-purple-500/10 text-purple-600 border-purple-200/80',
+        pillBg: 'bg-purple-700 text-white',
+        barColor: 'from-purple-600 via-fuchsia-500 to-pink-500',
+        glow: 'shadow-[0_0_12px_rgba(168,85,247,0.25)]'
+      };
+    }
+    if (text.includes('503') || text.includes('NET') || text.includes('COMM')) {
+      return {
+        icon: Network,
+        iconBg: 'bg-emerald-500/10 text-emerald-600 border-emerald-200/80',
+        pillBg: 'bg-emerald-700 text-white',
+        barColor: 'from-emerald-500 via-teal-500 to-cyan-500',
+        glow: 'shadow-[0_0_12px_rgba(16,185,129,0.25)]'
+      };
+    }
+    if (text.includes('504') || text.includes('SOFT') || text.includes('ENG') || text.includes('CODE')) {
+      return {
+        icon: Code2,
+        iconBg: 'bg-amber-500/10 text-amber-600 border-amber-200/80',
+        pillBg: 'bg-amber-600 text-white',
+        barColor: 'from-amber-500 via-orange-500 to-amber-600',
+        glow: 'shadow-[0_0_12px_rgba(245,158,11,0.25)]'
+      };
+    }
+    return {
+      icon: BookOpen,
+      iconBg: 'bg-slate-500/10 text-slate-700 border-slate-200',
+      pillBg: 'bg-slate-800 text-white',
+      barColor: 'from-slate-700 to-slate-900',
+      glow: 'shadow-xs'
+    };
+  };
+
+  const filteredSubjects = subjects.filter((s) => {
+    const perc = Number(s.attendance_percentage || 0);
+    if (filterStatus === 'SAFE') return perc >= 85;
+    if (filterStatus === 'NORMAL') return perc >= 75 && perc < 85;
+    if (filterStatus === 'SHORTAGE') return perc < 75;
+    return true;
+  });
 
   // SVG Dial offset (r=40 -> circumference 251.2)
   const strokeOffset = 251.2 - (251.2 * Math.min(overallPerc, 100)) / 100;
@@ -245,139 +311,314 @@ export const MyAttendance = () => {
         </div>
       )}
 
-      {/* 3. VISUAL ATTENDANCE BREAKDOWN TABLE & PROGRESS BARS */}
-      <div className="bg-white/90 backdrop-blur-md rounded-[32px] border border-slate-200/80 shadow-2xs overflow-hidden">
-        <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      {/* 3. VISUAL ATTENDANCE BREAKDOWN: DUAL-VIEW REGISTRY */}
+      <div className="bg-white/95 backdrop-blur-md rounded-[32px] border border-slate-200/90 shadow-sm overflow-hidden transition-all duration-300">
+        {/* Header Controls: Filters & View Switcher */}
+        <div className="p-5 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-gradient-to-r from-slate-50/60 via-white to-slate-50/40">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 tracking-tight">
-              Subject Attendance Registry
-            </h3>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="p-1 rounded-lg bg-primary-100 text-primary-700">
+                <ClipboardCheck className="w-4 h-4" />
+              </span>
+              <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                Subject Attendance Registry
+              </h3>
+            </div>
             <p className="text-xs text-slate-500">
-              Verified lecture counts and real-time threshold progress for Semester {student.semester || 5}
+              Verified lecture counts and threshold compliance for Semester {student.semester || 5}
             </p>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-slate-500">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <span className="text-[11px] font-semibold">Safe (&ge;85%)</span>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Filter Pills */}
+            <div className="flex items-center gap-1 p-1 rounded-2xl bg-slate-100/80 border border-slate-200/80 text-xs">
+              {[
+                { id: 'ALL', label: `All (${subjects.length})` },
+                { id: 'SAFE', label: `Safe (${subjects.filter((s) => (s.attendance_percentage || 0) >= 85).length})` },
+                { id: 'NORMAL', label: `Normal (${subjects.filter((s) => (s.attendance_percentage || 0) >= 75 && (s.attendance_percentage || 0) < 85).length})` },
+                { id: 'SHORTAGE', label: `Shortage (${subjects.filter((s) => (s.attendance_percentage || 0) < 75).length})` }
+              ].map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setFilterStatus(f.id)}
+                  className={`px-3 py-1 rounded-xl font-bold text-[11px] transition-all ${
+                    filterStatus === f.id
+                      ? 'bg-white text-slate-900 shadow-2xs'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-              <span className="text-[11px] font-semibold">Normal (75-84%)</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-              <span className="text-[11px] font-semibold">Shortage (&lt;75%)</span>
+
+            {/* View Mode Toggle Button */}
+            <div className="hidden sm:flex items-center p-1 rounded-2xl bg-slate-100/80 border border-slate-200/80 text-xs">
+              <button
+                type="button"
+                onClick={() => setViewMode('table')}
+                className={`p-1.5 rounded-xl transition-all ${
+                  viewMode === 'table'
+                    ? 'bg-white text-slate-900 shadow-2xs'
+                    : 'text-slate-400 hover:text-slate-700'
+                }`}
+                title="Table Registry View"
+                aria-label="Table Registry View"
+              >
+                <TableIcon className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('cards')}
+                className={`p-1.5 rounded-xl transition-all ${
+                  viewMode === 'cards'
+                    ? 'bg-white text-slate-900 shadow-2xs'
+                    : 'text-slate-400 hover:text-slate-700'
+                }`}
+                title="Visual Cards Grid View"
+                aria-label="Visual Cards Grid View"
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                <th className="px-5 py-3.5 w-24">Course</th>
-                <th className="px-5 py-3.5">Subject & Faculty</th>
-                <th className="px-5 py-3.5 min-w-[200px]">Attendance Progress & Threshold</th>
-                <th className="px-5 py-3.5 text-center">Classes</th>
-                <th className="px-5 py-3.5 text-center">Attended</th>
-                <th className="px-5 py-3.5 text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {subjects.map((s) => {
-                const perc = Number(s.attendance_percentage || 0);
-                const isSubjectShortage = perc < 75.0;
-                const missed = Math.max(0, (s.classes_held || 0) - (s.classes_attended || 0));
+        {/* VIEW 1: Visual Interactive Cards Grid (Shown on 'cards' mode or mobile) */}
+        {viewMode === 'cards' ? (
+          <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredSubjects.map((s) => {
+              const perc = Number(s.attendance_percentage || 0);
+              const isSafe = perc >= 85;
+              const isNormal = perc >= 75 && perc < 85;
+              const missed = Math.max(0, (s.classes_held || 0) - (s.classes_attended || 0));
+              const safeMargin = Math.max(0, Math.floor(((s.classes_attended || 0) - 0.75 * (s.classes_held || 0)) / 0.75));
+              const recover = Math.max(0, Math.ceil((0.75 * (s.classes_held || 0) - (s.classes_attended || 0)) / 0.25));
+              const theme = getCourseTheme(s.code, s.name);
+              const Icon = theme.icon;
+              const cardOffset = 188.4 - (188.4 * Math.min(perc, 100)) / 100;
 
-                return (
-                  <tr key={s.code} className="hover:bg-slate-50/70 transition-colors">
-                    {/* Course Code Pill */}
-                    <td className="px-5 py-4 font-mono">
-                      <span className="px-2.5 py-1 rounded-xl bg-[#1e293b] text-white font-bold text-[11px] shadow-2xs inline-block">
-                        {s.code}
+              return (
+                <div
+                  key={s.code}
+                  className="p-5 rounded-3xl border border-slate-200/90 bg-gradient-to-br from-white via-slate-50/40 to-slate-100/30 shadow-2xs hover:shadow-md transition-all space-y-4 hover:border-slate-300"
+                >
+                  {/* Card Header: Icon + Code + Status */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-11 h-11 rounded-2xl border flex items-center justify-center ${theme.iconBg} ${theme.glow}`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold ${theme.pillBg}`}>
+                          {s.code}
+                        </span>
+                        <h4 className="font-extrabold text-slate-900 text-sm mt-1 leading-snug">
+                          {s.name}
+                        </h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          {sanitizeFacultyName(s.staff_name)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Circular Radial Gauge */}
+                    <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
+                      <svg className="w-full h-full transform -rotate-90" viewBox="0 0 70 70">
+                        <circle cx="35" cy="35" r="30" stroke="#e2e8f0" strokeWidth="6" fill="transparent" />
+                        <circle
+                          cx="35"
+                          cy="35"
+                          r="30"
+                          stroke={isSafe ? '#10b981' : isNormal ? '#f59e0b' : '#f43f5e'}
+                          strokeWidth="6"
+                          strokeDasharray="188.4"
+                          strokeDashoffset={cardOffset}
+                          strokeLinecap="round"
+                          fill="transparent"
+                        />
+                      </svg>
+                      <span className="absolute font-black text-xs font-mono text-slate-900">
+                        {perc}%
                       </span>
-                    </td>
+                    </div>
+                  </div>
 
-                    {/* Subject Name & Clean Faculty */}
-                    <td className="px-5 py-4">
-                      <p className="font-bold text-slate-900 text-sm">{s.name}</p>
-                      <p className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                        <span>{sanitizeFacultyName(s.staff_name)}</span>
-                      </p>
-                    </td>
+                  {/* Visual Progress Bar with 75% Pin */}
+                  <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-500 font-semibold">Eligibility Threshold</span>
+                      <span className="text-slate-400 font-medium">
+                        {missed === 0 ? 'Zero Absences' : `${missed} missed`}
+                      </span>
+                    </div>
 
-                    {/* Visual Progress Bar with 75% Cutoff Marker */}
-                    <td className="px-5 py-4">
-                      <div className="space-y-1.5">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-slate-800 font-mono">{perc}%</span>
-                          <span className="text-[10px] text-slate-400">
-                            {missed === 0 ? 'Zero Absences' : `${missed} missed`}
+                    <div className="relative w-full h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                      <div
+                        className="absolute top-0 bottom-0 w-0.5 bg-slate-400 z-10"
+                        style={{ left: '75%' }}
+                        title="75% Mandatory Attendance Target"
+                      />
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 bg-gradient-to-r ${theme.barColor}`}
+                        style={{ width: `${Math.min(perc, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Metrics Footer */}
+                  <div className="grid grid-cols-3 gap-2 pt-1 text-center font-mono text-xs">
+                    <div className="p-2 bg-white rounded-2xl border border-slate-200/80">
+                      <span className="text-[10px] text-slate-400 uppercase font-sans font-semibold block">Attended</span>
+                      <span className="font-extrabold text-slate-900 text-sm">{s.classes_attended}</span>
+                    </div>
+                    <div className="p-2 bg-white rounded-2xl border border-slate-200/80">
+                      <span className="text-[10px] text-slate-400 uppercase font-sans font-semibold block">Held</span>
+                      <span className="font-extrabold text-slate-900 text-sm">{s.classes_held}</span>
+                    </div>
+                    <div className={`p-2 rounded-2xl border ${isSafe ? 'bg-emerald-50/70 border-emerald-200/80 text-emerald-800' : isNormal ? 'bg-amber-50/70 border-amber-200/80 text-amber-800' : 'bg-rose-50/70 border-rose-200/80 text-rose-800'}`}>
+                      <span className="text-[10px] uppercase font-sans font-semibold block">Cushion</span>
+                      <span className="font-extrabold text-sm">
+                        {perc >= 75 ? `+${safeMargin}` : `-${recover}`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* VIEW 2: High-Impact Visual Table View */
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  <th className="px-5 py-3.5 w-28">Course</th>
+                  <th className="px-5 py-3.5">Subject & Faculty</th>
+                  <th className="px-5 py-3.5 min-w-[240px]">Attendance Progress & Threshold</th>
+                  <th className="px-5 py-3.5 text-center w-36">Classes / Held</th>
+                  <th className="px-5 py-3.5 text-right w-36">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredSubjects.map((s) => {
+                  const perc = Number(s.attendance_percentage || 0);
+                  const isSafe = perc >= 85;
+                  const isNormal = perc >= 75 && perc < 85;
+                  const isShortageSubj = perc < 75.0;
+                  const missed = Math.max(0, (s.classes_held || 0) - (s.classes_attended || 0));
+                  const safeMargin = Math.max(0, Math.floor(((s.classes_attended || 0) - 0.75 * (s.classes_held || 0)) / 0.75));
+                  const recover = Math.max(0, Math.ceil((0.75 * (s.classes_held || 0) - (s.classes_attended || 0)) / 0.25));
+                  const theme = getCourseTheme(s.code, s.name);
+                  const Icon = theme.icon;
+
+                  return (
+                    <tr
+                      key={s.code}
+                      className="hover:bg-slate-50/80 transition-all duration-150 group"
+                    >
+                      {/* Course Code with Themed Icon */}
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className={`w-8 h-8 rounded-xl border flex items-center justify-center ${theme.iconBg} ${theme.glow}`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <span className={`px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold shadow-2xs ${theme.pillBg}`}>
+                            {s.code}
                           </span>
                         </div>
+                      </td>
 
-                        {/* Progress track */}
-                        <div className="relative w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                          {/* 75% University Threshold Marker */}
-                          <div
-                            className="absolute top-0 bottom-0 w-0.5 bg-slate-400/70 z-10"
-                            style={{ left: '75%' }}
-                            title="75% Mandatory Attendance Threshold"
-                          ></div>
+                      {/* Subject Name & Faculty */}
+                      <td className="px-5 py-4">
+                        <p className="font-extrabold text-slate-900 text-sm group-hover:text-primary-700 transition-colors">
+                          {s.name}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-slate-500">
+                          <span className="flex items-center gap-1 font-medium">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                            {sanitizeFacultyName(s.staff_name)}
+                          </span>
 
-                          {/* Progress Fill */}
-                          <div
-                            className={`h-full rounded-full transition-all duration-500 ${
-                              perc >= 85
-                                ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
-                                : perc >= 75
-                                ? 'bg-gradient-to-r from-amber-400 to-[#ffc83b]'
-                                : 'bg-gradient-to-r from-rose-500 to-red-600'
-                            }`}
-                            style={{ width: `${Math.min(perc, 100)}%` }}
-                          ></div>
+                          {/* Safe Margin Pill */}
+                          {perc >= 75 ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200/60">
+                              <Shield className="w-3 h-3 text-emerald-600" />
+                              <span>Can miss {safeMargin} classes safely</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-bold border border-rose-200/60">
+                              <AlertTriangle className="w-3 h-3 text-rose-600" />
+                              <span>Must attend next {recover} classes</span>
+                            </span>
+                          )}
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Classes Held */}
-                    <td className="px-5 py-4 text-center font-mono font-semibold text-slate-600">
-                      {s.classes_held}
-                    </td>
+                      {/* Visual Layered Progress Bar with 75% Pin */}
+                      <td className="px-5 py-4">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className={`font-mono font-black text-sm ${isSafe ? 'text-emerald-700' : isNormal ? 'text-amber-700' : 'text-rose-700'}`}>
+                              {perc}%
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-medium">
+                              {missed === 0 ? 'Zero Absences' : `${missed} missed`}
+                            </span>
+                          </div>
 
-                    {/* Classes Attended */}
-                    <td className="px-5 py-4 text-center font-mono font-bold text-slate-900">
-                      {s.classes_attended}
-                    </td>
+                          {/* Progress track */}
+                          <div className="relative w-full h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                            {/* 75% Cutoff Marker */}
+                            <div
+                              className="absolute top-0 bottom-0 w-0.5 bg-slate-500/80 z-10"
+                              style={{ left: '75%' }}
+                              title="75% Mandatory Attendance Target"
+                            />
 
-                    {/* Status Pill Badge */}
-                    <td className="px-5 py-4 text-right">
-                      {perc >= 85 ? (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/80 shadow-2xs">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>{perc}% (Normal)</span>
-                        </span>
-                      ) : perc >= 75 ? (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200/80 shadow-2xs">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />
-                          <span>{perc}% (Normal)</span>
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200/80 shadow-2xs">
-                          <AlertTriangle className="w-3.5 h-3.5" />
-                          <span>{perc}% (Shortage)</span>
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                            {/* Progress Fill */}
+                            <div
+                              className={`h-full rounded-full transition-all duration-500 bg-gradient-to-r ${theme.barColor} ${theme.glow}`}
+                              style={{ width: `${Math.min(perc, 100)}%` }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Attended / Held Ratio */}
+                      <td className="px-5 py-4 text-center font-mono">
+                        <div className="inline-flex items-baseline gap-1 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/80">
+                          <span className="font-black text-slate-900 text-sm">{s.classes_attended}</span>
+                          <span className="text-slate-400 text-xs font-semibold">/ {s.classes_held}</span>
+                        </div>
+                      </td>
+
+                      {/* Status Badge */}
+                      <td className="px-5 py-4 text-right">
+                        {isSafe ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>{perc}% (Safe)</span>
+                          </span>
+                        ) : isNormal ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />
+                            <span>{perc}% (Normal)</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200 shadow-2xs">
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+                            <span>{perc}% (Shortage)</span>
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

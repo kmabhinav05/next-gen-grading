@@ -65,13 +65,12 @@ export function Component({
       {/* Soft natural golden hour & depth overlay */}
       <div className="absolute inset-0 bg-black/15 backdrop-brightness-[0.98] pointer-events-none" />
 
-      {/* Floating 3D Frosted Glass Login Container */}
+      {/* Floating Frosted Glass Login Container with Fast Smooth Fade-in */}
       <motion.div
-        initial={{ opacity: 0, y: 25, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
         className="w-full max-w-[430px] relative z-10"
-        style={{ perspective: 1200 }}
       >
         <motion.div
           style={{ rotateX, rotateY }}
@@ -217,37 +216,9 @@ export function Component({
                 </button>
               </div>
 
-              {/* Author / Credit Tag as in the mockup */}
-              <div className="text-center pt-4 text-[11px] text-white/70 italic tracking-wide">
-                Created by <span className="font-semibold text-white/85 not-italic">anggidwiiputra</span>
-              </div>
             </form>
           </div>
         </motion.div>
-
-        {/* Quick Demo Role Selector Pills (Convenient for testing all 4 portals) */}
-        <div className="mt-5 text-center">
-          <p className="text-[11px] text-white/80 font-semibold uppercase tracking-wider mb-2 drop-shadow-xs">
-            1-Click Demo Portals
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {[
-              { id: 'ADMIN', label: 'Admin', desc: 'admin / admin123' },
-              { id: 'STAFF', label: 'Faculty', desc: 'staff_sharma' },
-              { id: 'STUDENT', label: 'Student', desc: 'student1 / 21CS001' },
-              { id: 'PARENT', label: 'Parent', desc: 'parent_patel' },
-            ].map((role) => (
-              <button
-                key={role.id}
-                type="button"
-                onClick={() => onRoleQuickSelect?.(role.id)}
-                className="px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 border border-white/40 text-white text-xs font-bold backdrop-blur-md transition-all shadow-sm active:scale-95 hover:border-white"
-              >
-                {role.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </motion.div>
     </div>
   );

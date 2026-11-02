@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
+import fs from 'fs'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -10,6 +11,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export default defineConfig({
   plugins: [
     react(),
+    {
+      name: 'copy-404-fallback',
+      closeBundle() {
+        const distIndex = path.resolve(__dirname, 'dist/index.html')
+        const dist404 = path.resolve(__dirname, 'dist/404.html')
+        if (fs.existsSync(distIndex)) {
+          fs.copyFileSync(distIndex, dist404)
+        }
+      }
+    },
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.png', 'apple-touch-icon.png', 'pwa-192.png', 'pwa-512.png', 'logo.png'],

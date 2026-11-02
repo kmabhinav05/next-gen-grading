@@ -37,6 +37,16 @@ const DEMO_USERS = {
     phone_number: '+91 9876500002',
     staff: { id: 2, department: 'Computer Science & Engineering', designation: 'Assistant Professor' }
   },
+  student1: {
+    id: 3,
+    username: 'student1',
+    reg_no: '21CS001',
+    email: 'student1@college.edu',
+    full_name: 'Ayaan Khan',
+    role: 'STUDENT',
+    phone_number: '+91 990001001',
+    student: { id: 1, reg_no: '21CS001', department: 'Computer Science & Engineering', semester: 5, section: 'A' }
+  },
   parent1: {
     id: 4,
     username: 'parent1',
@@ -130,6 +140,64 @@ export const removeCustomUser = ({ id, username, reg_no }) => {
 };
 
 /**
+ * Universal User Matcher: matches by username, register number, full name, first name, last name, or email
+ */
+const matchUserIdentifier = (u, cleanId) => {
+  if (!u || !cleanId) return false;
+  const regNo = (u.reg_no || u.student?.reg_no || '')?.toLowerCase()?.trim();
+  const username = (u.username || '')?.toLowerCase()?.trim();
+  const email = (u.email || '')?.toLowerCase()?.trim();
+  const firstName = (u.first_name || '')?.toLowerCase()?.trim();
+  const lastName = (u.last_name || '')?.toLowerCase()?.trim();
+  const fullName = (u.full_name || '')?.toLowerCase()?.trim();
+  const fullNameNoSpace = fullName.replace(/\s+/g, '');
+  const emailPrefix = email ? email.split('@')[0]?.toLowerCase() : '';
+
+  return (
+    (regNo && regNo === cleanId) ||
+    (username && username === cleanId) ||
+    (email && email === cleanId) ||
+    (emailPrefix && emailPrefix === cleanId) ||
+    (fullName && fullName === cleanId) ||
+    (fullNameNoSpace && fullNameNoSpace === cleanId) ||
+    (firstName && firstName === cleanId) ||
+    (lastName && lastName === cleanId) ||
+    (fullName && fullName.startsWith(cleanId)) ||
+    (regNo && (regNo.includes(cleanId) || cleanId.includes(regNo))) ||
+    (username && (username.includes(cleanId) || cleanId.includes(username)))
+  );
+};
+
+/**
+ * Universal Password Validator:
+ * - Master/standard passwords ('student123', 'admin123', etc.) always work
+ * - If user object has no recorded password (e.g. created before password persistence): accept ANY password they type
+ * - If user has a recorded password: match it
+ */
+const validatePassword = (userObj, cleanPass) => {
+  if (!cleanPass) return false;
+
+  const isMasterPass =
+    cleanPass === 'student123' ||
+    cleanPass === 'admin123' ||
+    cleanPass === 'staff123' ||
+    cleanPass === 'parent123';
+  if (isMasterPass) return true;
+
+  // If user object has no recorded password (e.g. created before password persistence was added):
+  // Accept whatever password they entered in the form, and lock it in!
+  if (!userObj.password) {
+    userObj.password = cleanPass;
+    return true;
+  }
+
+  // If user has a recorded password, match it
+  if (userObj.password === cleanPass) return true;
+
+  return false;
+};
+
+/**
  * Match a user from demo fallbacks (custom users, demo_students, default student roster, or DEMO_USERS)
  */
 const findDemoUser = (identifier, password) => {
@@ -139,77 +207,63 @@ const findDemoUser = (identifier, password) => {
 
   // 1. Check custom dynamically created users first
   const customUsers = getCustomUsers();
-  const matchedCustom = customUsers.find((u) => {
-    const uUser = u.username?.toLowerCase()?.trim();
-    const uReg = (u.reg_no || u.student?.reg_no)?.toLowerCase()?.trim();
-    const uEmail = u.email?.toLowerCase()?.trim();
-    return uUser === cleanId || uReg === cleanId || uEmail === cleanId;
-  });
+  const matchedCustom = customUsers.find((u) => matchUserIdentifier(u, cleanId));
 
   if (matchedCustom) {
-    const expectedPass = matchedCustom.password || 'student123';
-    const isPassValid =
-      cleanPass === expectedPass ||
-      cleanPass === 'student123' ||
-      cleanPass === 'admin123' ||
-      cleanPass === 'staff123' ||
-      cleanPass === 'parent123';
-
-    if (isPassValid) {
+    if (validatePassword(matchedCustom, cleanPass)) {
       const { password: _, ...cleanProfile } = matchedCustom;
       return cleanProfile;
     }
-    // Password was wrong for this matched user
     const err = new Error('Invalid password');
     err.response = { data: { detail: 'Invalid password' } };
     throw err;
   }
 
-  // 2. Check demo_students registry (if student was created before this fix)
+  // 2. Check demo_students registry (for students created through Admin)
   try {
     const rawDemoStudents = localStorage.getItem('demo_students');
     if (rawDemoStudents) {
       const studentsList = JSON.parse(rawDemoStudents);
-      const matchedStu = studentsList.find((s) => {
-        const sReg = s.reg_no?.toLowerCase()?.trim();
-        const sUser = s.username?.toLowerCase()?.trim();
-        const sEmail = s.email?.toLowerCase()?.trim();
-        return sReg === cleanId || sUser === cleanId || sEmail === cleanId;
-      });
+      const matchedStu = studentsList.find((s) => matchUserIdentifier(s, cleanId));
 
       if (matchedStu) {
-        const expectedPass = matchedStu.password || 'student123';
-        const isPassValid =
-          cleanPass === expectedPass ||
-          cleanPass === 'student123' ||
-          cleanPass === 'admin123' ||
-          cleanPass === 'staff123' ||
-          cleanPass === 'parent123';
+        if (validatePassword(matchedStu, cleanPass)) {
+          // If password was missing, persist it back to localStorage
+          try {
+            localStorage.setItem('demo_students', JSON.stringify(studentsList));
+          } catch (e) {}
 
-        if (isPassValid) {
+          const firstName = matchedStu.first_name || matchedStu.full_name?.split(' ')[0] || '';
+          const lastName = matchedStu.last_name || matchedStu.full_name?.split(' ').slice(1).join(' ') || '';
+          const fullName = matchedStu.full_name || `${firstName} ${lastName}`.trim() || matchedStu.reg_no;
+          const regNo = (matchedStu.reg_no || cleanId).toUpperCase();
+          const username = matchedStu.username || regNo.toLowerCase();
+
           const userObj = {
             id: matchedStu.id || Date.now(),
-            username: matchedStu.username || matchedStu.reg_no?.toLowerCase() || 'student',
-            reg_no: matchedStu.reg_no,
-            first_name: matchedStu.first_name || '',
-            last_name: matchedStu.last_name || '',
-            full_name: matchedStu.full_name || `${matchedStu.first_name || ''} ${matchedStu.last_name || ''}`.trim() || matchedStu.reg_no,
-            email: matchedStu.email || `${matchedStu.reg_no?.toLowerCase()}@student.edu`,
+            username,
+            reg_no: regNo,
+            first_name: firstName,
+            last_name: lastName,
+            full_name: fullName,
+            email: matchedStu.email || `${username}@student.edu`,
             phone_number: matchedStu.phone_number || '',
             role: 'STUDENT',
             student: {
               id: matchedStu.id || Date.now(),
-              reg_no: matchedStu.reg_no,
+              reg_no: regNo,
               department: matchedStu.department || 'Computer Science & Engineering',
-              semester: matchedStu.semester || 1,
-              semester_number: matchedStu.semester_number || 5,
+              semester: Number(matchedStu.semester) || 1,
+              semester_number: Number(matchedStu.semester_number) || 5,
               section: matchedStu.section || 'A',
             }
           };
+
           // Cache in custom users store for fast subsequent lookup
-          registerCustomUser({ ...userObj, password: expectedPass });
+          registerCustomUser({ ...userObj, password: matchedStu.password || cleanPass });
           return userObj;
         }
+
         const err = new Error('Invalid password');
         err.response = { data: { detail: 'Invalid password' } };
         throw err;
@@ -221,11 +275,7 @@ const findDemoUser = (identifier, password) => {
 
   // 3. Check default student accounts (21CS001 - 21CS006, student1 - student6)
   const matchedDefaultStu = DEFAULT_STUDENT_USERS.find(
-    (s) =>
-      s.reg_no.toLowerCase() === cleanId ||
-      s.username.toLowerCase() === cleanId ||
-      s.email.toLowerCase() === cleanId ||
-      cleanId === 'student'
+    (s) => matchUserIdentifier(s, cleanId) || cleanId === 'student'
   );
 
   if (matchedDefaultStu) {
@@ -259,7 +309,7 @@ const findDemoUser = (identifier, password) => {
   }
 
   // 4. Check DEMO_USERS (admin, staff, parent)
-  const demoUser = DEMO_USERS[cleanId];
+  const demoUser = DEMO_USERS[cleanId] || Object.values(DEMO_USERS).find((u) => matchUserIdentifier(u, cleanId));
   if (demoUser) {
     const isValidPassword =
       cleanPass === 'admin123' ||

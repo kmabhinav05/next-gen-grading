@@ -157,6 +157,17 @@ class ParentSerializer(serializers.ModelSerializer):
         parent = Parent.objects.create(user=user, **validated_data)
         return parent
 
+    def update(self, instance, validated_data):
+        if 'user' in validated_data:
+            user_data = validated_data.pop('user')
+            user = instance.user
+            for attr, val in user_data.items():
+                setattr(user, attr, val)
+            if 'password' in validated_data:
+                user.set_password(validated_data.pop('password'))
+            user.save()
+        return super().update(instance, validated_data)
+
 
 class ParentStudentSerializer(serializers.ModelSerializer):
     parent_name = serializers.CharField(source='parent.user.get_full_name', read_only=True)

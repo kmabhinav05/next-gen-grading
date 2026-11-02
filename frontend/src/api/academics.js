@@ -200,12 +200,48 @@ export const academicsService = {
     }
   },
   updateStaff: async (id, data) => {
+    const rawUsername = (data.username || 'staff').trim().toLowerCase();
+    const firstName = (data.first_name || '').trim();
+    const lastName = (data.last_name || '').trim();
+    const fullName = `${firstName} ${lastName}`.trim() || rawUsername;
+    const dept = data.department || 'Computer Science & Engineering';
+    const designation = data.designation || 'Faculty Member';
+    const email = data.email?.trim() || `${rawUsername}@college.edu`;
+    const phone = data.phone_number?.trim() || '';
+
+    const userAccount = {
+      id,
+      username: rawUsername,
+      first_name: firstName,
+      last_name: lastName,
+      full_name: fullName,
+      email,
+      phone_number: phone,
+      role: 'STAFF',
+      ...(data.password ? { password: data.password.trim() } : {}),
+      staff: {
+        id,
+        department: dept,
+        designation
+      }
+    };
+    registerCustomUser(userAccount);
+
     try {
       const res = await api.put(`/staff/${id}/`, data);
       return res.data;
     } catch (err) {
       const list = getStored('staff', DEFAULT_STAFF);
-      const updated = list.map((i) => (i.id === id ? { ...i, ...data } : i));
+      const updated = list.map((i) =>
+        i.id === id
+          ? {
+              ...i,
+              ...data,
+              full_name: fullName,
+              user: { ...(i.user || {}), username: rawUsername, first_name: firstName, last_name: lastName, email, phone_number: phone }
+            }
+          : i
+      );
       setStored('staff', updated);
       return { id, ...data };
     }
@@ -308,12 +344,64 @@ export const academicsService = {
     }
   },
   updateStudent: async (id, data) => {
+    const rawUsername = (data.username || data.reg_no || 'student').trim().toLowerCase();
+    const regNo = (data.reg_no || '').trim().toUpperCase();
+    const firstName = (data.first_name || '').trim();
+    const lastName = (data.last_name || '').trim();
+    const fullName = `${firstName} ${lastName}`.trim() || data.username || regNo;
+    const semNum = Number(data.semester_number || data.semester) || 5;
+    const sec = (data.section || 'A').toUpperCase().trim();
+    const dept = data.department || 'Computer Science & Engineering';
+    const email = data.email?.trim() || `${rawUsername}@student.edu`;
+    const phone = data.phone_number?.trim() || '';
+
+    const userAccount = {
+      id,
+      username: rawUsername,
+      reg_no: regNo,
+      first_name: firstName,
+      last_name: lastName,
+      full_name: fullName,
+      email,
+      phone_number: phone,
+      role: 'STUDENT',
+      ...(data.password ? { password: data.password.trim() } : {}),
+      student: {
+        id,
+        reg_no: regNo,
+        department: dept,
+        semester: Number(data.semester) || 1,
+        semester_number: semNum,
+        section: sec,
+      }
+    };
+    registerCustomUser(userAccount);
+
     try {
       const res = await api.put(`/students/${id}/`, data);
       return res.data;
     } catch (err) {
       const list = getStored('students', DEFAULT_STUDENTS);
-      const updated = list.map((i) => (i.id === id ? { ...i, ...data } : i));
+      const updated = list.map((i) =>
+        i.id === id
+          ? {
+              ...i,
+              ...data,
+              reg_no: regNo,
+              username: rawUsername,
+              first_name: firstName,
+              last_name: lastName,
+              full_name: fullName,
+              department: dept,
+              semester: Number(data.semester) || i.semester || 1,
+              semester_number: semNum,
+              section: sec,
+              email,
+              phone_number: phone,
+              ...(data.password ? { password: data.password.trim() } : {})
+            }
+          : i
+      );
       setStored('students', updated);
       return { id, ...data };
     }
@@ -393,6 +481,52 @@ export const academicsService = {
       updatedList.push(parentRecord);
       setStored('parents', updatedList);
       return parentRecord;
+    }
+  },
+  updateParent: async (id, data) => {
+    const rawUsername = (data.username || 'parent').trim().toLowerCase();
+    const firstName = (data.first_name || '').trim();
+    const lastName = (data.last_name || '').trim();
+    const fullName = `${firstName} ${lastName}`.trim() || rawUsername;
+    const relationship = data.relationship || 'Guardian';
+    const email = data.email?.trim() || `${rawUsername}@gmail.com`;
+    const phone = data.phone_number?.trim() || '';
+
+    const userAccount = {
+      id,
+      username: rawUsername,
+      first_name: firstName,
+      last_name: lastName,
+      full_name: fullName,
+      email,
+      phone_number: phone,
+      role: 'PARENT',
+      ...(data.password ? { password: data.password.trim() } : {}),
+      parent: {
+        id,
+        relationship
+      }
+    };
+    registerCustomUser(userAccount);
+
+    try {
+      const res = await api.put(`/parents/${id}/`, data);
+      return res.data;
+    } catch (err) {
+      const list = getStored('parents', DEFAULT_PARENTS);
+      const updated = list.map((i) =>
+        i.id === id
+          ? {
+              ...i,
+              ...data,
+              full_name: fullName,
+              relationship,
+              user: { ...(i.user || {}), username: rawUsername, first_name: firstName, last_name: lastName, email, phone_number: phone }
+            }
+          : i
+      );
+      setStored('parents', updated);
+      return { id, ...data };
     }
   },
   deleteParent: async (id) => {

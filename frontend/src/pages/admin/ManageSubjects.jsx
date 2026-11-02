@@ -4,7 +4,7 @@ import { DataTable } from '../../components/common/DataTable';
 import { Modal } from '../../components/common/Modal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 import HoldButton from '../../components/common/HoldButton';
-import { Plus, Trash2, BookOpen } from 'lucide-react';
+import { Plus, Trash2, Edit2, BookOpen, Filter, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ManageSubjects = () => {
@@ -12,11 +12,23 @@ export const ManageSubjects = () => {
   const [semesters, setSemesters] = useState([]);
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSemester, setSelectedSemester] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [editTarget, setEditTarget] = useState(null);
   const formRef = useRef(null);
+  const editFormRef = useRef(null);
 
   const [formData, setFormData] = useState({
+    code: '',
+    name: '',
+    semester: '',
+    staff: '',
+    max_internal_marks: 50,
+  });
+
+  const [editFormData, setEditFormData] = useState({
     code: '',
     name: '',
     semester: '',
@@ -65,6 +77,32 @@ export const ManageSubjects = () => {
     }
   };
 
+  const openEditModal = (subj) => {
+    setEditTarget(subj);
+    setEditFormData({
+      code: subj.code || '',
+      name: subj.name || '',
+      semester: subj.semester || subj.semester_number || 1,
+      staff: subj.staff || '',
+      max_internal_marks: subj.max_internal_marks || 50,
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    if (e) e.preventDefault();
+    if (!editTarget) return;
+    try {
+      await academicsService.updateSubject(editTarget.id, editFormData);
+      toast.success(`Course ${editFormData.code} updated successfully!`);
+      setIsEditModalOpen(false);
+      setEditTarget(null);
+      fetchData();
+    } catch (err) {
+      toast.error('Failed to update course.');
+    }
+  };
+
   const handleDelete = async () => {
     if (!deleteTarget) return;
     try {
@@ -77,6 +115,10 @@ export const ManageSubjects = () => {
       setDeleteTarget(null);
     }
   };
+
+  const filteredSubjects = selectedSemester
+    ? subjects.filter((s) => String(s.semester_number || s.semester) === String(selectedSemester))
+    : subjects;
 
   const columns = [
     {
@@ -95,7 +137,7 @@ export const ManageSubjects = () => {
       header: 'Semester',
       accessor: 'semester_number',
       sortable: true,
-      render: (row) => <span>Semester {row.semester_number}</span>,
+      render: (row) => <span>Semester {row.semester_number || row.semester || 5}</span>,
     },
     {
       header: 'Assigned Faculty',
@@ -115,12 +157,22 @@ export const ManageSubjects = () => {
       header: 'Actions',
       cellClassName: 'text-right',
       render: (row) => (
-        <button
-          onClick={() => setDeleteTarget(row)}
-          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex items-center justify-end gap-1.5">
+          <button
+            onClick={() => openEditModal(row)}
+            className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+            title="Edit course details"
+          >
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setDeleteTarget(row)}
+            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            title="Delete course"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       ),
     },
   ];
@@ -132,18 +184,44 @@ export const ManageSubjects = () => {
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Courses & Curriculum</h1>
           <p className="text-xs text-slate-500 mt-1">Configure subjects, semester associations, and teaching assignments</p>
         </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-xs"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Course</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Semester Filter */}
+          <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-1.5 shadow-2xs">
+            <Filter className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-xs font-medium text-slate-600">Semester:</span>
+            <select
+              value={selectedSemester}
+              onChange={(e) => setSelectedSemester(e.target.value)}
+              className="text-xs font-semibold text-slate-800 bg-transparent border-none focus:outline-none cursor-pointer"
+            >
+              <option value="">All Semesters</option>
+              {semesters.length > 0 ? (
+                semesters.map((s) => (
+                  <option key={s.id} value={s.number || s.id}>
+                    Semester {s.number} ({s.academic_year})
+                  </option>
+                ))
+              ) : (
+                [1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                  <option key={num} value={num}>Semester {num}</option>
+                ))
+              )}
+            </select>
+          </div>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-xs"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Course</span>
+          </button>
+        </div>
       </div>
 
       <DataTable
         columns={columns}
-        data={subjects}
+        data={filteredSubjects}
         searchPlaceholder="Search courses by code or title..."
         keyField="id"
       />
@@ -255,6 +333,98 @@ export const ManageSubjects = () => {
             >
               Hold to Add Course
             </HoldButton>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Course Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title={`Edit Course (${editFormData.code})`}>
+        <form ref={editFormRef} onSubmit={handleEditSubmit} className="space-y-4 text-xs">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Course Code</label>
+              <input
+                type="text"
+                required
+                value={editFormData.code}
+                onChange={(e) => setEditFormData({ ...editFormData, code: e.target.value.toUpperCase() })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg uppercase font-mono focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Max Internal Marks</label>
+              <input
+                type="number"
+                required
+                min="10"
+                max="100"
+                value={editFormData.max_internal_marks}
+                onChange={(e) => setEditFormData({ ...editFormData, max_internal_marks: Number(e.target.value) })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-semibold text-slate-700 mb-1">Course Name</label>
+            <input
+              type="text"
+              required
+              value={editFormData.name}
+              onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Semester</label>
+              <select
+                required
+                value={editFormData.semester}
+                onChange={(e) => setEditFormData({ ...editFormData, semester: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 bg-white"
+              >
+                <option value="">Select Semester</option>
+                {semesters.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    Semester {s.number} ({s.academic_year})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Assign Faculty</label>
+              <select
+                value={editFormData.staff}
+                onChange={(e) => setEditFormData({ ...editFormData, staff: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white"
+              >
+                <option value="">Unassigned</option>
+                {staffList.map((st) => (
+                  <option key={st.id} value={st.id}>
+                    {st.first_name || st.user?.first_name} {st.last_name || st.user?.last_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-xs transition-colors cursor-pointer"
+            >
+              <Save className="w-4 h-4" />
+              <span>Save Changes</span>
+            </button>
           </div>
         </form>
       </Modal>

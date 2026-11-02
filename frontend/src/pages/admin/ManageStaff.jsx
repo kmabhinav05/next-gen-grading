@@ -4,17 +4,31 @@ import { DataTable } from '../../components/common/DataTable';
 import { Modal } from '../../components/common/Modal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 import HoldButton from '../../components/common/HoldButton';
-import { Plus, Trash2, Users } from 'lucide-react';
+import { Plus, Trash2, Edit2, Users, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ManageStaff = () => {
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [editTarget, setEditTarget] = useState(null);
   const formRef = useRef(null);
+  const editFormRef = useRef(null);
 
   const [formData, setFormData] = useState({
+    username: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone_number: '',
+    department: 'Computer Science & Engineering',
+    designation: 'Assistant Professor',
+    password: '',
+  });
+
+  const [editFormData, setEditFormData] = useState({
     username: '',
     first_name: '',
     last_name: '',
@@ -63,6 +77,36 @@ export const ManageStaff = () => {
     }
   };
 
+  const openEditModal = (staff) => {
+    setEditTarget(staff);
+    const names = (staff.full_name || '').split(' ');
+    setEditFormData({
+      first_name: staff.first_name || staff.user?.first_name || names[0] || '',
+      last_name: staff.last_name || staff.user?.last_name || names.slice(1).join(' ') || '',
+      username: staff.username || staff.user?.username || '',
+      email: staff.email || staff.user?.email || '',
+      phone_number: staff.phone_number || staff.user?.phone_number || '',
+      department: staff.department || 'Computer Science & Engineering',
+      designation: staff.designation || 'Assistant Professor',
+      password: '',
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    if (e) e.preventDefault();
+    if (!editTarget) return;
+    try {
+      await academicsService.updateStaff(editTarget.id, editFormData);
+      toast.success(`Faculty ${editFormData.first_name} updated successfully!`);
+      setIsEditModalOpen(false);
+      setEditTarget(null);
+      fetchData();
+    } catch (err) {
+      toast.error('Failed to update faculty member.');
+    }
+  };
+
   const handleDelete = async () => {
     if (!deleteTarget) return;
     try {
@@ -83,8 +127,8 @@ export const ManageStaff = () => {
       sortable: true,
       render: (row) => (
         <div>
-          <p className="font-semibold text-slate-900">{row.first_name} {row.last_name}</p>
-          <p className="text-[11px] text-slate-500">{row.email || `@${row.username}`}</p>
+          <p className="font-semibold text-slate-900">{row.first_name || row.user?.first_name} {row.last_name || row.user?.last_name}</p>
+          <p className="text-[11px] text-slate-500">{row.email || row.user?.email || `@${row.username || row.user?.username}`}</p>
         </div>
       ),
     },
@@ -111,12 +155,22 @@ export const ManageStaff = () => {
       header: 'Actions',
       cellClassName: 'text-right',
       render: (row) => (
-        <button
-          onClick={() => setDeleteTarget(row)}
-          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex items-center justify-end gap-1.5">
+          <button
+            onClick={() => openEditModal(row)}
+            className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+            title="Edit faculty details"
+          >
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setDeleteTarget(row)}
+            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            title="Remove faculty"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       ),
     },
   ];
@@ -251,6 +305,119 @@ export const ManageStaff = () => {
             >
               Hold to Add Faculty
             </HoldButton>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Faculty Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title={`Edit Faculty Member (${editFormData.first_name} ${editFormData.last_name})`}>
+        <form ref={editFormRef} onSubmit={handleEditSubmit} className="space-y-4 text-xs">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">First Name</label>
+              <input
+                type="text"
+                required
+                value={editFormData.first_name}
+                onChange={(e) => setEditFormData({ ...editFormData, first_name: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Last Name</label>
+              <input
+                type="text"
+                required
+                value={editFormData.last_name}
+                onChange={(e) => setEditFormData({ ...editFormData, last_name: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Username</label>
+              <input
+                type="text"
+                required
+                value={editFormData.username}
+                onChange={(e) => setEditFormData({ ...editFormData, username: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Email</label>
+              <input
+                type="email"
+                required
+                value={editFormData.email}
+                onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Department</label>
+              <input
+                type="text"
+                required
+                value={editFormData.department}
+                onChange={(e) => setEditFormData({ ...editFormData, department: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Designation</label>
+              <input
+                type="text"
+                required
+                value={editFormData.designation}
+                onChange={(e) => setEditFormData({ ...editFormData, designation: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Phone Number</label>
+              <input
+                type="text"
+                value={editFormData.phone_number}
+                onChange={(e) => setEditFormData({ ...editFormData, phone_number: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Update Password (leave blank to keep unchanged)</label>
+              <input
+                type="password"
+                placeholder="New password if modifying"
+                value={editFormData.password}
+                onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-xs transition-colors cursor-pointer"
+            >
+              <Save className="w-4 h-4" />
+              <span>Save Changes</span>
+            </button>
           </div>
         </form>
       </Modal>

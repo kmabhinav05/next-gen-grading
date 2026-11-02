@@ -26,6 +26,7 @@ import { playHapticChime } from '../../utils/sound';
 export const StudentDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedSemester, setSelectedSemester] = useState(5);
   const [extraClassesToSimulate, setExtraClassesToSimulate] = useState(5);
   const [targetScorePercent, setTargetScorePercent] = useState(85);
   const [selectedCalendarDate, setSelectedCalendarDate] = useState(new Date(2026, 9, 30));
@@ -172,9 +173,21 @@ export const StudentDashboard = () => {
             </div>
             <div>
               <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Academic Status</span>
-              <span className="px-4 py-1.5 rounded-full bg-[#fbc02d] text-slate-900 font-bold text-xs shadow-2xs inline-block">
-                Sem {student.semester} • Section {student.section}
-              </span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#fbc02d] text-slate-900 font-bold text-xs shadow-2xs">
+                <span>Semester:</span>
+                <select
+                  value={selectedSemester}
+                  onChange={(e) => setSelectedSemester(Number(e.target.value))}
+                  className="bg-transparent border-none font-bold text-slate-900 cursor-pointer focus:outline-none"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                    <option key={num} value={num}>
+                      Sem {num}
+                    </option>
+                  ))}
+                </select>
+                <span>• Sec {student.section}</span>
+              </div>
             </div>
             <div>
               <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Department</span>

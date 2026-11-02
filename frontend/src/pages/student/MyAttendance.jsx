@@ -30,6 +30,7 @@ export const MyAttendance = () => {
   const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedSem, setSelectedSem] = useState(5);
   const [viewMode, setViewMode] = useState('table'); // 'table' | 'cards'
   const [filterStatus, setFilterStatus] = useState('ALL'); // 'ALL' | 'SAFE' | 'NORMAL' | 'SHORTAGE'
 
@@ -157,7 +158,21 @@ export const MyAttendance = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-2xl px-3 py-1.5 shadow-2xs">
+            <Filter className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-xs font-medium text-slate-600">Semester:</span>
+            <select
+              value={selectedSem}
+              onChange={(e) => setSelectedSem(Number(e.target.value))}
+              className="text-xs font-semibold text-slate-800 bg-transparent border-none focus:outline-none cursor-pointer"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
+                <option key={s} value={s}>Semester {s}</option>
+              ))}
+            </select>
+          </div>
+
           <Link
             to="/student/progress-card"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"

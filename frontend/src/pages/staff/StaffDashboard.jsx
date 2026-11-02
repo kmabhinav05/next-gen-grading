@@ -37,6 +37,7 @@ import { format } from 'date-fns';
 export const StaffDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedSemester, setSelectedSemester] = useState('');
   const [isShortageModalOpen, setIsShortageModalOpen] = useState(false);
   const [communications, setCommunications] = useState(() => communicationsService.getAll());
   const [commFilter, setCommFilter] = useState('ALL');
@@ -89,6 +90,9 @@ export const StaffDashboard = () => {
   }
 
   const assignedSubjects = data?.assigned_subjects || [];
+  const filteredSubjects = selectedSemester
+    ? assignedSubjects.filter((s) => String(s.semester || s.semester_number) === String(selectedSemester))
+    : assignedSubjects;
   const recentLogs = data?.recent_logs || [];
   const totalEnrolled = assignedSubjects.reduce((acc, s) => acc + (s.enrolled_students || 0), 0) || 6;
   const timeGreeting = getTimeGreeting();
@@ -123,9 +127,27 @@ export const StaffDashboard = () => {
           {/* Segmented Progress Tracker Strip - Exact 4 Pills Design */}
           <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-semibold">
             <div>
+              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Semester Filter</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-800 font-bold text-xs shadow-2xs">
+                <span>Sem:</span>
+                <select
+                  value={selectedSemester}
+                  onChange={(e) => setSelectedSemester(e.target.value)}
+                  className="bg-transparent border-none font-bold text-slate-800 cursor-pointer focus:outline-none"
+                >
+                  <option value="">All Semesters</option>
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                    <option key={num} value={num}>
+                      Sem {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div>
               <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Teaching</span>
               <span className="px-4 py-1.5 rounded-full bg-[#1e293b] text-white font-bold text-xs shadow-2xs inline-block">
-                {assignedSubjects.length || 2} Courses Assigned
+                {filteredSubjects.length} Courses Listed
               </span>
             </div>
             <div>
@@ -352,8 +374,8 @@ export const StaffDashboard = () => {
           </div>
 
           <div className="space-y-2.5 text-xs">
-            {assignedSubjects.length > 0 ? (
-              assignedSubjects.map((sub) => (
+            {filteredSubjects.length > 0 ? (
+              filteredSubjects.map((sub) => (
                 <div
                   key={sub.id}
                   className="p-3.5 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors"

@@ -124,9 +124,27 @@ export const dashboardService = {
       }
 
       if (role === 'STUDENT') {
+        let studentData = MOCK_STUDENT_CARD.student;
+        if (rawUser) {
+          try {
+            const parsed = JSON.parse(rawUser);
+            const stu = parsed.student || {};
+            studentData = {
+              id: stu.id || parsed.id || 1,
+              name: parsed.full_name || parsed.username || 'Student',
+              reg_no: stu.reg_no || parsed.reg_no || parsed.username?.toUpperCase() || '21CS001',
+              department: stu.department || parsed.department || 'Computer Science & Engineering',
+              semester: stu.semester_number || stu.semester || 5,
+              section: stu.section || parsed.section || 'A'
+            };
+          } catch (e) {}
+        }
         return {
           role: 'STUDENT',
-          progress_card: MOCK_STUDENT_CARD
+          progress_card: {
+            ...MOCK_STUDENT_CARD,
+            student: studentData
+          }
         };
       }
 

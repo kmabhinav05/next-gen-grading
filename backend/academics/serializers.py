@@ -32,7 +32,7 @@ class StaffSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        password = validated_data.pop('password', 'staff123')
+        password = validated_data.pop('password', None) or 'staff123'
         user = User.objects.create_user(
             username=user_data['username'],
             email=user_data.get('email', ''),
@@ -42,6 +42,8 @@ class StaffSerializer(serializers.ModelSerializer):
             role='STAFF',
             password=password
         )
+        user.is_active = True
+        user.save()
         staff = Staff.objects.create(user=user, **validated_data)
         return staff
 
@@ -82,7 +84,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        password = validated_data.pop('password', 'student123')
+        password = validated_data.pop('password', None) or 'student123'
         user = User.objects.create_user(
             username=user_data['username'],
             email=user_data.get('email', ''),
@@ -92,6 +94,8 @@ class StudentSerializer(serializers.ModelSerializer):
             role='STUDENT',
             password=password
         )
+        user.is_active = True
+        user.save()
         student = Student.objects.create(user=user, **validated_data)
         return student
 
@@ -138,7 +142,7 @@ class ParentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        password = validated_data.pop('password', 'parent123')
+        password = validated_data.pop('password', None) or 'parent123'
         user = User.objects.create_user(
             username=user_data['username'],
             email=user_data.get('email', ''),
@@ -148,6 +152,8 @@ class ParentSerializer(serializers.ModelSerializer):
             role='PARENT',
             password=password
         )
+        user.is_active = True
+        user.save()
         parent = Parent.objects.create(user=user, **validated_data)
         return parent
 

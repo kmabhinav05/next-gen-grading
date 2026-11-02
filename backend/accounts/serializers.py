@@ -20,14 +20,19 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        # Allow students to authenticate with either username or official Reg No (e.g. 21CS001)
+        # Allow users to authenticate with username, official Reg No (e.g. 21CS001), or email
         raw_username = attrs.get('username')
         if raw_username:
             try:
                 from academics.models import Student
-                matched_student = Student.objects.filter(reg_no__iexact=raw_username.strip()).select_related('user').first()
+                cleaned = raw_username.strip()
+                matched_student = Student.objects.filter(reg_no__iexact=cleaned).select_related('user').first()
                 if matched_student and matched_student.user:
                     attrs['username'] = matched_student.user.username
+                else:
+                    matched_user = User.objects.filter(email__iexact=cleaned).first()
+                    if matched_user:
+                        attrs['username'] = matched_user.username
             except Exception:
                 pass
 

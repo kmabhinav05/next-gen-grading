@@ -30,11 +30,7 @@ export const Login = () => {
   const handleLoginSubmit = async ({ email, password }) => {
     try {
       const cleanInput = (email || '').trim();
-      const mappedUser =
-        cleanInput.toLowerCase() === '21cs001' || cleanInput.toLowerCase() === 'student'
-          ? 'student1'
-          : cleanInput;
-      const user = await login(mappedUser, password);
+      const user = await login(cleanInput, password);
       if (user?.role) {
         redirectByRole(user.role);
       }

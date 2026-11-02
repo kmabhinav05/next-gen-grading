@@ -92,7 +92,28 @@ export const reportsService = {
       const res = await api.get(`/reports/progress-card/${studentId}/`);
       return res.data;
     } catch (err) {
-      return MOCK_CARD;
+      const rawUser = localStorage.getItem('user_profile') || localStorage.getItem('demo_user');
+      let studentData = MOCK_CARD.student;
+      if (rawUser) {
+        try {
+          const parsed = JSON.parse(rawUser);
+          if (parsed.role === 'STUDENT') {
+            const stu = parsed.student || {};
+            studentData = {
+              id: stu.id || parsed.id || studentId || 1,
+              name: parsed.full_name || parsed.username || 'Student',
+              reg_no: stu.reg_no || parsed.reg_no || parsed.username?.toUpperCase() || '21CS001',
+              department: stu.department || parsed.department || 'Computer Science & Engineering',
+              semester: stu.semester_number || stu.semester || 5,
+              section: stu.section || parsed.section || 'A'
+            };
+          }
+        } catch (e) {}
+      }
+      return {
+        ...MOCK_CARD,
+        student: studentData
+      };
     }
   },
 

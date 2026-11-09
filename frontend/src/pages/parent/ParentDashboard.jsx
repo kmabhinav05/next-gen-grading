@@ -596,7 +596,14 @@ export const ParentDashboard = () => {
       </div>
 
       {/* PTM Consultation Modal */}
-      <Modal isOpen={isPtmOpen} onClose={() => setIsPtmOpen(false)} title="Schedule Faculty Consultation">
+      <Modal
+        isOpen={isPtmOpen}
+        onClose={() => setIsPtmOpen(false)}
+        title="Schedule Faculty Consultation"
+        subtitle="Request a 1-on-1 parent-teacher progress review session."
+        icon={<Calendar className="w-5 h-5 text-blue-600" />}
+        maxWidth="max-w-xl"
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -663,26 +670,33 @@ export const ParentDashboard = () => {
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsPtmOpen(false)}
-              className="px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-medium"
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-slate-900 text-white rounded-xl font-bold shadow-xs hover:bg-slate-800"
+              className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-md shadow-blue-500/25 active:scale-[0.98] transition-all cursor-pointer"
             >
-              Confirm & Submit Request
+              Confirm Consultation
             </button>
           </div>
         </form>
       </Modal>
 
       {/* Leave Intimation Modal */}
-      <Modal isOpen={isLeaveOpen} onClose={() => setIsLeaveOpen(false)} title="Submit Ward Absence Intimation">
+      <Modal
+        isOpen={isLeaveOpen}
+        onClose={() => setIsLeaveOpen(false)}
+        title="Submit Ward Absence Intimation"
+        subtitle="Notify academic faculty and department administration in advance."
+        icon={<FileCheck className="w-5 h-5 text-emerald-600" />}
+        maxWidth="max-w-xl"
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -749,17 +763,17 @@ export const ParentDashboard = () => {
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsLeaveOpen(false)}
-              className="px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-medium"
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold shadow-xs hover:bg-emerald-700"
+              className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold shadow-md shadow-emerald-500/25 active:scale-[0.98] transition-all cursor-pointer"
             >
               Submit Absence Note
             </button>

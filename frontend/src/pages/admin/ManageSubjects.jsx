@@ -3,8 +3,18 @@ import { academicsService } from '../../api/academics';
 import { DataTable } from '../../components/common/DataTable';
 import { Modal } from '../../components/common/Modal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
-import HoldButton from '../../components/common/HoldButton';
-import { Plus, Trash2, Edit2, BookOpen, Filter, Save } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  BookOpen,
+  Filter,
+  Save,
+  Hash,
+  Award,
+  GraduationCap,
+  UserCheck,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ManageSubjects = () => {
@@ -17,6 +27,7 @@ export const ManageSubjects = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef(null);
   const editFormRef = useRef(null);
 
@@ -58,8 +69,20 @@ export const ManageSubjects = () => {
     fetchData();
   }, []);
 
+  const openAddModal = () => {
+    setFormData({
+      code: '',
+      name: '',
+      semester: semesters[0]?.id || '',
+      staff: '',
+      max_internal_marks: 50,
+    });
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
+    setIsSubmitting(true);
     try {
       await academicsService.createSubject(formData);
       toast.success(`Course ${formData.code} created successfully!`);
@@ -74,6 +97,8 @@ export const ManageSubjects = () => {
       fetchData();
     } catch (err) {
       toast.error(err.response?.data ? JSON.stringify(err.response.data) : 'Failed to create course');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -92,6 +117,7 @@ export const ManageSubjects = () => {
   const handleEditSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!editTarget) return;
+    setIsSubmitting(true);
     try {
       await academicsService.updateSubject(editTarget.id, editFormData);
       toast.success(`Course ${editFormData.code} updated successfully!`);
@@ -100,6 +126,8 @@ export const ManageSubjects = () => {
       fetchData();
     } catch (err) {
       toast.error('Failed to update course.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -125,33 +153,37 @@ export const ManageSubjects = () => {
       header: 'Course Code',
       accessor: 'code',
       sortable: true,
-      render: (row) => <span className="font-mono font-bold text-slate-900">{row.code}</span>,
+      render: (row) => (
+        <span className="font-mono font-bold text-primary-700 bg-primary-50 px-2 py-0.5 rounded text-xs">
+          {row.code}
+        </span>
+      ),
     },
     {
-      header: 'Course Name',
+      header: 'Course Title',
       accessor: 'name',
       sortable: true,
-      render: (row) => <span className="font-semibold text-slate-800">{row.name}</span>,
+      render: (row) => (
+        <div>
+          <p className="font-semibold text-slate-900">{row.name}</p>
+          <p className="text-[11px] text-slate-400">Max IA Marks: {row.max_internal_marks}</p>
+        </div>
+      ),
     },
     {
       header: 'Semester',
       accessor: 'semester_number',
       sortable: true,
-      render: (row) => <span>Semester {row.semester_number || row.semester || 5}</span>,
+      render: (row) => <span>Semester {row.semester_number || row.semester}</span>,
     },
     {
       header: 'Assigned Faculty',
       accessor: 'staff_name',
       render: (row) => (
-        <span className="font-medium text-slate-700">
-          {row.staff_name || <span className="text-slate-400 italic">Unassigned</span>}
+        <span className="text-slate-700 font-medium">
+          {row.staff_name || 'Unassigned'}
         </span>
       ),
-    },
-    {
-      header: 'Max IA Marks',
-      accessor: 'max_internal_marks',
-      render: (row) => <span className="font-mono text-slate-600">{row.max_internal_marks} Marks</span>,
     },
     {
       header: 'Actions',
@@ -161,7 +193,7 @@ export const ManageSubjects = () => {
           <button
             onClick={() => openEditModal(row)}
             className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
-            title="Edit course details"
+            title="Edit course"
           >
             <Edit2 className="w-4 h-4" />
           </button>
@@ -182,7 +214,7 @@ export const ManageSubjects = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Courses & Curriculum</h1>
-          <p className="text-xs text-slate-500 mt-1">Configure subjects, semester associations, and teaching assignments</p>
+          <p className="text-xs text-slate-500 mt-1">Configure subjects, semester syllabi, and assign course instructors</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {/* Semester Filter */}
@@ -210,8 +242,8 @@ export const ManageSubjects = () => {
           </div>
 
           <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-xs"
+            onClick={openAddModal}
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-xs cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Course</span>
@@ -226,204 +258,245 @@ export const ManageSubjects = () => {
         keyField="id"
       />
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Course">
-        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Course Code</label>
-              <input
-                type="text"
-                required
-                placeholder="e.g. CS505"
-                value={formData.code}
-                onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg uppercase font-mono"
-              />
+      {/* Add Course Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Create New Course"
+        subtitle="Define course code, full title, academic semester, and assign faculty instructor."
+        icon={<BookOpen className="w-5 h-5 text-blue-600" />}
+        maxWidth="max-w-xl"
+      >
+        <form ref={formRef} onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
+          <div className="bg-slate-50/60 p-4 rounded-2xl border border-slate-100 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  Course Code <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <Hash className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. CS505"
+                    value={formData.code}
+                    onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm uppercase font-mono bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-semibold placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  Max Internal Marks <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <Award className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="number"
+                    required
+                    min="10"
+                    max="100"
+                    value={formData.max_internal_marks}
+                    onChange={(e) => setFormData({ ...formData, max_internal_marks: Number(e.target.value) })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium"
+                  />
+                </div>
+              </div>
             </div>
+
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">Max IA Marks</label>
-              <input
-                type="number"
-                required
-                value={formData.max_internal_marks}
-                onChange={(e) => setFormData({ ...formData, max_internal_marks: Number(e.target.value) })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg"
-              />
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                Course Title <span className="text-rose-500">*</span>
+              </label>
+              <div className="relative">
+                <BookOpen className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Cloud Computing & Microservices"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium placeholder:text-slate-400 placeholder:font-normal"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  Semester <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <GraduationCap className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <select
+                    required
+                    value={formData.semester}
+                    onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="">Select Semester</option>
+                    {semesters.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        Semester {s.number} ({s.academic_year})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Assign Faculty</label>
+                <div className="relative">
+                  <UserCheck className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <select
+                    value={formData.staff}
+                    onChange={(e) => setFormData({ ...formData, staff: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="">Unassigned</option>
+                    {staffList.map((st) => (
+                      <option key={st.id} value={st.id}>
+                        {st.first_name || st.user?.first_name} {st.last_name || st.user?.last_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Course Name</label>
-            <input
-              type="text"
-              required
-              placeholder="e.g. Cloud Computing & Microservices"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Semester</label>
-              <select
-                required
-                value={formData.semester}
-                onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white"
-              >
-                <option value="">Select Semester</option>
-                {semesters.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    Semester {s.number} ({s.academic_year})
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Assign Faculty</label>
-              <select
-                value={formData.staff}
-                onChange={(e) => setFormData({ ...formData, staff: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white"
-              >
-                <option value="">Unassigned</option>
-                {staffList.map((st) => (
-                  <option key={st.id} value={st.id}>
-                    {st.first_name} {st.last_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
-            >
-              Cancel
-            </button>
-            <HoldButton
-              onHold={() => {
-                if (formRef.current && !formRef.current.checkValidity()) {
-                  formRef.current.reportValidity();
-                  return;
-                }
-                handleSubmit();
-              }}
-              onTap={() => {
-                if (formRef.current && !formRef.current.checkValidity()) {
-                  formRef.current.reportValidity();
-                } else {
-                  toast('Hold button to confirm adding course', { icon: '👆' });
-                }
-              }}
-              doneLabel="Course Added!"
-              backgroundColor="#0f172a"
-              fillColor="#8b5cf6"
-              textColor="#ffffff"
-              fillTextColor="#ffffff"
-              holdTime={1100}
-              radius={10}
-              size="sm"
-              icon={<Plus className="w-3.5 h-3.5" />}
-            >
-              Hold to Add Course
-            </HoldButton>
-          </div>
-        </form>
-      </Modal>
-
-      {/* Edit Course Modal */}
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title={`Edit Course (${editFormData.code})`}>
-        <form ref={editFormRef} onSubmit={handleEditSubmit} className="space-y-4 text-xs">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Course Code</label>
-              <input
-                type="text"
-                required
-                value={editFormData.code}
-                onChange={(e) => setEditFormData({ ...editFormData, code: e.target.value.toUpperCase() })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg uppercase font-mono focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Max Internal Marks</label>
-              <input
-                type="number"
-                required
-                min="10"
-                max="100"
-                value={editFormData.max_internal_marks}
-                onChange={(e) => setEditFormData({ ...editFormData, max_internal_marks: Number(e.target.value) })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Course Name</label>
-            <input
-              type="text"
-              required
-              value={editFormData.name}
-              onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Semester</label>
-              <select
-                required
-                value={editFormData.semester}
-                onChange={(e) => setEditFormData({ ...editFormData, semester: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 bg-white"
-              >
-                <option value="">Select Semester</option>
-                {semesters.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    Semester {s.number} ({s.academic_year})
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Assign Faculty</label>
-              <select
-                value={editFormData.staff}
-                onChange={(e) => setEditFormData({ ...editFormData, staff: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white"
-              >
-                <option value="">Unassigned</option>
-                {staffList.map((st) => (
-                  <option key={st.id} value={st.id}>
-                    {st.first_name || st.user?.first_name} {st.last_name || st.user?.last_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={() => setIsEditModalOpen(false)}
-              className="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-xs transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-xs transition-colors cursor-pointer"
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-xs text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] shadow-md shadow-blue-500/25 transition-all cursor-pointer disabled:opacity-50"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{isSubmitting ? 'Creating...' : 'Create Course'}</span>
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Course Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Edit Course Details"
+        subtitle={`Update course specifications, credits, or assigned faculty for ${editFormData.code}`}
+        icon={<Edit2 className="w-5 h-5 text-blue-600" />}
+        maxWidth="max-w-xl"
+      >
+        <form ref={editFormRef} onSubmit={handleEditSubmit} autoComplete="off" className="space-y-4">
+          <div className="bg-slate-50/60 p-4 rounded-2xl border border-slate-100 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Course Code *</label>
+                <div className="relative">
+                  <Hash className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    value={editFormData.code}
+                    onChange={(e) => setEditFormData({ ...editFormData, code: e.target.value.toUpperCase() })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm uppercase font-mono bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-semibold"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Max Internal Marks *</label>
+                <div className="relative">
+                  <Award className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="number"
+                    required
+                    min="10"
+                    max="100"
+                    value={editFormData.max_internal_marks}
+                    onChange={(e) => setEditFormData({ ...editFormData, max_internal_marks: Number(e.target.value) })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Course Title *</label>
+              <div className="relative">
+                <BookOpen className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  required
+                  value={editFormData.name}
+                  onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                  className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Semester *</label>
+                <div className="relative">
+                  <GraduationCap className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <select
+                    required
+                    value={editFormData.semester}
+                    onChange={(e) => setEditFormData({ ...editFormData, semester: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="">Select Semester</option>
+                    {semesters.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        Semester {s.number} ({s.academic_year})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Assign Faculty</label>
+                <div className="relative">
+                  <UserCheck className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <select
+                    value={editFormData.staff}
+                    onChange={(e) => setEditFormData({ ...editFormData, staff: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="">Unassigned</option>
+                    {staffList.map((st) => (
+                      <option key={st.id} value={st.id}>
+                        {st.first_name || st.user?.first_name} {st.last_name || st.user?.last_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-xs transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-xs text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] shadow-md shadow-blue-500/25 transition-all cursor-pointer disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
-              <span>Save Changes</span>
+              <span>{isSubmitting ? 'Saving...' : 'Save Changes'}</span>
             </button>
           </div>
         </form>

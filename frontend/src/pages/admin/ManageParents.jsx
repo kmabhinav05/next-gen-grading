@@ -3,8 +3,22 @@ import { academicsService } from '../../api/academics';
 import { DataTable } from '../../components/common/DataTable';
 import { Modal } from '../../components/common/Modal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
-import HoldButton from '../../components/common/HoldButton';
-import { Plus, Trash2, Edit2, Save } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  Save,
+  User,
+  UserPlus,
+  Users,
+  AtSign,
+  Lock,
+  Eye,
+  EyeOff,
+  Mail,
+  Phone,
+  Heart,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ManageParents = () => {
@@ -14,6 +28,9 @@ export const ManageParents = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showEditPassword, setShowEditPassword] = useState(false);
   const formRef = useRef(null);
   const editFormRef = useRef(null);
 
@@ -53,8 +70,23 @@ export const ManageParents = () => {
     fetchData();
   }, []);
 
+  const openAddModal = () => {
+    setFormData({
+      username: '',
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone_number: '',
+      relationship: 'Father',
+      password: '',
+    });
+    setShowPassword(false);
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
+    setIsSubmitting(true);
     try {
       await academicsService.createParent(formData);
       toast.success('Parent account created successfully!');
@@ -71,6 +103,8 @@ export const ManageParents = () => {
       fetchData();
     } catch (err) {
       toast.error(err.response?.data ? JSON.stringify(err.response.data) : 'Failed to create parent');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -86,12 +120,14 @@ export const ManageParents = () => {
       relationship: parent.relationship || 'Guardian',
       password: '',
     });
+    setShowEditPassword(false);
     setIsEditModalOpen(true);
   };
 
   const handleEditSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!editTarget) return;
+    setIsSubmitting(true);
     try {
       await academicsService.updateParent(editTarget.id, editFormData);
       toast.success('Parent account updated successfully!');
@@ -100,6 +136,8 @@ export const ManageParents = () => {
       fetchData();
     } catch (err) {
       toast.error('Failed to update parent account.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -107,10 +145,10 @@ export const ManageParents = () => {
     if (!deleteTarget) return;
     try {
       await academicsService.deleteParent(deleteTarget.id);
-      toast.success('Parent account deleted.');
+      toast.success('Parent account removed.');
       fetchData();
     } catch (err) {
-      toast.error('Failed to delete parent account.');
+      toast.error('Failed to remove parent.');
     } finally {
       setDeleteTarget(null);
     }
@@ -119,41 +157,39 @@ export const ManageParents = () => {
   const columns = [
     {
       header: 'Parent Name',
-      accessor: 'first_name',
+      accessor: 'full_name',
       sortable: true,
       render: (row) => (
-        <div>
-          <p className="font-semibold text-slate-900">{row.first_name || row.user?.first_name} {row.last_name || row.user?.last_name}</p>
-          <p className="text-[11px] text-slate-500">@{row.username || row.user?.username} • {row.relationship}</p>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs uppercase">
+            {row.first_name ? row.first_name[0] : 'P'}
+          </div>
+          <div>
+            <p className="font-semibold text-slate-900">{row.first_name} {row.last_name}</p>
+            <p className="text-[11px] text-slate-400">@{row.username || 'parent'}</p>
+          </div>
         </div>
       ),
     },
     {
-      header: 'Contact',
+      header: 'Relationship',
+      accessor: 'relationship',
+      sortable: true,
+      render: (row) => (
+        <span className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-slate-100 text-slate-700">
+          {row.relationship || 'Guardian'}
+        </span>
+      ),
+    },
+    {
+      header: 'Contact Phone',
       accessor: 'phone_number',
-      render: (row) => (
-        <div className="text-xs">
-          <p className="text-slate-700">{row.phone_number || row.user?.phone_number || 'N/A'}</p>
-          <p className="text-slate-400 text-[11px]">{row.email || row.user?.email}</p>
-        </div>
-      ),
+      render: (row) => <span className="text-slate-600 font-mono text-xs">{row.phone_number || 'N/A'}</span>,
     },
     {
-      header: 'Linked Wards / Students',
-      accessor: 'linked_children',
-      render: (row) => (
-        <div className="flex flex-wrap gap-1">
-          {row.linked_children && row.linked_children.length > 0 ? (
-            row.linked_children.map((c) => (
-              <span key={c.id || c} className="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                {c.name || c} {c.reg_no ? `(${c.reg_no})` : ''}
-              </span>
-            ))
-          ) : (
-            <span className="text-xs text-slate-400 italic">No ward linked</span>
-          )}
-        </div>
-      ),
+      header: 'Email',
+      accessor: 'email',
+      render: (row) => <span className="text-slate-600 text-xs">{row.email || 'N/A'}</span>,
     },
     {
       header: 'Actions',
@@ -163,7 +199,7 @@ export const ManageParents = () => {
           <button
             onClick={() => openEditModal(row)}
             className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
-            title="Edit parent details"
+            title="Edit parent account"
           >
             <Edit2 className="w-4 h-4" />
           </button>
@@ -184,11 +220,11 @@ export const ManageParents = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Parent Accounts</h1>
-          <p className="text-xs text-slate-500 mt-1">Manage parent credentials and linked student wards</p>
+          <p className="text-xs text-slate-500 mt-1">Manage guardian credentials and parent communications</p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-xs"
+          onClick={openAddModal}
+          className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-xs cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add Parent Account</span>
@@ -202,215 +238,305 @@ export const ManageParents = () => {
         keyField="id"
       />
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create Parent Account">
-        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">First Name</label>
-              <input
-                type="text"
-                required
-                value={formData.first_name}
-                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
+      {/* Add Parent Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Create Parent Account"
+        subtitle="Register parent or guardian credentials for ward progress monitoring."
+        icon={<UserPlus className="w-5 h-5 text-blue-600" />}
+        maxWidth="max-w-xl"
+      >
+        <form ref={formRef} onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
+          <input type="text" name="fake_user_autofill_guard" className="hidden" aria-hidden="true" tabIndex={-1} autoComplete="off" />
+          <input type="password" name="fake_pass_autofill_guard" className="hidden" aria-hidden="true" tabIndex={-1} autoComplete="new-password" />
+
+          {/* Section 1: Guardian Profile */}
+          <div className="bg-slate-50/60 p-4 rounded-2xl border border-slate-100 space-y-3">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <User className="w-3.5 h-3.5 text-blue-600" />
+              <span>Guardian Profile</span>
             </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Last Name</label>
-              <input
-                type="text"
-                required
-                value={formData.last_name}
-                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  First Name <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Robert"
+                    value={formData.first_name}
+                    onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  Last Name <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Jenkins"
+                    value={formData.last_name}
+                    onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Relationship</label>
+                <div className="relative">
+                  <Heart className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <select
+                    value={formData.relationship}
+                    onChange={(e) => setFormData({ ...formData, relationship: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Guardian">Guardian</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Phone Number</label>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="+91 9876543210"
+                    value={formData.phone_number}
+                    onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Username</label>
-              <input
-                type="text"
-                required
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
+          {/* Section 2: Portal Credentials */}
+          <div className="bg-slate-50/60 p-4 rounded-2xl border border-slate-100 space-y-3">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <Lock className="w-3.5 h-3.5 text-blue-600" />
+              <span>Portal Authentication & Access</span>
             </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Relationship</label>
-              <select
-                value={formData.relationship}
-                onChange={(e) => setFormData({ ...formData, relationship: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white"
-              >
-                <option value="Father">Father</option>
-                <option value="Mother">Mother</option>
-                <option value="Guardian">Guardian</option>
-              </select>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700">
+                    Login Username <span className="text-rose-500">*</span>
+                  </label>
+                  <span className="text-[10px] text-slate-400 font-medium">For parent portal</span>
+                </div>
+                <div className="relative">
+                  <AtSign className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. robertj"
+                    value={formData.username}
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase() })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700">
+                    Initial Password <span className="text-rose-500">*</span>
+                  </label>
+                  <span className="text-[10px] text-blue-600 font-medium bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
+                    Default: parent123
+                  </span>
+                </div>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    placeholder="e.g. parent123"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="w-full pl-10 pr-10 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium placeholder:text-slate-400 placeholder:font-normal"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Phone Number</label>
-              <input
-                type="text"
-                value={formData.phone_number}
-                onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Password</label>
-              <input
-                type="password"
-                required
-                placeholder="e.g. parent123"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
-            >
-              Cancel
-            </button>
-            <HoldButton
-              onHold={() => {
-                if (formRef.current && !formRef.current.checkValidity()) {
-                  formRef.current.reportValidity();
-                  return;
-                }
-                handleSubmit();
-              }}
-              onTap={() => {
-                if (formRef.current && !formRef.current.checkValidity()) {
-                  formRef.current.reportValidity();
-                } else {
-                  toast('Hold button to confirm adding parent', { icon: '👆' });
-                }
-              }}
-              doneLabel="Parent Added!"
-              backgroundColor="#0f172a"
-              fillColor="#10b981"
-              textColor="#ffffff"
-              fillTextColor="#ffffff"
-              holdTime={1100}
-              radius={10}
-              size="sm"
-              icon={<Plus className="w-3.5 h-3.5" />}
-            >
-              Hold to Add Parent
-            </HoldButton>
-          </div>
-        </form>
-      </Modal>
-
-      {/* Edit Parent Modal */}
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title={`Edit Parent (${editFormData.first_name} ${editFormData.last_name})`}>
-        <form ref={editFormRef} onSubmit={handleEditSubmit} className="space-y-4 text-xs">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">First Name</label>
-              <input
-                type="text"
-                required
-                value={editFormData.first_name}
-                onChange={(e) => setEditFormData({ ...editFormData, first_name: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Last Name</label>
-              <input
-                type="text"
-                required
-                value={editFormData.last_name}
-                onChange={(e) => setEditFormData({ ...editFormData, last_name: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Username</label>
-              <input
-                type="text"
-                required
-                value={editFormData.username}
-                onChange={(e) => setEditFormData({ ...editFormData, username: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Relationship</label>
-              <select
-                value={editFormData.relationship}
-                onChange={(e) => setEditFormData({ ...editFormData, relationship: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              >
-                <option value="Father">Father</option>
-                <option value="Mother">Mother</option>
-                <option value="Guardian">Guardian</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Email</label>
-              <input
-                type="email"
-                value={editFormData.email}
-                onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Phone Number</label>
-              <input
-                type="text"
-                value={editFormData.phone_number}
-                onChange={(e) => setEditFormData({ ...editFormData, phone_number: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Update Password (leave blank to keep unchanged)</label>
-            <input
-              type="password"
-              placeholder="Enter new password if modifying"
-              value={editFormData.password}
-              onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-            />
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={() => setIsEditModalOpen(false)}
-              className="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-xs transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-xs transition-colors cursor-pointer"
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-xs text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] shadow-md shadow-blue-500/25 transition-all cursor-pointer disabled:opacity-50"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>{isSubmitting ? 'Creating...' : 'Create Account'}</span>
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Parent Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Edit Parent Profile"
+        subtitle={`Update contact details or portal credentials for ${editFormData.first_name} ${editFormData.last_name}`}
+        icon={<Edit2 className="w-5 h-5 text-blue-600" />}
+        maxWidth="max-w-xl"
+      >
+        <form ref={editFormRef} onSubmit={handleEditSubmit} autoComplete="off" className="space-y-4">
+          <div className="bg-slate-50/60 p-4 rounded-2xl border border-slate-100 space-y-3">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <User className="w-3.5 h-3.5 text-blue-600" />
+              <span>Guardian Profile</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">First Name *</label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    value={editFormData.first_name}
+                    onChange={(e) => setEditFormData({ ...editFormData, first_name: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Last Name *</label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    value={editFormData.last_name}
+                    onChange={(e) => setEditFormData({ ...editFormData, last_name: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Relationship</label>
+                <div className="relative">
+                  <Heart className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <select
+                    value={editFormData.relationship}
+                    onChange={(e) => setEditFormData({ ...editFormData, relationship: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Guardian">Guardian</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Phone Number</label>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={editFormData.phone_number}
+                    onChange={(e) => setEditFormData({ ...editFormData, phone_number: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Email Address</label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="email"
+                  value={editFormData.email}
+                  onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
+                  className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Password */}
+          <div className="bg-slate-50/60 p-4 rounded-2xl border border-slate-100 space-y-3">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <Lock className="w-3.5 h-3.5 text-blue-600" />
+              <span>Security Credentials</span>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700">Update Password</label>
+                <span className="text-[10px] text-slate-400">Leave blank to keep unchanged</span>
+              </div>
+              <div className="relative">
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type={showEditPassword ? 'text' : 'password'}
+                  placeholder="Enter new password if modifying"
+                  value={editFormData.password}
+                  onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
+                  className="w-full pl-10 pr-10 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800 transition-all font-medium placeholder:text-slate-400 placeholder:font-normal"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowEditPassword(!showEditPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
+                  aria-label={showEditPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showEditPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-xs transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-xs text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] shadow-md shadow-blue-500/25 transition-all cursor-pointer disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
-              <span>Save Changes</span>
+              <span>{isSubmitting ? 'Saving...' : 'Save Changes'}</span>
             </button>
           </div>
         </form>

@@ -761,7 +761,14 @@ export const Settings = () => {
       )}
 
       {/* 2FA Setup Modal */}
-      <Modal isOpen={is2FAModalOpen} onClose={() => setIs2FAModalOpen(false)} title="Setup Two-Factor Authentication">
+      <Modal
+        isOpen={is2FAModalOpen}
+        onClose={() => setIs2FAModalOpen(false)}
+        title="Setup Two-Factor Authentication"
+        subtitle="Secure your institutional portal account with TOTP verification."
+        icon={<Shield className="w-5 h-5 text-indigo-600" />}
+        maxWidth="max-w-md"
+      >
         <form onSubmit={handleVerify2FA} className="space-y-4 text-xs">
           <p className="text-slate-600">
             Scan this QR code with Google Authenticator, 1Password, or Microsoft Authenticator, then enter the 6-digit code:

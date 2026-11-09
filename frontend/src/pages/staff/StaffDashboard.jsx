@@ -715,7 +715,14 @@ export const StaffDashboard = () => {
       </div>
 
       {/* Shortage Advisory Modal */}
-      <Modal isOpen={isShortageModalOpen} onClose={() => setIsShortageModalOpen(false)} title="Attendance Shortage Advisory Notice">
+      <Modal
+        isOpen={isShortageModalOpen}
+        onClose={() => setIsShortageModalOpen(false)}
+        title="Attendance Shortage Advisory Notice"
+        subtitle="Issue formal shortage warning notices for students below 75% attendance."
+        icon={<AlertTriangle className="w-5 h-5 text-rose-600" />}
+        maxWidth="max-w-xl"
+      >
         <div className="space-y-4 text-xs">
           <p className="text-slate-600">
             The following student(s) currently fail to meet the mandatory 75% lecture attendance threshold in your classes:

@@ -124,49 +124,78 @@ export const StaffDashboard = () => {
             </div>
           </div>
 
-          {/* Segmented Progress Tracker Strip - Exact 4 Pills Design */}
-          <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-semibold">
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Semester Filter</span>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-800 font-bold text-xs shadow-2xs">
-                <span>Sem:</span>
+          {/* Segmented Teaching Metric Chips - Proper Cohesive Modern Design */}
+          <div className="flex flex-wrap items-center gap-3 mt-4">
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
+                <GraduationCap className="w-3.5 h-3.5 text-blue-600" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Semester Filter</span>
                 <select
                   value={selectedSemester}
                   onChange={(e) => setSelectedSemester(e.target.value)}
-                  className="bg-transparent border-none font-bold text-slate-800 cursor-pointer focus:outline-none"
+                  className="bg-transparent border-none font-bold text-xs text-slate-800 cursor-pointer focus:outline-none p-0 -ml-0.5 leading-tight"
                 >
                   <option value="">All Semesters</option>
                   {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                     <option key={num} value={num}>
-                      Sem {num}
+                      Semester {num}
                     </option>
                   ))}
                 </select>
               </div>
             </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Teaching</span>
-              <span className="px-4 py-1.5 rounded-full bg-[#1e293b] text-white font-bold text-xs shadow-2xs inline-block">
-                {filteredSubjects.length} Courses Listed
-              </span>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                <BookOpen className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Teaching</span>
+                <span className="text-xs font-bold text-slate-900 block leading-tight">
+                  {filteredSubjects.length} Courses Listed
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">IA Assessment</span>
-              <span className="px-4 py-1.5 rounded-full bg-[#fbc02d] text-slate-900 font-bold text-xs shadow-2xs inline-block">
-                IA1 & IA2 Active
-              </span>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+                <Award className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">IA Assessment</span>
+                <div className="flex items-center gap-1.5 leading-tight">
+                  <span className="text-xs font-bold text-slate-900">IA1 & IA2</span>
+                  <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
+                    Active
+                  </span>
+                </div>
+              </div>
             </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Enrolled</span>
-              <span className="px-4 py-1.5 rounded-full border border-dashed border-slate-300/90 bg-white/50 text-slate-700 font-semibold text-xs inline-block">
-                {totalEnrolled} Registered Students
-              </span>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                <Users className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Enrolled</span>
+                <span className="text-xs font-bold text-slate-900 block leading-tight">
+                  {totalEnrolled} Students
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Department</span>
-              <span className="px-4 py-1.5 rounded-full border border-slate-200/90 bg-white text-slate-800 font-bold text-xs shadow-2xs inline-block">
-                {data?.department || 'Computer Science & Engineering'}
-              </span>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Department</span>
+                <span className="text-xs font-bold text-slate-900 block leading-tight">
+                  {data?.department || 'Computer Science & Engineering'}
+                </span>
+              </div>
             </div>
           </div>
         </div>

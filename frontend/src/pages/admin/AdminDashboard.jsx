@@ -103,31 +103,72 @@ export const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Segmented Progress Tracker Strip - Exact 4 Pills Design */}
-          <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-semibold">
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Enrolled</span>
-              <span className="px-4 py-1.5 rounded-full bg-[#1e293b] text-white font-bold text-xs shadow-2xs inline-block">
-                {counts.students || 6} Students
-              </span>
-            </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Faculty</span>
-              <span className="px-4 py-1.5 rounded-full bg-[#fbc02d] text-slate-900 font-bold text-xs shadow-2xs inline-block">
-                {counts.staff || 2} Staff
-              </span>
-            </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Courses Active</span>
-              <span className="px-4 py-1.5 rounded-full border border-dashed border-slate-300/90 bg-white/50 text-slate-700 font-semibold text-xs inline-block">
-                {counts.subjects || 4} Subjects
-              </span>
-            </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Attendance Rate</span>
-              <span className="px-4 py-1.5 rounded-full border border-slate-200/90 bg-white text-slate-800 font-bold text-xs shadow-2xs inline-block">
-                88.5% Good Standing
-              </span>
+          {/* Segmented Institutional Metric Chips - Proper Cohesive Modern Design */}
+          <div className="flex flex-wrap items-center gap-3 mt-4">
+            <Link
+              to="/admin/students"
+              className="group flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-blue-400 hover:bg-slate-50/50 transition-all cursor-pointer"
+              title="Manage Enrolled Students"
+            >
+              <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform shrink-0">
+                <GraduationCap className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Enrolled</span>
+                <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+                  {counts.students || 6} Students
+                </span>
+              </div>
+            </Link>
+
+            <Link
+              to="/admin/staff"
+              className="group flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-indigo-400 hover:bg-slate-50/50 transition-all cursor-pointer"
+              title="Manage Faculty Directory"
+            >
+              <div className="w-7 h-7 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 group-hover:scale-105 transition-transform shrink-0">
+                <Users className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Faculty</span>
+                <span className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight">
+                  {counts.staff || 2} Staff
+                </span>
+              </div>
+            </Link>
+
+            <Link
+              to="/admin/subjects"
+              className="group flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-violet-400 hover:bg-slate-50/50 transition-all cursor-pointer"
+              title="Manage Courses & Curriculum"
+            >
+              <div className="w-7 h-7 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600 group-hover:scale-105 transition-transform shrink-0">
+                <BookOpen className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Courses Active</span>
+                <span className="text-xs font-bold text-slate-900 group-hover:text-violet-600 transition-colors leading-tight">
+                  {counts.subjects || 4} Subjects
+                </span>
+              </div>
+            </Link>
+
+            <div
+              className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs transition-all"
+              title="Institutional Attendance Compliance"
+            >
+              <div className="w-7 h-7 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Attendance Rate</span>
+                <div className="flex items-center gap-1.5 leading-tight">
+                  <span className="text-xs font-bold text-slate-900">88.5%</span>
+                  <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
+                    Good Standing
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

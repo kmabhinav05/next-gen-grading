@@ -163,49 +163,71 @@ export const StudentDashboard = () => {
             </div>
           </div>
 
-          {/* Segmented Progress Tracker Strip - Exact 4 Pills Design */}
-          <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-semibold">
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Registration</span>
-              <span className="px-4 py-1.5 rounded-full bg-[#1e293b] text-white font-bold text-xs shadow-2xs font-mono inline-block">
-                {student.reg_no}
-              </span>
-            </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Academic Status</span>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#fbc02d] text-slate-900 font-bold text-xs shadow-2xs">
-                <span>Semester:</span>
-                <select
-                  value={selectedSemester}
-                  onChange={(e) => setSelectedSemester(Number(e.target.value))}
-                  className="bg-transparent border-none font-bold text-slate-900 cursor-pointer focus:outline-none"
-                >
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                    <option key={num} value={num}>
-                      Sem {num}
-                    </option>
-                  ))}
-                </select>
-                <span>• Sec {student.section}</span>
+          {/* Segmented Student Metric Chips - Proper Cohesive Modern Design */}
+          <div className="flex flex-wrap items-center gap-3 mt-4">
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-mono font-bold text-xs shrink-0">
+                #
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Register No</span>
+                <span className="text-xs font-bold text-slate-900 font-mono block leading-tight">
+                  {student.reg_no}
+                </span>
               </div>
             </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Department</span>
-              <span className="px-4 py-1.5 rounded-full border border-dashed border-slate-300/90 bg-white/50 text-slate-700 font-semibold text-xs inline-block">
-                {student.department}
-              </span>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                <GraduationCap className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Academic Status</span>
+                <div className="flex items-center gap-1 leading-tight">
+                  <select
+                    value={selectedSemester}
+                    onChange={(e) => setSelectedSemester(Number(e.target.value))}
+                    className="bg-transparent border-none font-bold text-xs text-slate-900 cursor-pointer focus:outline-none p-0 -ml-0.5"
+                  >
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                      <option key={num} value={num}>
+                        Semester {num}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="text-xs font-bold text-slate-900">• Sec {student.section}</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <span className="text-[11px] sm:text-xs text-slate-400 block font-normal mb-1.5">Standing</span>
-              <span
-                className={`px-4 py-1.5 rounded-full border inline-block text-xs font-bold shadow-2xs ${
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="w-7 h-7 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
+                <BookOpen className="w-3.5 h-3.5 text-slate-600" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Department</span>
+                <span className="text-xs font-bold text-slate-900 block leading-tight truncate max-w-[200px]" title={student.department}>
+                  {student.department}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
+                isAttendanceShortage ? 'bg-red-50 border border-red-100 text-red-600' : 'bg-emerald-50 border border-emerald-100 text-emerald-600'
+              }`}>
+                {isAttendanceShortage ? <AlertTriangle className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Standing</span>
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full inline-block leading-tight ${
                   isAttendanceShortage
-                    ? 'border-red-300 bg-red-50 text-red-700'
-                    : 'border-slate-200/90 bg-white text-slate-800'
-                }`}
-              >
-                {isAttendanceShortage ? 'Attendance Shortage Alert' : 'Good Standing'}
-              </span>
+                    ? 'bg-red-50 text-red-700 border border-red-200'
+                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                }`}>
+                  {isAttendanceShortage ? 'Attendance Shortage Alert' : 'Good Standing'}
+                </span>
+              </div>
             </div>
           </div>
         </div>

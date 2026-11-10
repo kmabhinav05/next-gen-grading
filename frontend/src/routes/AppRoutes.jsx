@@ -30,6 +30,7 @@ import { StudentProgressCard } from '../pages/staff/StudentProgressCard';
 import { StudentDashboard } from '../pages/student/StudentDashboard';
 import { MyProgressCard } from '../pages/student/MyProgressCard';
 import { MyAttendance } from '../pages/student/MyAttendance';
+import { StudentResources } from '../pages/student/StudentResources';
 
 // Parent Pages
 import { ParentDashboard } from '../pages/parent/ParentDashboard';
@@ -193,6 +194,14 @@ export const AppRoutes = () => {
           element={
             <ProtectedRoute allowedRoles={['STUDENT']}>
               <MyAttendance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/resources"
+          element={
+            <ProtectedRoute allowedRoles={['STUDENT']}>
+              <StudentResources />
             </ProtectedRoute>
           }
         />

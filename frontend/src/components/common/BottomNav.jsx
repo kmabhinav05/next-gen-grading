@@ -13,7 +13,8 @@ import {
   Users,
   GraduationCap,
   FileSpreadsheet,
-  Settings
+  Settings,
+  FolderDown
 } from 'lucide-react';
 
 export const BottomNav = () => {
@@ -27,9 +28,9 @@ export const BottomNav = () => {
       case 'STUDENT':
         return [
           { label: 'Home', href: '/student/dashboard', icon: LayoutDashboard },
+          { label: 'Resources', href: '/student/resources', icon: FolderDown },
           { label: 'Progress', href: '/student/progress-card', icon: Award },
           { label: 'Attendance', href: '/student/attendance', icon: Clock },
-          { label: 'Results', href: '/results', icon: BookOpen },
           { label: 'Profile', href: '/profile', icon: User }
         ];
       case 'STAFF':

@@ -15,7 +15,8 @@ import {
   FileText,
   Calculator,
   Sparkles,
-  Sliders
+  Sliders,
+  FolderDown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GlassCalendar } from '@/components/ui/glass-calendar';
@@ -229,6 +230,22 @@ export const StudentDashboard = () => {
                 </span>
               </div>
             </div>
+
+            <Link
+              to="/student/resources"
+              className="group flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-blue-400 hover:bg-slate-50/50 transition-all cursor-pointer"
+              title="Access Staff Notes & Study Locker"
+            >
+              <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform shrink-0">
+                <FolderDown className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Resources</span>
+                <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+                  Staff Notes & Locker
+                </span>
+              </div>
+            </Link>
           </div>
         </div>
 
@@ -444,6 +461,38 @@ export const StudentDashboard = () => {
             Open Progress Card
           </Link>
         </div>
+      </div>
+
+      {/* 2.5 ACADEMIC RESOURCES BANNER */}
+      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0">
+            <FolderDown className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30 tracking-wide uppercase">
+                Resources Locker
+              </span>
+              <span className="text-xs text-blue-100 font-medium">Faculty Notes & Uploaded Files</span>
+            </div>
+            <h3 className="text-base sm:text-lg font-black tracking-tight mt-0.5">
+              Access Staff Lecture Notes & Personal Study Locker
+            </h3>
+            <p className="text-xs text-blue-100/90 max-w-xl line-clamp-1 mt-0.5">
+              Download lecture materials, exam question banks from faculty or upload personal study sheets to your cloud locker.
+            </p>
+          </div>
+        </div>
+
+        <Link
+          to="/student/resources"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-indigo-700 font-bold text-xs shadow-sm hover:bg-blue-50 transition-all shrink-0"
+        >
+          <BookOpen className="w-4 h-4 text-indigo-600" />
+          <span>Open Resources</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
 
       {/* 3. BOTTOM GRID (Course Marks Accordion + Student Class Timetable) */}

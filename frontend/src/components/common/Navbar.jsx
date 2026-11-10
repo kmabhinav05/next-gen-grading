@@ -164,6 +164,7 @@ export const Navbar = () => {
           { label: 'Dashboard', href: '/student/dashboard' },
           { label: 'Progress Card', href: '/student/progress-card' },
           { label: 'Attendance', href: '/student/attendance' },
+          { label: 'Resources', href: '/student/resources' },
           { label: 'COE Results', href: '/results' },
         ];
       case 'PARENT':

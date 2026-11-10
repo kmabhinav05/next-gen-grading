@@ -25,17 +25,45 @@ const THEMES = {
   },
 };
 
+const DARK_THEMES = {
+  cream: {
+    outer: 'bg-[#080c14]',
+    canvas: 'bg-gradient-to-br from-[#0f172a] via-[#111c30] to-[#1e1b4b]/20 border-slate-800/80',
+  },
+  slate: {
+    outer: 'bg-[#06090f]',
+    canvas: 'bg-gradient-to-br from-[#0b1120] via-[#0f172a] to-[#090d16] border-slate-800/80',
+  },
+  indigo: {
+    outer: 'bg-[#070815]',
+    canvas: 'bg-gradient-to-br from-[#0d1028] via-[#0a0c20] to-[#1e1b4b]/30 border-indigo-950/80',
+  },
+  emerald: {
+    outer: 'bg-[#040d0a]',
+    canvas: 'bg-gradient-to-br from-[#061e16] via-[#04150f] to-[#022c22]/30 border-emerald-950/80',
+  },
+};
+
 export const DashboardLayout = () => {
   const { role } = useAuth();
   const [themeKey, setThemeKey] = useState(() => localStorage.getItem('pref_theme') || 'cream');
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('pref_mode') === 'dark');
 
   useEffect(() => {
     const applyPreferences = () => {
       const activeTheme = localStorage.getItem('pref_theme') || 'cream';
+      const activeMode = localStorage.getItem('pref_mode') || 'light';
       const isHighContrast = localStorage.getItem('pref_contrast') === 'true';
       const density = localStorage.getItem('pref_density') || 'comfortable';
 
       setThemeKey(activeTheme);
+      setIsDark(activeMode === 'dark');
+
+      if (activeMode === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
 
       if (isHighContrast) {
         document.documentElement.classList.add('high-contrast');
@@ -48,15 +76,19 @@ export const DashboardLayout = () => {
 
     applyPreferences();
     window.addEventListener('theme-changed', applyPreferences);
+    window.addEventListener('mode-changed', applyPreferences);
     window.addEventListener('storage', applyPreferences);
 
     return () => {
       window.removeEventListener('theme-changed', applyPreferences);
+      window.removeEventListener('mode-changed', applyPreferences);
       window.removeEventListener('storage', applyPreferences);
     };
   }, []);
 
-  const activeTheme = THEMES[themeKey] || THEMES.cream;
+  const activeTheme = isDark
+    ? (DARK_THEMES[themeKey] || DARK_THEMES.cream)
+    : (THEMES[themeKey] || THEMES.cream);
 
   return (
     <div

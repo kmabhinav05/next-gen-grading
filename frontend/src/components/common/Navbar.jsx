@@ -19,6 +19,8 @@ import {
   HeartHandshake
 } from 'lucide-react';
 import { playHapticChime } from '../../utils/sound';
+import { ThemeToggleHoldButton } from './ThemeToggleHoldButton';
+import { getStoredMode } from '../../utils/theme';
 
 const RouterLink = ({ href, children, ...props }) => {
   if (!href) return <a {...props}>{children}</a>;
@@ -34,7 +36,22 @@ export const Navbar = () => {
   const location = useLocation();
   const [showNotifications, setShowNotifications] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => getStoredMode() === 'dark');
   const notifRef = useRef(null);
+
+  useEffect(() => {
+    const handleModeChange = () => {
+      setIsDark(getStoredMode() === 'dark');
+    };
+    window.addEventListener('mode-changed', handleModeChange);
+    window.addEventListener('theme-changed', handleModeChange);
+    window.addEventListener('storage', handleModeChange);
+    return () => {
+      window.removeEventListener('mode-changed', handleModeChange);
+      window.removeEventListener('theme-changed', handleModeChange);
+      window.removeEventListener('storage', handleModeChange);
+    };
+  }, []);
 
   // Digital 3D ID Profile is strictly for Faculty (STAFF) and Student (STUDENT)
   const isProfileSupported = role === 'STAFF' || role === 'STUDENT';
@@ -198,7 +215,7 @@ export const Navbar = () => {
               items={navItems}
               activeHref={currentActiveHref}
               linkComponent={RouterLink}
-              theme="light"
+              theme={isDark ? 'dark' : 'light'}
               layout="split"
               itemStyle="pill"
               hoverEffect="fill"
@@ -211,6 +228,9 @@ export const Navbar = () => {
 
           {/* Desktop Right Controls */}
           <div className="flex items-center gap-2.5 shrink-0 relative" ref={notifRef}>
+            {/* React Bits HoldButton Dark / Light Mode Toggle */}
+            <ThemeToggleHoldButton size="sm" />
+
             {/* Settings Icon Button */}
             <Link
               to="/settings"
@@ -301,6 +321,8 @@ export const Navbar = () => {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-1.5">
+            <ThemeToggleHoldButton size="sm" compact />
+
             <Link
               to="/settings"
               title="Settings"
@@ -471,6 +493,11 @@ export const Navbar = () => {
 
             {/* Drawer Footer Actions */}
             <div className="pt-4 border-t border-slate-100 space-y-2 pb-safe">
+              <div className="w-full flex items-center justify-between p-2 rounded-2xl bg-slate-50 border border-slate-200/80">
+                <span className="text-xs font-bold text-slate-700 pl-1">Theme Mode</span>
+                <ThemeToggleHoldButton size="sm" />
+              </div>
+
               <Link
                 to="/settings"
                 onClick={() => setIsMobileDrawerOpen(false)}

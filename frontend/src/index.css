@@ -161,3 +161,134 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* =========================================================
+   DARK MODE ENHANCEMENTS
+   Preserves brand accents, font styling, weights, greetings,
+   badges, card geometries and overall design.
+   ========================================================= */
+html.dark body {
+  background-color: #080c14;
+  color: #f1f5f9;
+}
+
+/* Surface backgrounds in dark mode */
+html.dark .bg-white,
+html.dark .bg-white\/95,
+html.dark .bg-white\/90,
+html.dark .bg-white\/80,
+html.dark .bg-white\/70,
+html.dark .bg-white\/60 {
+  background-color: #131b2e !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .bg-slate-50,
+html.dark .bg-slate-50\/80,
+html.dark .bg-slate-50\/50,
+html.dark .bg-slate-100 {
+  background-color: #0b1120 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Borders in dark mode */
+html.dark .border-slate-200,
+html.dark .border-slate-200\/80,
+html.dark .border-slate-200\/90,
+html.dark .border-slate-100,
+html.dark .border-slate-100\/80 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .divide-slate-100 > * + * {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Typography contrast adjustments without affecting brand accents */
+html.dark .text-slate-900,
+html.dark .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-700 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+html.dark .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Form inputs & dropdowns in dark mode */
+html.dark input:not([type="checkbox"]):not([type="radio"]),
+html.dark select,
+html.dark textarea {
+  background-color: #0b1120 !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover, 
+html.dark input:-webkit-autofill:focus, 
+html.dark input:-webkit-autofill:active,
+html.dark select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 40px #0b1120 inset !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Subtle badge translucent fills in dark mode */
+html.dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+html.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+html.dark .bg-indigo-50 {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+html.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+html.dark .bg-violet-50 {
+  background-color: rgba(139, 92, 246, 0.15) !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Table and list item hover transitions in dark mode */
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-slate-50\/50:hover,
+html.dark .hover\:bg-slate-100:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Mobile bottom nav */
+html.dark nav[aria-label="Mobile Bottom Navigation"] {
+  background-color: rgba(11, 17, 32, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Custom Lean Scrollbars in Dark Mode */
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}

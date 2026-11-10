@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import HoldButton from '../../components/common/HoldButton';
+import { ThemeToggleHoldButton } from '../../components/common/ThemeToggleHoldButton';
 import { playHapticChime } from '../../utils/sound';
 import { Modal } from '../../components/common/Modal';
 import {
@@ -28,7 +29,9 @@ import {
   Eye,
   QrCode,
   Key,
-  Trash2
+  Trash2,
+  Moon,
+  Sun
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -326,6 +329,26 @@ export const Settings = () => {
                     <span className="text-[11px] text-slate-500 mt-1 block">{d.desc}</span>
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Dark / Light Display Mode powered by React Bits HoldButton */}
+            <div className="space-y-3 pt-4 border-t border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-2xl bg-slate-50/80 border border-slate-200">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-slate-800">Display Theme Mode</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                      React Bits HoldButton
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Press and hold (or tap) to transition between Crisp Light and Midnight Obsidian Dark mode.
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  <ThemeToggleHoldButton size="md" />
+                </div>
               </div>
             </div>
 

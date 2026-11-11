@@ -21,7 +21,8 @@ import {
   Table as TableIcon,
   Shield,
   Layers,
-  Filter
+  Filter,
+  User
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -84,43 +85,43 @@ export const MyAttendance = () => {
     if (text.includes('501') || text.includes('DATA') || text.includes('DBMS')) {
       return {
         icon: Database,
-        iconBg: 'bg-indigo-500/10 text-indigo-600 border-indigo-200/80',
-        pillBg: 'bg-indigo-600 text-white',
+        iconBg: 'bg-indigo-50 text-indigo-600 border-indigo-200/80',
+        pillBg: 'bg-indigo-50 text-indigo-700 border-indigo-200 font-bold',
         barColor: 'from-blue-600 via-indigo-500 to-indigo-600',
-        glow: 'shadow-[0_0_12px_rgba(99,102,241,0.25)]'
+        glow: 'shadow-xs'
       };
     }
     if (text.includes('502') || text.includes('OPERAT') || text.includes('OS')) {
       return {
         icon: Cpu,
-        iconBg: 'bg-purple-500/10 text-purple-600 border-purple-200/80',
-        pillBg: 'bg-purple-700 text-white',
+        iconBg: 'bg-purple-50 text-purple-600 border-purple-200/80',
+        pillBg: 'bg-purple-50 text-purple-700 border-purple-200 font-bold',
         barColor: 'from-purple-600 via-fuchsia-500 to-pink-500',
-        glow: 'shadow-[0_0_12px_rgba(168,85,247,0.25)]'
+        glow: 'shadow-xs'
       };
     }
     if (text.includes('503') || text.includes('NET') || text.includes('COMM')) {
       return {
         icon: Network,
-        iconBg: 'bg-emerald-500/10 text-emerald-600 border-emerald-200/80',
-        pillBg: 'bg-emerald-700 text-white',
+        iconBg: 'bg-teal-50 text-teal-600 border-teal-200/80',
+        pillBg: 'bg-teal-50 text-teal-700 border-teal-200 font-bold',
         barColor: 'from-emerald-500 via-teal-500 to-cyan-500',
-        glow: 'shadow-[0_0_12px_rgba(16,185,129,0.25)]'
+        glow: 'shadow-xs'
       };
     }
     if (text.includes('504') || text.includes('SOFT') || text.includes('ENG') || text.includes('CODE')) {
       return {
         icon: Code2,
-        iconBg: 'bg-amber-500/10 text-amber-600 border-amber-200/80',
-        pillBg: 'bg-amber-600 text-white',
+        iconBg: 'bg-amber-50 text-amber-700 border-amber-200/80',
+        pillBg: 'bg-amber-50 text-amber-800 border-amber-200 font-bold',
         barColor: 'from-amber-500 via-orange-500 to-amber-600',
-        glow: 'shadow-[0_0_12px_rgba(245,158,11,0.25)]'
+        glow: 'shadow-xs'
       };
     }
     return {
       icon: BookOpen,
-      iconBg: 'bg-slate-500/10 text-slate-700 border-slate-200',
-      pillBg: 'bg-slate-800 text-white',
+      iconBg: 'bg-slate-100 text-slate-700 border-slate-200',
+      pillBg: 'bg-slate-100 text-slate-700 border-slate-200 font-bold',
       barColor: 'from-slate-700 to-slate-900',
       glow: 'shadow-xs'
     };
@@ -507,11 +508,11 @@ export const MyAttendance = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                  <th className="px-5 py-3.5 w-28">Course</th>
+                <tr className="bg-slate-50/90 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  <th className="px-5 py-3.5 w-32">Course</th>
                   <th className="px-5 py-3.5">Subject & Faculty</th>
-                  <th className="px-5 py-3.5 min-w-[240px]">Attendance Progress & Threshold</th>
-                  <th className="px-5 py-3.5 text-center w-36">Classes / Held</th>
+                  <th className="px-5 py-3.5 min-w-[280px]">Attendance Progress & Threshold</th>
+                  <th className="px-5 py-3.5 text-center w-36">Attended / Total</th>
                   <th className="px-5 py-3.5 text-right w-36">Status</th>
                 </tr>
               </thead>
@@ -530,15 +531,15 @@ export const MyAttendance = () => {
                   return (
                     <tr
                       key={s.code}
-                      className="hover:bg-slate-50/80 transition-all duration-150 group"
+                      className="hover:bg-slate-50/70 transition-colors"
                     >
                       {/* Course Code with Themed Icon */}
-                      <td className="px-5 py-4">
+                      <td className="px-5 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2.5">
-                          <div className={`w-8 h-8 rounded-xl border flex items-center justify-center ${theme.iconBg} ${theme.glow}`}>
+                          <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${theme.iconBg}`}>
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className={`px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold shadow-2xs ${theme.pillBg}`}>
+                          <span className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold border tracking-wide shadow-2xs ${theme.pillBg}`}>
                             {s.code}
                           </span>
                         </div>
@@ -546,47 +547,44 @@ export const MyAttendance = () => {
 
                       {/* Subject Name & Faculty */}
                       <td className="px-5 py-4">
-                        <p className="font-extrabold text-slate-900 text-sm group-hover:text-primary-700 transition-colors">
+                        <div className="font-bold text-slate-900 text-sm leading-snug">
                           {s.name}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-slate-500">
-                          <span className="flex items-center gap-1 font-medium">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                            {sanitizeFacultyName(s.staff_name)}
-                          </span>
-
-                          {/* Safe Margin Pill */}
-                          {perc >= 75 ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200/60">
-                              <Shield className="w-3 h-3 text-emerald-600" />
-                              <span>Can miss {safeMargin} classes safely</span>
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-bold border border-rose-200/60">
-                              <AlertTriangle className="w-3 h-3 text-rose-600" />
-                              <span>Must attend next {recover} classes</span>
-                            </span>
-                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500">
+                          <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>Faculty: <span className="font-semibold text-slate-700">{sanitizeFacultyName(s.staff_name)}</span></span>
                         </div>
                       </td>
 
-                      {/* Visual Layered Progress Bar with 75% Pin */}
-                      <td className="px-5 py-4">
+                      {/* Visual Layered Progress Bar with 75% Pin & Clear Cushion */}
+                      <td className="px-5 py-4 min-w-[280px]">
                         <div className="space-y-1.5">
-                          <div className="flex items-center justify-between text-[11px]">
-                            <span className={`font-mono font-black text-sm ${isSafe ? 'text-emerald-700' : isNormal ? 'text-amber-700' : 'text-rose-700'}`}>
-                              {perc}%
-                            </span>
-                            <span className="text-[10px] text-slate-400 font-medium">
-                              {missed === 0 ? 'Zero Absences' : `${missed} missed`}
+                          {/* Percentage and Missed Count Header */}
+                          <div className="flex items-baseline justify-between text-xs">
+                            <div className="flex items-baseline gap-1.5">
+                              <span className={`font-mono font-black text-base ${
+                                isSafe ? 'text-emerald-600' : isNormal ? 'text-amber-600' : 'text-rose-600'
+                              }`}>
+                                {perc}%
+                              </span>
+                              <span className="text-[11px] font-semibold text-slate-400">
+                                attended
+                              </span>
+                            </div>
+                            <span className="text-xs font-medium text-slate-500">
+                              {missed === 0 ? (
+                                <span className="text-emerald-600 font-semibold">0 Absences</span>
+                              ) : (
+                                <span><strong className="text-slate-700 font-semibold">{missed}</strong> missed</span>
+                              )}
                             </span>
                           </div>
 
                           {/* Progress track */}
-                          <div className="relative w-full h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                          <div className="relative w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60 shadow-inner">
                             {/* 75% Cutoff Marker */}
                             <div
-                              className="absolute top-0 bottom-0 w-0.5 bg-slate-500/80 z-10"
+                              className="absolute top-0 bottom-0 w-0.5 bg-slate-400 z-10"
                               style={{ left: '75%' }}
                               title="75% Mandatory Attendance Target"
                             />
@@ -597,33 +595,55 @@ export const MyAttendance = () => {
                               style={{ width: `${Math.min(perc, 100)}%` }}
                             />
                           </div>
+
+                          {/* Cushion / Safe Margin Subtext */}
+                          <div className="flex items-center justify-between text-[11px] pt-0.5">
+                            {perc >= 75 ? (
+                              <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+                                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                <span>Can miss <strong className="font-extrabold">{safeMargin}</strong> classes safely</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 font-semibold text-rose-700">
+                                <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                                <span>Must attend next <strong className="font-extrabold">{recover}</strong> classes</span>
+                              </span>
+                            )}
+                            <span className="text-[10px] text-slate-400 font-medium tracking-tight">
+                              75% min req.
+                            </span>
+                          </div>
                         </div>
                       </td>
 
                       {/* Attended / Held Ratio */}
-                      <td className="px-5 py-4 text-center font-mono">
-                        <div className="inline-flex items-baseline gap-1 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/80">
-                          <span className="font-black text-slate-900 text-sm">{s.classes_attended}</span>
-                          <span className="text-slate-400 text-xs font-semibold">/ {s.classes_held}</span>
+                      <td className="px-5 py-4 text-center whitespace-nowrap">
+                        <div className="inline-flex flex-col items-center">
+                          <div className="inline-flex items-baseline gap-1 bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-200/80 font-mono">
+                            <span className="font-black text-slate-900 text-sm">{s.classes_attended}</span>
+                            <span className="text-slate-400 text-xs font-semibold">/</span>
+                            <span className="text-slate-600 text-xs font-bold">{s.classes_held}</span>
+                          </div>
+                          <span className="text-[10px] text-slate-400 font-medium mt-1">Sessions Held</span>
                         </div>
                       </td>
 
                       {/* Status Badge */}
-                      <td className="px-5 py-4 text-right">
+                      <td className="px-5 py-4 text-right whitespace-nowrap">
                         {isSafe ? (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 shadow-2xs">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>{perc}% (Safe)</span>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span>Safe</span>
                           </span>
                         ) : isNormal ? (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 shadow-2xs">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />
-                            <span>{perc}% (Normal)</span>
+                            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span>Normal</span>
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200 shadow-2xs">
-                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-                            <span>{perc}% (Shortage)</span>
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                            <span>Shortage</span>
                           </span>
                         )}
                       </td>

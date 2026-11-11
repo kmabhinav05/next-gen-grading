@@ -3,6 +3,7 @@ import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
 import {
   ClipboardCheck,
+  User,
   AlertTriangle,
   CheckCircle2,
   Clock,
@@ -302,99 +303,135 @@ export const ChildAttendance = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                <th className="px-5 py-3.5 w-24">Course</th>
+              <tr className="bg-slate-50/90 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <th className="px-5 py-3.5 w-28">Course</th>
                 <th className="px-5 py-3.5">Subject & Faculty</th>
-                <th className="px-5 py-3.5 min-w-[200px]">Attendance Progress & Threshold</th>
-                <th className="px-5 py-3.5 text-center">Classes</th>
-                <th className="px-5 py-3.5 text-center">Attended</th>
-                <th className="px-5 py-3.5 text-right">Status</th>
+                <th className="px-5 py-3.5 min-w-[280px]">Attendance Progress & Threshold</th>
+                <th className="px-5 py-3.5 text-center w-36">Attended / Total</th>
+                <th className="px-5 py-3.5 text-right w-36">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {subjects.map((s) => {
                 const perc = Number(s.attendance_percentage || 0);
+                const isSafe = perc >= 85;
+                const isNormal = perc >= 75 && perc < 85;
                 const isSubjectShortage = perc < 75.0;
                 const missed = Math.max(0, (s.classes_held || 0) - (s.classes_attended || 0));
+                const safeMargin = Math.max(0, Math.floor(((s.classes_attended || 0) - 0.75 * (s.classes_held || 0)) / 0.75));
+                const recover = Math.max(0, Math.ceil((0.75 * (s.classes_held || 0) - (s.classes_attended || 0)) / 0.25));
 
                 return (
                   <tr key={s.code} className="hover:bg-slate-50/70 transition-colors">
                     {/* Course Code Pill */}
-                    <td className="px-5 py-4 font-mono">
-                      <span className="px-2.5 py-1 rounded-xl bg-[#1e293b] text-white font-bold text-[11px] shadow-2xs inline-block">
+                    <td className="px-5 py-4 whitespace-nowrap">
+                      <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 border border-slate-200 font-mono font-bold text-xs tracking-wide shadow-2xs inline-block">
                         {s.code}
                       </span>
                     </td>
 
                     {/* Subject Name & Clean Faculty */}
                     <td className="px-5 py-4">
-                      <p className="font-bold text-slate-900 text-sm">{s.name}</p>
-                      <p className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                        <span>{sanitizeFacultyName(s.staff_name)}</span>
+                      <p className="font-bold text-slate-900 text-sm leading-snug">{s.name}</p>
+                      <p className="text-xs text-slate-500 mt-1 flex items-center gap-1.5 font-medium">
+                        <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>Faculty: <span className="font-semibold text-slate-700">{sanitizeFacultyName(s.staff_name)}</span></span>
                       </p>
                     </td>
 
-                    {/* Visual Progress Bar with 75% Cutoff Marker */}
-                    <td className="px-5 py-4">
+                    {/* Visual Progress Bar with 75% Cutoff Marker & Headroom */}
+                    <td className="px-5 py-4 min-w-[280px]">
                       <div className="space-y-1.5">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-slate-800 font-mono">{perc}%</span>
-                          <span className="text-[10px] text-slate-400">
-                            {missed === 0 ? 'Zero Absences' : `${missed} missed`}
+                        <div className="flex items-baseline justify-between text-xs">
+                          <div className="flex items-baseline gap-1.5">
+                            <span className={`font-mono font-black text-base ${
+                              isSafe ? 'text-emerald-600' : isNormal ? 'text-amber-600' : 'text-rose-600'
+                            }`}>
+                              {perc}%
+                            </span>
+                            <span className="text-[11px] font-semibold text-slate-400">
+                              attended
+                            </span>
+                          </div>
+                          <span className="text-xs font-medium text-slate-500">
+                            {missed === 0 ? (
+                              <span className="text-emerald-600 font-semibold">0 Absences</span>
+                            ) : (
+                              <span><strong className="text-slate-700 font-semibold">{missed}</strong> missed</span>
+                            )}
                           </span>
                         </div>
 
                         {/* Progress track */}
-                        <div className="relative w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="relative w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60 shadow-inner">
                           {/* 75% University Threshold Marker */}
                           <div
-                            className="absolute top-0 bottom-0 w-0.5 bg-slate-400/70 z-10"
+                            className="absolute top-0 bottom-0 w-0.5 bg-slate-400 z-10"
                             style={{ left: '75%' }}
                             title="75% Mandatory Attendance Threshold"
-                          ></div>
+                          />
 
                           {/* Progress Fill */}
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${
-                              perc >= 85
+                              isSafe
                                 ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
-                                : perc >= 75
-                                ? 'bg-gradient-to-r from-amber-400 to-[#ffc83b]'
+                                : isNormal
+                                ? 'bg-gradient-to-r from-amber-400 to-amber-500'
                                 : 'bg-gradient-to-r from-rose-500 to-red-600'
                             }`}
                             style={{ width: `${Math.min(perc, 100)}%` }}
-                          ></div>
+                          />
+                        </div>
+
+                        {/* Headroom / Cushion Subtext */}
+                        <div className="flex items-center justify-between text-[11px] pt-0.5">
+                          {perc >= 75 ? (
+                            <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+                              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span>Can miss <strong className="font-extrabold">{safeMargin}</strong> classes safely</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 font-semibold text-rose-700">
+                              <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                              <span>Must attend next <strong className="font-extrabold">{recover}</strong> classes</span>
+                            </span>
+                          )}
+                          <span className="text-[10px] text-slate-400 font-medium tracking-tight">
+                            75% min req.
+                          </span>
                         </div>
                       </div>
                     </td>
 
-                    {/* Classes Held */}
-                    <td className="px-5 py-4 text-center font-mono font-semibold text-slate-600">
-                      {s.classes_held}
-                    </td>
-
-                    {/* Classes Attended */}
-                    <td className="px-5 py-4 text-center font-mono font-bold text-slate-900">
-                      {s.classes_attended}
+                    {/* Attended / Held Ratio */}
+                    <td className="px-5 py-4 text-center whitespace-nowrap">
+                      <div className="inline-flex flex-col items-center">
+                        <div className="inline-flex items-baseline gap-1 bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-200/80 font-mono">
+                          <span className="font-black text-slate-900 text-sm">{s.classes_attended}</span>
+                          <span className="text-slate-400 text-xs font-semibold">/</span>
+                          <span className="text-slate-600 text-xs font-bold">{s.classes_held}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400 font-medium mt-1">Sessions Held</span>
+                      </div>
                     </td>
 
                     {/* Status Pill Badge */}
-                    <td className="px-5 py-4 text-right">
-                      {perc >= 85 ? (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/80 shadow-2xs">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>{perc}% (Normal)</span>
+                    <td className="px-5 py-4 text-right whitespace-nowrap">
+                      {isSafe ? (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 shadow-2xs">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span>Safe</span>
                         </span>
-                      ) : perc >= 75 ? (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200/80 shadow-2xs">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />
-                          <span>{perc}% (Normal)</span>
+                      ) : isNormal ? (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 shadow-2xs">
+                          <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                          <span>Normal</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200/80 shadow-2xs">
-                          <AlertTriangle className="w-3.5 h-3.5" />
-                          <span>{perc}% (Shortage)</span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200 shadow-2xs">
+                          <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                          <span>Shortage</span>
                         </span>
                       )}
                     </td>

@@ -304,11 +304,11 @@ export const ChildAttendance = () => {
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="bg-slate-50/90 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                <th className="px-5 py-3.5 w-28">Course</th>
-                <th className="px-5 py-3.5">Subject & Faculty</th>
-                <th className="px-5 py-3.5 min-w-[280px]">Attendance Progress & Threshold</th>
-                <th className="px-5 py-3.5 text-center w-36">Attended / Total</th>
-                <th className="px-5 py-3.5 text-right w-36">Status</th>
+                <th className="px-6 py-4 w-36 text-left">Course</th>
+                <th className="px-6 py-4 text-left">Subject & Faculty</th>
+                <th className="px-6 py-4 min-w-[280px] text-left">Attendance & 75% Threshold</th>
+                <th className="px-6 py-4 w-40 text-center">Attended / Total</th>
+                <th className="px-6 py-4 w-36 text-center">Eligibility</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -324,23 +324,23 @@ export const ChildAttendance = () => {
                 return (
                   <tr key={s.code} className="hover:bg-slate-50/70 transition-colors">
                     {/* Course Code Pill */}
-                    <td className="px-5 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4.5 align-middle whitespace-nowrap">
                       <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 border border-slate-200 font-mono font-bold text-xs tracking-wide shadow-2xs inline-block">
                         {s.code}
                       </span>
                     </td>
 
                     {/* Subject Name & Clean Faculty */}
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4.5 align-middle">
                       <p className="font-bold text-slate-900 text-sm leading-snug">{s.name}</p>
-                      <p className="text-xs text-slate-500 mt-1 flex items-center gap-1.5 font-medium">
+                      <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-1.5 font-medium">
                         <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                         <span>Faculty: <span className="font-semibold text-slate-700">{sanitizeFacultyName(s.staff_name)}</span></span>
                       </p>
                     </td>
 
                     {/* Visual Progress Bar with 75% Cutoff Marker & Headroom */}
-                    <td className="px-5 py-4 min-w-[280px]">
+                    <td className="px-6 py-4.5 align-middle min-w-[280px]">
                       <div className="space-y-1.5">
                         <div className="flex items-baseline justify-between text-xs">
                           <div className="flex items-baseline gap-1.5">
@@ -363,7 +363,7 @@ export const ChildAttendance = () => {
                         </div>
 
                         {/* Progress track */}
-                        <div className="relative w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60 shadow-inner">
+                        <div className="relative w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60 shadow-inner">
                           {/* 75% University Threshold Marker */}
                           <div
                             className="absolute top-0 bottom-0 w-0.5 bg-slate-400 z-10"
@@ -405,35 +405,37 @@ export const ChildAttendance = () => {
                     </td>
 
                     {/* Attended / Held Ratio */}
-                    <td className="px-5 py-4 text-center whitespace-nowrap">
-                      <div className="inline-flex flex-col items-center">
-                        <div className="inline-flex items-baseline gap-1 bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-200/80 font-mono">
+                    <td className="px-6 py-4.5 align-middle text-center whitespace-nowrap">
+                      <div className="inline-flex flex-col items-center justify-center">
+                        <div className="inline-flex items-baseline gap-1.5 bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-200/80 font-mono">
                           <span className="font-black text-slate-900 text-sm">{s.classes_attended}</span>
                           <span className="text-slate-400 text-xs font-semibold">/</span>
                           <span className="text-slate-600 text-xs font-bold">{s.classes_held}</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 font-medium mt-1">Sessions Held</span>
+                        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-1">Sessions</span>
                       </div>
                     </td>
 
                     {/* Status Pill Badge */}
-                    <td className="px-5 py-4 text-right whitespace-nowrap">
-                      {isSafe ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 shadow-2xs">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                          <span>Safe</span>
-                        </span>
-                      ) : isNormal ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 shadow-2xs">
-                          <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                          <span>Normal</span>
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200 shadow-2xs">
-                          <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                          <span>Shortage</span>
-                        </span>
-                      )}
+                    <td className="px-6 py-4.5 align-middle text-center whitespace-nowrap">
+                      <div className="flex items-center justify-center">
+                        {isSafe ? (
+                          <span className="inline-flex items-center justify-center gap-1.5 min-w-[96px] px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span>Safe</span>
+                          </span>
+                        ) : isNormal ? (
+                          <span className="inline-flex items-center justify-center gap-1.5 min-w-[96px] px-3.5 py-1.5 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 shadow-2xs">
+                            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span>Normal</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center justify-center gap-1.5 min-w-[96px] px-3.5 py-1.5 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200 shadow-2xs">
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                            <span>Shortage</span>
+                          </span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );

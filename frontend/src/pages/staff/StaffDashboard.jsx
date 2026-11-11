@@ -389,55 +389,68 @@ export const StaffDashboard = () => {
       </div>
 
       {/* 3. BOTTOM GRID (Assigned Subjects Accordion + Faculty Lecture Timetable) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
         
         {/* Left: Assigned Subjects with Action Buttons (35%) */}
-        <div className="lg:col-span-4 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-              Assigned Subjects
-            </h3>
-            <span className="text-[11px] font-semibold text-slate-400">
-              {assignedSubjects.length} Courses
-            </span>
-          </div>
+        <div className="lg:col-span-12 xl:col-span-4 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between h-full">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                Assigned Subjects
+              </h3>
+              <span className="text-[11px] font-semibold text-slate-400">
+                {assignedSubjects.length} Courses
+              </span>
+            </div>
 
-          <div className="space-y-2.5 text-xs">
-            {filteredSubjects.length > 0 ? (
-              filteredSubjects.map((sub) => (
-                <div
-                  key={sub.id}
-                  className="p-3.5 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors"
-                >
-                  <div className="flex items-center justify-between font-bold text-slate-800">
-                    <span className="truncate">{sub.code}: {sub.name}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 text-white flex-shrink-0 ml-2">
-                      Sem {sub.semester}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200/60">
-                    <span>{sub.enrolled_students} Students</span>
-                    <div className="flex items-center gap-1.5 font-medium">
-                      <span className="px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold">
-                        IA1: {sub.marks_status?.IA1}
-                      </span>
-                      <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold">
-                        IA2: {sub.marks_status?.IA2}
+            <div className="space-y-2.5 text-xs">
+              {filteredSubjects.length > 0 ? (
+                filteredSubjects.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between font-bold text-slate-800">
+                      <span className="truncate">{sub.code}: {sub.name}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 text-white flex-shrink-0 ml-2">
+                        Sem {sub.semester}
                       </span>
                     </div>
+                    <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200/60">
+                      <span>{sub.enrolled_students} Students</span>
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <span className="px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold">
+                          IA1: {sub.marks_status?.IA1}
+                        </span>
+                        <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold">
+                          IA2: {sub.marks_status?.IA2}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="p-4 text-center text-slate-400">No subjects currently assigned.</div>
-            )}
+                ))
+              ) : (
+                <div className="p-4 text-center text-slate-400">No subjects currently assigned.</div>
+              )}
+            </div>
+          </div>
+
+          {/* Quick Subject Overview Footer */}
+          <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span className="font-medium text-slate-600">Faculty Workload: Normal</span>
+            <Link
+              to="/staff/class-report"
+              className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1"
+            >
+              Class Reports &rarr;
+            </Link>
           </div>
         </div>
 
         {/* Right: Faculty Timetable & Counseling Schedule (Side-by-Side) */}
-        <div className="lg:col-span-8 flex flex-col xl:flex-row items-start gap-5">
+        <div className="lg:col-span-12 xl:col-span-8 flex flex-col md:flex-row items-stretch gap-5 h-full">
           {/* Glass Calendar in authentic card shape */}
-          <div className="w-full xl:w-[360px] shrink-0 flex justify-center">
+          <div className="w-full md:w-[360px] shrink-0 flex justify-center">
             <GlassCalendar
               selectedDate={selectedCalendarDate}
               onDateSelect={(d) => {
@@ -462,72 +475,98 @@ export const StaffDashboard = () => {
           </div>
 
           {/* Daily Schedule Details for Selected Date */}
-          <div className="flex-1 w-full bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-indigo-600" />
-                <h3 className="text-xs font-bold text-slate-900">
-                  Teaching Timetable: <span className="text-indigo-600 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
-                </h3>
+          <div className="flex-1 w-full bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between h-full space-y-3">
+            <div>
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-indigo-600" />
+                  <h3 className="text-xs font-bold text-slate-900">
+                    Teaching Timetable: <span className="text-indigo-600 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
+                  </h3>
+                </div>
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                  Department of CSE
+                </span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
-                Department of CSE
-              </span>
+
+              {/* Note badge if present */}
+              {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')] && (
+                <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between mb-3">
+                  <span className="font-medium">📌 Faculty Memo: {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')]}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const key = format(selectedCalendarDate, 'yyyy-MM-dd');
+                      const next = { ...calendarNotes };
+                      delete next[key];
+                      setCalendarNotes(next);
+                    }}
+                    className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
+                  >
+                    Clear
+                  </button>
+                </div>
+              )}
+
+              <div className="space-y-2.5 text-xs">
+                <div className="flex items-center gap-4">
+                  <span className="w-16 font-mono text-slate-400 text-[11px]">09:00 am</span>
+                  <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
+                    <div>
+                      <h4 className="font-bold text-xs">CS501: Database Management Lecture</h4>
+                      <p className="text-[10px] text-slate-300">Section A • Room 304 (Query Optimization)</p>
+                    </div>
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                      Lecture
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <span className="w-16 font-mono text-slate-400 text-[11px]">11:00 am</span>
+                  <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
+                    <div>
+                      <h4 className="font-bold text-xs">Lab Session: SQL Indexing Practical</h4>
+                      <p className="text-[10px] text-amber-700">Lab 2 • Attendance register verification</p>
+                    </div>
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                      Lab Session
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <span className="w-16 font-mono text-slate-400 text-[11px]">02:30 pm</span>
+                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
+                    <span>Student Academic Mentoring & Parent Counseling Clinic</span>
+                    <span className="text-[10px] font-semibold text-slate-400">Office Hours</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <span className="w-16 font-mono text-slate-400 text-[11px]">04:00 pm</span>
+                  <div className="flex-1 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 flex items-center justify-between shadow-2xs">
+                    <div>
+                      <h4 className="font-bold text-xs">Faculty Departmental Meeting & Curriculum Review</h4>
+                      <p className="text-[10px] text-slate-500">Conference Room • HOD & Course Instructors</p>
+                    </div>
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200">
+                      Department
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Note badge if present */}
-            {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')] && (
-              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between">
-                <span className="font-medium">📌 Faculty Memo: {calendarNotes[format(selectedCalendarDate, 'yyyy-MM-dd')]}</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const key = format(selectedCalendarDate, 'yyyy-MM-dd');
-                    const next = { ...calendarNotes };
-                    delete next[key];
-                    setCalendarNotes(next);
-                  }}
-                  className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
-                >
-                  Clear
-                </button>
+            {/* Bottom Status Bar */}
+            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <div className="flex items-center gap-1.5 font-medium">
+                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                <span>Faculty Schedule Synchronized</span>
               </div>
-            )}
-
-            <div className="space-y-2.5 text-xs">
-              <div className="flex items-center gap-4">
-                <span className="w-16 font-mono text-slate-400 text-[11px]">09:00 am</span>
-                <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
-                  <div>
-                    <h4 className="font-bold text-xs">CS501: Database Management Lecture</h4>
-                    <p className="text-[10px] text-slate-300">Section A • Room 304 (Query Optimization)</p>
-                  </div>
-                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
-                    Lecture
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="w-16 font-mono text-slate-400 text-[11px]">11:00 am</span>
-                <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
-                  <div>
-                    <h4 className="font-bold text-xs">Lab Session: SQL Indexing Practical</h4>
-                    <p className="text-[10px] text-amber-700">Lab 2 • Attendance register verification</p>
-                  </div>
-                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
-                    Lab Session
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="w-16 font-mono text-slate-400 text-[11px]">02:30 pm</span>
-                <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
-                  <span>Student Academic Mentoring & Parent Counseling Clinic</span>
-                  <span className="text-[10px] font-semibold text-slate-400">Office Hours</span>
-                </div>
-              </div>
+              <span className="text-[10px] font-semibold text-slate-400">
+                Department CSE Active
+              </span>
             </div>
           </div>
         </div>

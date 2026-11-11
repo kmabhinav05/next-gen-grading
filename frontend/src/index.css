@@ -14,11 +14,19 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-variant-numeric: tabular-nums;
   }
 
   body {
-    @apply text-slate-800 bg-slate-100 min-h-[100dvh] overflow-x-hidden;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    color: #1e293b;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-variant-numeric: tabular-nums;
+    @apply bg-slate-100 min-h-[100dvh] overflow-x-hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

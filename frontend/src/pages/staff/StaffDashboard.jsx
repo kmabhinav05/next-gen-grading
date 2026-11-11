@@ -103,14 +103,14 @@ export const StaffDashboard = () => {
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
           <div>
-            <span className="text-sm sm:text-base font-bold text-[#f59e0b] block tracking-wide">
+            <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
               {timeGreeting},
             </span>
-            <span className="text-xl sm:text-2xl font-bold text-slate-500 block mt-0.5">
-              Welcome in,
+            <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
+              Welcome back,
             </span>
             <div className="flex flex-wrap items-center gap-3 mt-1">
-              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
                 {data?.staff_name || 'Arjun Menon'}
               </h1>
               <Link
@@ -131,7 +131,7 @@ export const StaffDashboard = () => {
                 <GraduationCap className="w-3.5 h-3.5 text-blue-600" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Semester Filter</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Semester Filter</span>
                 <select
                   value={selectedSemester}
                   onChange={(e) => setSelectedSemester(e.target.value)}
@@ -152,7 +152,7 @@ export const StaffDashboard = () => {
                 <BookOpen className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Teaching</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Teaching</span>
                 <span className="text-xs font-bold text-slate-900 block leading-tight">
                   {filteredSubjects.length} Courses Listed
                 </span>
@@ -164,10 +164,10 @@ export const StaffDashboard = () => {
                 <Award className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">IA Assessment</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">IA Assessment</span>
                 <div className="flex items-center gap-1.5 leading-tight">
                   <span className="text-xs font-bold text-slate-900">IA1 & IA2</span>
-                  <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
+                  <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                     Active
                   </span>
                 </div>
@@ -179,7 +179,7 @@ export const StaffDashboard = () => {
                 <Users className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Enrolled</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Enrolled</span>
                 <span className="text-xs font-bold text-slate-900 block leading-tight">
                   {totalEnrolled} Students
                 </span>
@@ -191,7 +191,7 @@ export const StaffDashboard = () => {
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Department</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Department</span>
                 <span className="text-xs font-bold text-slate-900 block leading-tight">
                   {data?.department || 'Computer Science & Engineering'}
                 </span>
@@ -207,10 +207,10 @@ export const StaffDashboard = () => {
               <GraduationCap className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {totalEnrolled}
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Enrolled</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Enrolled</p>
             </div>
           </div>
 
@@ -219,10 +219,10 @@ export const StaffDashboard = () => {
               <BookOpen className="w-5 h-5 text-amber-500" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {assignedSubjects.length || 2}
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Subjects</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Subjects</p>
             </div>
           </div>
 
@@ -231,10 +231,10 @@ export const StaffDashboard = () => {
               <FileSpreadsheet className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {recentLogs.length || 4}
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Excel Uploads</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Excel Uploads</p>
             </div>
           </div>
         </div>
@@ -255,38 +255,40 @@ export const StaffDashboard = () => {
         {/* Card 2: Performance Progress Card with Vertical Bars (28%) */}
         <div className="md:col-span-12 lg:col-span-3 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-800">Class IA Average</span>
-            <Link to="/staff/class-report" className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
+            <span className="text-xs font-semibold text-slate-800">Class IA Average</span>
+            <Link to="/staff/class-report" className="p-1.5 rounded-full hover:bg-slate-100 text-slate-600" aria-label="View Class Report">
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div>
-            <div className="flex items-baseline gap-2 mt-2">
-              <span className="text-3xl font-black text-slate-900 tracking-tight">85.4%</span>
-              <span className="text-[11px] text-slate-500 font-medium">Batch Score</span>
+            {/* Value and Label on dedicated separate lines without collision */}
+            <div className="mt-1">
+              <div className="text-3xl font-bold text-slate-900 tracking-tight leading-[1.3]">85.4%</div>
+              <div className="text-xs font-semibold text-[#475569] mt-0.5">Highest Score: 18.5 / 20 (Batch Score)</div>
             </div>
 
-            {/* Custom Vertical Bars */}
-            <div className="h-28 flex items-end justify-between gap-3 mt-4 pt-4 border-t border-slate-100 relative">
+            {/* Custom Vertical Bars with ample headroom so tooltips never overlap text */}
+            <div className="h-28 flex items-end justify-between gap-3 mt-4 pt-6 border-t border-slate-100 relative">
               <div className="flex flex-col items-center gap-1.5 flex-1">
                 <div className="w-2.5 h-16 bg-slate-900 rounded-full"></div>
-                <span className="text-[10px] text-slate-400 font-medium">IA 1</span>
+                <span className="text-xs text-[#475569] font-medium">IA 1</span>
               </div>
-              <div className="flex flex-col items-center gap-1.5 flex-1 relative">
-                <span className="absolute -top-7 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-[9px] shadow-2xs whitespace-nowrap">
-                  18.5 / 20
+              <div className="flex flex-col items-center gap-1.5 flex-1 relative group/bar">
+                {/* Positioned safely above the bar with hover accent */}
+                <span className="absolute -top-6 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-xs shadow-2xs whitespace-nowrap opacity-90 group-hover/bar:opacity-100 transition-opacity">
+                  18.5
                 </span>
-                <div className="w-2.5 h-24 bg-[#ffc83b] rounded-full"></div>
-                <span className="text-[10px] font-bold text-[#f59e0b]">IA 2</span>
+                <div className="w-2.5 h-20 bg-[#ffc83b] rounded-full"></div>
+                <span className="text-xs font-bold text-[#b45309]">IA 2</span>
               </div>
               <div className="flex flex-col items-center gap-1.5 flex-1">
                 <div className="w-2.5 h-12 bg-slate-200 rounded-full"></div>
-                <span className="text-[10px] text-slate-400 font-medium">IA 3</span>
+                <span className="text-xs text-[#475569] font-medium">IA 3</span>
               </div>
               <div className="flex flex-col items-center gap-1.5 flex-1">
                 <div className="w-2.5 h-20 bg-slate-900 rounded-full"></div>
-                <span className="text-[10px] text-slate-400 font-medium">Sem Avg</span>
+                <span className="text-xs text-[#475569] font-medium">Sem Avg</span>
               </div>
             </div>
           </div>
@@ -296,7 +298,7 @@ export const StaffDashboard = () => {
         <div className="md:col-span-12 lg:col-span-3 bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Attendance Logged</span>
-            <Link to="/staff/attendance" className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
+            <Link to="/staff/attendance" className="p-1.5 rounded-full hover:bg-slate-100 text-[#475569]">
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
@@ -319,18 +321,18 @@ export const StaffDashboard = () => {
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-xl font-black text-slate-900 tracking-tight">91.2%</span>
-                <span className="text-[9px] text-slate-400 font-semibold uppercase">Logged</span>
+                <span className="text-2xl font-bold text-slate-900 tracking-tight leading-[1.3]">91.2%</span>
+                <span className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">LOGGED</span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-[#475569]">
             <div className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-slate-400" />
               <span>42 Hours Held</span>
             </div>
-            <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
               Up to Date
             </span>
           </div>
@@ -350,7 +352,7 @@ export const StaffDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">IA1 Excel Ingested</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">Done</span>
+                <span className="text-xs text-emerald-400 font-bold">Done</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -358,7 +360,7 @@ export const StaffDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">IA2 Excel Ingested</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">Done</span>
+                <span className="text-xs text-emerald-400 font-bold">Done</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -366,15 +368,15 @@ export const StaffDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">Attendance Registry</span>
                 </div>
-                <span className="text-[10px] text-slate-300">Logged</span>
+                <span className="text-xs text-slate-200 font-bold">Logged</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/40 border border-slate-800">
-                <div className="flex items-center gap-2 truncate text-slate-400">
-                  <Circle className="w-4 h-4 text-slate-500 flex-shrink-0" />
-                  <span className="truncate">PTM Signoff Review</span>
+                <div className="flex items-center gap-2 truncate text-[#CBD5E1]">
+                  <Circle className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                  <span className="truncate font-medium">PTM Signoff Review</span>
                 </div>
-                <span className="text-[9px] text-[#ffc83b] font-semibold">Pending</span>
+                <span className="text-xs text-[#ffc83b] font-bold">Pending</span>
               </div>
             </div>
           </div>
@@ -398,7 +400,7 @@ export const StaffDashboard = () => {
               <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                 Assigned Subjects
               </h3>
-              <span className="text-[11px] font-semibold text-slate-400">
+              <span className="text-xs font-semibold text-slate-400">
                 {assignedSubjects.length} Courses
               </span>
             </div>
@@ -412,17 +414,17 @@ export const StaffDashboard = () => {
                   >
                     <div className="flex items-center justify-between font-bold text-slate-800">
                       <span className="truncate">{sub.code}: {sub.name}</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 text-white flex-shrink-0 ml-2">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-slate-900 text-white flex-shrink-0 ml-2">
                         Sem {sub.semester}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200/60">
+                    <div className="flex items-center justify-between text-xs text-[#475569] mt-2 pt-2 border-t border-slate-200/60">
                       <span>{sub.enrolled_students} Students</span>
                       <div className="flex items-center gap-1.5 font-medium">
-                        <span className="px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold">
+                        <span className="px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs font-bold">
                           IA1: {sub.marks_status?.IA1}
                         </span>
-                        <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold">
+                        <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-bold">
                           IA2: {sub.marks_status?.IA2}
                         </span>
                       </div>
@@ -436,11 +438,11 @@ export const StaffDashboard = () => {
           </div>
 
           {/* Quick Subject Overview Footer */}
-          <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
             <span className="font-medium text-slate-600">Faculty Workload: Normal</span>
             <Link
               to="/staff/class-report"
-              className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1"
+              className="text-xs font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1"
             >
               Class Reports &rarr;
             </Link>
@@ -484,7 +486,7 @@ export const StaffDashboard = () => {
                     Teaching Timetable: <span className="text-indigo-600 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
                   </h3>
                 </div>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
                   Department of CSE
                 </span>
               </div>
@@ -501,7 +503,7 @@ export const StaffDashboard = () => {
                       delete next[key];
                       setCalendarNotes(next);
                     }}
-                    className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
+                    className="text-amber-600 hover:text-amber-800 text-xs font-bold"
                   >
                     Clear
                   </button>
@@ -510,47 +512,47 @@ export const StaffDashboard = () => {
 
               <div className="space-y-2.5 text-xs">
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">09:00 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">09:00 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">CS501: Database Management Lecture</h4>
-                      <p className="text-[10px] text-slate-300">Section A • Room 304 (Query Optimization)</p>
+                      <p className="text-xs text-slate-300">Section A • Room 304 (Query Optimization)</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
                       Lecture
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">11:00 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">11:00 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Lab Session: SQL Indexing Practical</h4>
-                      <p className="text-[10px] text-amber-700">Lab 2 • Attendance register verification</p>
+                      <p className="text-xs text-amber-700">Lab 2 • Attendance register verification</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
                       Lab Session
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">02:30 pm</span>
-                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
+                  <span className="w-16 font-mono text-slate-400 text-xs">02:30 pm</span>
+                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-[#475569] text-xs flex items-center justify-between">
                     <span>Student Academic Mentoring & Parent Counseling Clinic</span>
-                    <span className="text-[10px] font-semibold text-slate-400">Office Hours</span>
+                    <span className="text-xs font-semibold text-slate-400">Office Hours</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">04:00 pm</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">04:00 pm</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Faculty Departmental Meeting & Curriculum Review</h4>
-                      <p className="text-[10px] text-slate-500">Conference Room • HOD & Course Instructors</p>
+                      <p className="text-xs text-[#475569]">Conference Room • HOD & Course Instructors</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200">
                       Department
                     </span>
                   </div>
@@ -559,12 +561,12 @@ export const StaffDashboard = () => {
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
               <div className="flex items-center gap-1.5 font-medium">
                 <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
                 <span>Faculty Schedule Synchronized</span>
               </div>
-              <span className="text-[10px] font-semibold text-slate-400">
+              <span className="text-xs font-semibold text-slate-400">
                 Department CSE Active
               </span>
             </div>
@@ -582,7 +584,7 @@ export const StaffDashboard = () => {
                 Attendance Defaulter Warning Center
               </h3>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#475569] leading-relaxed max-w-[65ch]">
               Students identified below the mandatory 75% threshold in your assigned courses.
             </p>
           </div>
@@ -604,7 +606,7 @@ export const StaffDashboard = () => {
                 Remedial Class Counseling Group
               </h3>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#475569] leading-relaxed max-w-[65ch]">
               Organize special tutoring sessions for students scoring below 40% in internal tests.
             </p>
           </div>
@@ -627,15 +629,15 @@ export const StaffDashboard = () => {
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-[1.3] flex items-center gap-2">
                   <span>Parent Communications & PTM Consultation Inbox</span>
                   {communications.filter((c) => c.status === 'Pending').length > 0 && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-black uppercase tracking-wider animate-pulse">
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold uppercase tracking-wider animate-pulse">
                       {communications.filter((c) => c.status === 'Pending').length} Pending Action
                     </span>
                   )}
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[#475569] leading-relaxed max-w-[70ch]">
                   Direct requests from registered parents: Online/Offline PTM consultation slots and medical absence intimations.
                 </p>
               </div>
@@ -688,7 +690,7 @@ export const StaffDashboard = () => {
                   <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <span
-                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                        className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
                           item.type === 'PTM'
                             ? 'bg-purple-100 text-purple-800 border border-purple-200'
                             : 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -701,14 +703,14 @@ export const StaffDashboard = () => {
                       <span className="text-xs text-slate-600">
                         Ward: <strong className="text-slate-800">{item.studentName}</strong> ({item.regNo})
                       </span>
-                      <span className="text-[11px] text-slate-400 ml-auto font-mono">{item.createdAt}</span>
+                      <span className="text-xs text-slate-400 ml-auto font-mono">{item.createdAt}</span>
                     </div>
 
                     <p className="text-xs text-slate-700 bg-white/70 p-2.5 rounded-xl border border-slate-100">
                       {item.type === 'PTM' ? item.notes : item.reason}
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-500">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#475569]">
                       {item.type === 'PTM' ? (
                         <>
                           <span className="flex items-center gap-1 font-medium text-slate-700">
@@ -801,7 +803,7 @@ export const StaffDashboard = () => {
               <span>Ananya Sen (21CS004)</span>
               <span className="text-rose-700 font-mono">70.0% Critical</span>
             </div>
-            <div className="text-[11px] text-slate-500 flex items-center justify-between">
+            <div className="text-xs text-[#475569] flex items-center justify-between">
               <span>Course: CS502 Operating Systems (Sem 5, Sec A)</span>
               <span>28 Attended / 40 Held</span>
             </div>
@@ -809,7 +811,7 @@ export const StaffDashboard = () => {
 
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600 space-y-1">
             <span className="font-bold text-slate-800 block">Notice Actions:</span>
-            <ul className="list-disc list-inside space-y-0.5 text-[11px]">
+            <ul className="list-disc list-inside space-y-0.5 text-xs">
               <li>Dispatches official email advisory to student institutional inbox.</li>
               <li>Alerts registered parent guardian mobile number.</li>
               <li>Generates audit entry for Controller of Examinations (COE).</li>

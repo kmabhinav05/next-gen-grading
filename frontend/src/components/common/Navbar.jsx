@@ -268,12 +268,12 @@ export const Navbar = () => {
                   <span className="text-xs font-bold text-slate-800 truncate max-w-[120px] leading-tight group-hover:text-primary-600 transition-colors">
                     {user?.full_name || user?.username}
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase flex items-center gap-1">
+                  <span className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase flex items-center gap-1">
                     <span>{role}</span>
                     {isProfileSupported ? (
-                      <span className="text-primary-600 font-bold group-hover:underline">• ID</span>
+                      <span className="text-primary-700 font-bold group-hover:underline">• ID</span>
                     ) : (
-                      <span className="text-slate-400 group-hover:text-primary-600 font-medium transition-colors">• Profile</span>
+                      <span className="text-slate-500 group-hover:text-primary-700 font-medium transition-colors">• Profile</span>
                     )}
                   </span>
                 </div>

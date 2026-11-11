@@ -3,7 +3,6 @@ import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
 import { Modal } from '../../components/common/Modal';
 import { getTimeGreeting } from '../../utils/greeting';
-import { DashboardShowcaseModern } from '../../components/common/DashboardShowcaseModern';
 import {
   ArrowUpRight,
   BookOpen,
@@ -99,31 +98,34 @@ export const StaffDashboard = () => {
   const timeGreeting = getTimeGreeting();
 
   return (
-    <div className="space-y-8">
-      {/* 1. Reference Modern Showcase: My Courses, Assignments, and Home Tasks */}
-      <DashboardShowcaseModern
-        courses={assignedSubjects.map((s, idx) => ({
-          code: s.code,
-          name: s.name,
-          faculty: data?.staff_name || 'Prof. Arjun Menon',
-          level: idx === 0 ? 'Core Lecture' : idx === 1 ? 'Lab Practical' : 'Elective Course',
-          levelColor: idx === 0 ? 'text-emerald-700' : idx === 1 ? 'text-blue-700' : 'text-amber-800',
-          days: s.attendance_count || 42,
-          hours: Math.round((s.attendance_count || 42) * 1.2),
-          students: s.enrolled_students || 6,
-          progress: s.attendance_rate || 88,
-          iconBg: idx === 0 ? 'bg-emerald-50 text-emerald-600' : idx === 1 ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-700'
-        }))}
-        assignmentTitle="Department IA2 Marks Review & Parent-Teacher Counseling"
-        assignmentDate="30 October 2026, 10:00 AM"
-        assignmentDuration="01 h 45 m"
-      />
-
-      {/* 2. Institutional Teaching Metric Chips & Big Stats */}
+    <div className="space-y-6">
+      {/* 1. HERO HEADER ROW (Matching Reference Design) */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
-          {/* Segmented Teaching Metric Chips */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div>
+            <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
+              {timeGreeting},
+            </span>
+            <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
+              Welcome back,
+            </span>
+            <div className="flex flex-wrap items-center gap-3 mt-1">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
+                {data?.staff_name || 'Arjun Menon'}
+              </h1>
+              <Link
+                to="/profile"
+                title="View Profile & 3D ID Badge"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
+              >
+                <span>View Profile & ID</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Segmented Teaching Metric Chips - Proper Cohesive Modern Design */}
+          <div className="flex flex-wrap items-center gap-3 mt-4">
             <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
               <div className="w-7 h-7 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
                 <GraduationCap className="w-3.5 h-3.5 text-blue-600" />

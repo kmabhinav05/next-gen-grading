@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
+import { DashboardShowcaseModern } from '../../components/common/DashboardShowcaseModern';
 import {
   ArrowUpRight,
   Users,
@@ -77,33 +78,54 @@ export const AdminDashboard = () => {
   const timeGreeting = getTimeGreeting();
 
   return (
-    <div className="space-y-6">
-      {/* 1. HERO HEADER ROW */}
-      <div className="space-y-4 pb-2">
-        <div>
-          <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
-            {timeGreeting},
-          </span>
-          <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
-            Welcome back,
-          </span>
-          <div className="flex flex-wrap items-center gap-3 mt-1">
-            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
-              Administrator
-            </h1>
-            <Link
-              to="/profile"
-              title="View Profile & Account Details"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
-            >
-              <span>View Profile</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
+    <div className="space-y-8">
+      {/* 1. Reference Modern Showcase: My Courses, Assignments, and Home Tasks */}
+      <DashboardShowcaseModern
+        courses={[
+          {
+            code: 'CS501',
+            name: 'Database Management',
+            faculty: 'Prof. Ramesh Sharma',
+            level: 'Core Syllabus',
+            levelColor: 'text-emerald-700',
+            days: 38,
+            hours: 42,
+            students: counts.students || 6,
+            progress: 88,
+            iconBg: 'bg-emerald-50 text-emerald-600'
+          },
+          {
+            code: 'CS502',
+            name: 'Operating Systems',
+            faculty: 'Prof. Priya Verma',
+            level: 'Core Syllabus',
+            levelColor: 'text-blue-700',
+            days: 36,
+            hours: 40,
+            students: counts.students || 6,
+            progress: 75,
+            iconBg: 'bg-blue-50 text-blue-600'
+          },
+          {
+            code: 'CS503',
+            name: 'Computer Networks',
+            faculty: 'Prof. Ramesh Sharma',
+            level: 'Core Syllabus',
+            levelColor: 'text-amber-800',
+            days: 40,
+            hours: 45,
+            students: counts.students || 6,
+            progress: 95,
+            iconBg: 'bg-amber-50 text-amber-700'
+          }
+        ]}
+        assignmentTitle="Department PTM Counseling & Progress Card Verification"
+        assignmentDate="30 October 2026, 10:00 AM"
+        assignmentDuration="01 h 30 m"
+      />
 
-        {/* Segmented Institutional Metric Chips - Proper Cohesive Modern Design */}
-        <div className="flex flex-wrap items-center gap-3">
+      {/* 2. Institutional Directorate Metric Chips */}
+      <div className="flex flex-wrap items-center gap-3">
           <Link
             to="/admin/students"
             className="group flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-blue-400 hover:bg-slate-50/50 transition-all cursor-pointer"
@@ -170,7 +192,6 @@ export const AdminDashboard = () => {
             </div>
           </div>
         </div>
-      </div>
 
       {/* 2. TOP GRID OF 4 CARDS (Matching image) */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5">

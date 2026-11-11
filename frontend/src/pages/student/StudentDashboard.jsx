@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { dashboardService } from '../../api/dashboard';
 import { Skeleton } from '../../components/common/Skeleton';
 import { getTimeGreeting } from '../../utils/greeting';
+import { DashboardShowcaseModern } from '../../components/common/DashboardShowcaseModern';
 import {
   ArrowUpRight,
   Award,
@@ -138,34 +139,31 @@ export const StudentDashboard = () => {
   const timeGreeting = getTimeGreeting();
 
   return (
-    <div className="space-y-6">
-      {/* 1. HERO HEADER ROW (Matching Reference Design) */}
+    <div className="space-y-8">
+      {/* 1. Modern Showcase: My Courses, Assignments, and Home Tasks (matching reference design) */}
+      <DashboardShowcaseModern
+        courses={subjects.map((s, idx) => ({
+          code: s.code,
+          name: s.name,
+          faculty: s.staff_name ? `Prof. ${s.staff_name.replace(/^((Prof\.|Prof|Professor)\s*)+/gi, '').trim()}` : 'Prof. Faculty',
+          level: idx === 0 ? 'Core Course' : idx === 1 ? 'Advanced Level' : 'Certified Syllabus',
+          levelColor: idx === 0 ? 'text-emerald-700' : idx === 1 ? 'text-blue-700' : 'text-amber-800',
+          days: s.classes_held || 36,
+          hours: Math.round((s.classes_held || 36) * 1.1),
+          students: 6,
+          progress: Math.round(((s.total_ia || 0) / (s.max_total_ia || 40)) * 100) || 85,
+          iconBg: idx === 0 ? 'bg-emerald-50 text-emerald-600' : idx === 1 ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-700'
+        }))}
+        assignmentTitle="Parent-Teacher Meeting & Semester IA Evaluation Review"
+        assignmentDate="30 October 2026, 10:00 AM"
+        assignmentDuration="01 h 30 m"
+      />
+
+      {/* 2. Institutional Student Metric Chips & Quick Stats */}
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
-          <div>
-            <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
-              {timeGreeting},
-            </span>
-            <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
-              Welcome back,
-            </span>
-            <div className="flex flex-wrap items-center gap-3 mt-1">
-              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
-                {student.name}
-              </h1>
-              <Link
-                to="/profile"
-                title="View Profile & 3D ID Badge"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
-              >
-                <span>View Profile & ID</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Segmented Student Metric Chips - Proper Cohesive Modern Design */}
-          <div className="flex flex-wrap items-center gap-3 mt-4">
+          {/* Segmented Student Metric Chips */}
+          <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
               <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-mono font-bold text-xs shrink-0">
                 #

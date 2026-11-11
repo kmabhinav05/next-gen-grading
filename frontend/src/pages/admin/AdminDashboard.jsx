@@ -81,14 +81,14 @@ export const AdminDashboard = () => {
       {/* 1. HERO HEADER ROW */}
       <div className="space-y-4 pb-2">
         <div>
-          <span className="text-sm sm:text-base font-bold text-[#f59e0b] block tracking-wide">
+          <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
             {timeGreeting},
           </span>
-          <span className="text-xl sm:text-2xl font-bold text-slate-500 block mt-0.5">
-            Welcome in,
+          <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
+            Welcome back,
           </span>
           <div className="flex flex-wrap items-center gap-3 mt-1">
-            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
               Administrator
             </h1>
             <Link
@@ -113,7 +113,7 @@ export const AdminDashboard = () => {
               <GraduationCap className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Enrolled</span>
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Enrolled</span>
               <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
                 {counts.students || 6} Students
               </span>
@@ -129,7 +129,7 @@ export const AdminDashboard = () => {
               <Users className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Faculty</span>
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Faculty</span>
               <span className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight">
                 {counts.staff || 2} Staff
               </span>
@@ -145,7 +145,7 @@ export const AdminDashboard = () => {
               <BookOpen className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Courses Active</span>
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Courses Active</span>
               <span className="text-xs font-bold text-slate-900 group-hover:text-violet-600 transition-colors leading-tight">
                 {counts.subjects || 4} Subjects
               </span>
@@ -160,10 +160,10 @@ export const AdminDashboard = () => {
               <CheckCircle2 className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Attendance Rate</span>
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Attendance Rate</span>
               <div className="flex items-center gap-1.5 leading-tight">
                 <span className="text-xs font-bold text-slate-900">88.5%</span>
-                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
+                <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                   Good Standing
                 </span>
               </div>
@@ -194,31 +194,32 @@ export const AdminDashboard = () => {
           </div>
 
           <div>
-            <div className="flex items-baseline gap-2 mt-2">
-              <span className="text-3xl font-black text-slate-900 tracking-tight">84.6%</span>
-              <span className="text-[11px] text-slate-500 font-medium">Class Avg</span>
+            {/* Value and Label on dedicated separate lines without collision */}
+            <div className="mt-1">
+              <div className="text-3xl font-bold text-slate-900 tracking-tight leading-[1.3]">84.6%</div>
+              <div className="text-xs font-semibold text-[#475569] mt-0.5">Overall Department Average</div>
             </div>
 
-            {/* Custom Vertical Bars (matching image style) */}
-            <div className="h-28 flex items-end justify-between gap-2 mt-4 pt-4 border-t border-slate-100 relative">
+            {/* Custom Vertical Bars with ample headroom so tooltips never overlap text */}
+            <div className="h-28 flex items-end justify-between gap-3 mt-4 pt-6 border-t border-slate-100 relative">
               <div className="flex flex-col items-center gap-1.5 flex-1">
                 <div className="w-2.5 h-16 bg-slate-900 rounded-full"></div>
-                <span className="text-[10px] text-slate-400 font-medium">CS501</span>
+                <span className="text-xs text-[#475569] font-medium">CS501</span>
               </div>
               <div className="flex flex-col items-center gap-1.5 flex-1">
                 <div className="w-2.5 h-20 bg-slate-900 rounded-full"></div>
-                <span className="text-[10px] text-slate-400 font-medium">CS502</span>
+                <span className="text-xs text-[#475569] font-medium">CS502</span>
               </div>
-              <div className="flex flex-col items-center gap-1.5 flex-1 relative">
-                <span className="absolute -top-7 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-[9px] shadow-2xs whitespace-nowrap">
+              <div className="flex flex-col items-center gap-1.5 flex-1 relative group/bar">
+                <span className="absolute -top-6 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-xs shadow-2xs whitespace-nowrap opacity-90 group-hover/bar:opacity-100 transition-opacity">
                   48 / 50
                 </span>
                 <div className="w-2.5 h-24 bg-[#ffc83b] rounded-full"></div>
-                <span className="text-[10px] font-bold text-[#f59e0b]">CS503</span>
+                <span className="text-xs font-bold text-[#b45309]">CS503</span>
               </div>
               <div className="flex flex-col items-center gap-1.5 flex-1">
                 <div className="w-2.5 h-14 bg-slate-900 rounded-full"></div>
-                <span className="text-[10px] text-slate-400 font-medium">CS504</span>
+                <span className="text-xs text-[#475569] font-medium">CS504</span>
               </div>
             </div>
           </div>
@@ -251,18 +252,18 @@ export const AdminDashboard = () => {
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-xl font-black text-slate-900 tracking-tight">88.5%</span>
-                <span className="text-[9px] text-slate-400 font-semibold uppercase">Regularity</span>
+                <span className="text-2xl font-bold text-slate-900 tracking-tight leading-[1.3]">88.5%</span>
+                <span className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">REGULARITY</span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-[#475569]">
             <div className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-slate-400" />
               <span>42 Classes Held</span>
             </div>
-            <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
               Good Standing
             </span>
           </div>
@@ -282,7 +283,7 @@ export const AdminDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">IA1 Marks Uploaded</span>
                 </div>
-                <span className="text-[10px] text-slate-400">100%</span>
+                <span className="text-xs text-emerald-400 font-bold">100%</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -290,7 +291,7 @@ export const AdminDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">IA2 Marks Ingested</span>
                 </div>
-                <span className="text-[10px] text-slate-400">100%</span>
+                <span className="text-xs text-emerald-400 font-bold">100%</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -298,15 +299,15 @@ export const AdminDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">Digital Progress Cards</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">Ready</span>
+                <span className="text-xs text-emerald-400 font-bold">Ready</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/40 border border-slate-800">
-                <div className="flex items-center gap-2 truncate text-slate-400">
-                  <Circle className="w-4 h-4 text-slate-500 flex-shrink-0" />
-                  <span className="truncate">COE Results Extractor</span>
+                <div className="flex items-center gap-2 truncate text-[#CBD5E1]">
+                  <Circle className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                  <span className="truncate font-medium">COE Results Extractor</span>
                 </div>
-                <span className="text-[9px] text-amber-400 font-semibold">Staging</span>
+                <span className="text-xs text-amber-400 font-bold">Staging</span>
               </div>
             </div>
           </div>
@@ -334,43 +335,43 @@ export const AdminDashboard = () => {
               <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
                 <div className="flex items-center justify-between font-bold text-slate-800">
                   <span>CS501: Database Management</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-700">Prof. Sharma</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-100 text-blue-700">Prof. Sharma</span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
+                <p className="text-xs text-[#475569] mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
               </div>
 
               <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
                 <div className="flex items-center justify-between font-bold text-slate-800">
                   <span>CS502: Operating Systems</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-purple-100 text-purple-700">Prof. Verma</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-700">Prof. Verma</span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
+                <p className="text-xs text-[#475569] mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
               </div>
 
               <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
                 <div className="flex items-center justify-between font-bold text-slate-800">
                   <span>CS503: Computer Networks</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-700">Prof. Sharma</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-100 text-blue-700">Prof. Sharma</span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
+                <p className="text-xs text-[#475569] mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
               </div>
 
               <div className="p-3 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
                 <div className="flex items-center justify-between font-bold text-slate-800">
                   <span>CS504: Software Engineering</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-purple-100 text-purple-700">Prof. Verma</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-700">Prof. Verma</span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
+                <p className="text-xs text-[#475569] mt-1">Semester 5 • 6 Enrolled Students • IA1 & IA2 Complete</p>
               </div>
             </div>
           </div>
 
           {/* Quick Curriculum Overview Footer */}
-          <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
             <span className="font-medium text-slate-600">Curriculum Compliance: 100%</span>
             <Link
               to="/admin/subjects"
-              className="text-[11px] font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+              className="text-xs font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
             >
               All Courses &rarr;
             </Link>
@@ -414,7 +415,7 @@ export const AdminDashboard = () => {
                     Campus Agenda & Timetable: <span className="text-amber-700 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
                   </h3>
                 </div>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
                   Institutional Directorate
                 </span>
               </div>
@@ -431,7 +432,7 @@ export const AdminDashboard = () => {
                       delete next[key];
                       setCalendarNotes(next);
                     }}
-                    className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
+                    className="text-amber-600 hover:text-amber-800 text-xs font-bold"
                   >
                     Clear
                   </button>
@@ -440,47 +441,47 @@ export const AdminDashboard = () => {
 
               <div className="space-y-2.5 text-xs">
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">08:30 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">08:30 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Department Marks Review & HOD Meeting</h4>
-                      <p className="text-[10px] text-slate-300">Continuous Assessment Consolidation</p>
+                      <p className="text-xs text-slate-300">Continuous Assessment Consolidation</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-slate-700 text-[#ffc83b] font-semibold">
                       Board Room
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">10:00 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">10:00 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Parent-Teacher Meeting (PTM) Counseling</h4>
-                      <p className="text-[10px] text-amber-700">Digital Progress Card Signature Verification</p>
+                      <p className="text-xs text-amber-700">Digital Progress Card Signature Verification</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-amber-200 text-amber-900 font-semibold">
                       Seminar Hall
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">11:30 am</span>
-                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
+                  <span className="w-16 font-mono text-slate-400 text-xs">11:30 am</span>
+                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-xs flex items-center justify-between">
                     <span>Lab Hours: CS501 Database Hands-on Session (Section A)</span>
-                    <span className="text-[10px] font-semibold text-slate-400">Lab Complex 2</span>
+                    <span className="text-xs font-medium text-[#475569]">Lab Complex 2</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">03:30 pm</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">03:30 pm</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Dean Academic Review & Syndicate Sync</h4>
-                      <p className="text-[10px] text-slate-500">Administrative Block • Directorate Office</p>
+                      <p className="text-xs text-[#475569]">Administrative Block • Directorate Office</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 font-semibold border border-amber-200">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-amber-50 text-amber-800 font-semibold border border-amber-200">
                       Directorate
                     </span>
                   </div>
@@ -489,12 +490,12 @@ export const AdminDashboard = () => {
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
               <div className="flex items-center gap-1.5 font-medium">
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
                 <span>Directorate Agenda Synchronized</span>
               </div>
-              <span className="text-[10px] font-semibold text-slate-400">
+              <span className="text-xs font-medium text-[#475569]">
                 Institutional Directorate
               </span>
             </div>
@@ -511,15 +512,15 @@ export const AdminDashboard = () => {
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-[1.3] flex items-center gap-2">
                   <span>Parent Communications, PTM & Absence Central Oversight</span>
                   {communications.filter((c) => c.status === 'Pending').length > 0 && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-black uppercase tracking-wider animate-pulse">
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold uppercase tracking-wider animate-pulse">
                       {communications.filter((c) => c.status === 'Pending').length} Pending Review
                     </span>
                   )}
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[#475569] leading-relaxed max-w-[70ch]">
                   Institutional record of all consultation bookings and ward leave notes filed by parents across departments.
                 </p>
               </div>
@@ -558,7 +559,7 @@ export const AdminDashboard = () => {
         ) : (
           <div className="overflow-x-auto rounded-2xl border border-slate-200/80">
             <table className="w-full text-left text-xs border-collapse">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px] font-bold">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-semibold">
                 <tr>
                   <th className="px-4 py-3">Category</th>
                   <th className="px-4 py-3">Parent & Ward Info</th>
@@ -580,7 +581,7 @@ export const AdminDashboard = () => {
                     <tr key={item.id} className="hover:bg-slate-50/70 transition-colors">
                       <td className="px-4 py-3.5 whitespace-nowrap">
                         <span
-                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                          className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${
                             item.type === 'PTM'
                               ? 'bg-purple-100 text-purple-800 border border-purple-200'
                               : 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -588,17 +589,17 @@ export const AdminDashboard = () => {
                         >
                           {item.type === 'PTM' ? 'PTM Consultation' : 'Leave Note'}
                         </span>
-                        <div className="text-[10px] text-slate-400 mt-1 font-mono">{item.createdAt}</div>
+                        <div className="text-xs text-slate-400 mt-1 font-mono">{item.createdAt}</div>
                       </td>
                       <td className="px-4 py-3.5">
                         <div className="font-bold text-slate-900">{item.parentName}</div>
-                        <div className="text-slate-500 text-[11px] mt-0.5">
+                        <div className="text-slate-500 text-xs mt-0.5">
                           Ward: <strong className="text-slate-700">{item.studentName}</strong> ({item.regNo})
                         </div>
                       </td>
                       <td className="px-4 py-3.5">
                         <div className="font-bold text-slate-800">{item.faculty}</div>
-                        <div className="text-slate-500 text-[11px]">{item.subject}</div>
+                        <div className="text-slate-500 text-xs">{item.subject}</div>
                       </td>
                       <td className="px-4 py-3.5 max-w-xs">
                         {item.type === 'PTM' ? (
@@ -607,33 +608,33 @@ export const AdminDashboard = () => {
                               <Calendar className="w-3.5 h-3.5 text-indigo-500" />
                               <span>{item.date} • {item.timeSlot}</span>
                             </div>
-                            <p className="text-slate-600 text-[11px] line-clamp-2">{item.notes}</p>
-                            <span className="text-[10px] text-slate-400">{item.mode}</span>
+                            <p className="text-slate-600 text-xs line-clamp-2">{item.notes}</p>
+                            <span className="text-xs text-slate-400">{item.mode}</span>
                           </div>
                         ) : (
                           <div className="space-y-1">
                             <div className="font-medium text-amber-900">
                               {item.startDate} to {item.endDate} ({item.leaveType})
                             </div>
-                            <p className="text-slate-600 text-[11px] line-clamp-2">{item.reason}</p>
+                            <p className="text-slate-600 text-xs line-clamp-2">{item.reason}</p>
                           </div>
                         )}
                       </td>
                       <td className="px-4 py-3.5 whitespace-nowrap">
                         {item.status === 'Pending' ? (
-                          <span className="px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-bold text-[10px]">
+                          <span className="px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-bold text-xs">
                             Pending Action
                           </span>
                         ) : item.status === 'Confirmed' || item.status === 'Approved' ? (
-                          <span className="px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-[10px]">
+                          <span className="px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-xs">
                             Confirmed / Approved
                           </span>
                         ) : item.status === 'Acknowledged' ? (
-                          <span className="px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 font-bold text-[10px]">
+                          <span className="px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 font-bold text-xs">
                             Acknowledged
                           </span>
                         ) : (
-                          <span className="px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-bold text-[10px]">
+                          <span className="px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-bold text-xs">
                             Declined
                           </span>
                         )}
@@ -645,7 +646,7 @@ export const AdminDashboard = () => {
                               <button
                                 type="button"
                                 onClick={() => handleAdminStatusChange(item.id, item.type === 'PTM' ? 'Confirmed' : 'Acknowledged')}
-                                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] shadow-2xs transition-all flex items-center gap-1"
+                                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-2xs transition-all flex items-center gap-1"
                                 title="Approve"
                               >
                                 <Check className="w-3 h-3" />
@@ -654,7 +655,7 @@ export const AdminDashboard = () => {
                               <button
                                 type="button"
                                 onClick={() => handleAdminStatusChange(item.id, 'Declined')}
-                                className="px-2 py-1 rounded-lg bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 font-bold text-[11px] shadow-2xs transition-all flex items-center gap-1"
+                                className="px-2 py-1 rounded-lg bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 font-bold text-xs shadow-2xs transition-all flex items-center gap-1"
                                 title="Decline"
                               >
                                 <X className="w-3 h-3" />
@@ -665,7 +666,7 @@ export const AdminDashboard = () => {
                             <button
                               type="button"
                               onClick={() => handleAdminStatusChange(item.id, 'Pending')}
-                              className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium text-[10px] transition-all"
+                              className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium text-xs transition-all"
                             >
                               Reset
                             </button>
@@ -686,7 +687,7 @@ export const AdminDashboard = () => {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="font-bold text-slate-800">COE Engine Online</span>
-            <span className="text-slate-400 font-mono text-[11px]">Latency 12ms</span>
+            <span className="text-slate-400 font-mono text-xs">Latency 12ms</span>
           </div>
           <div className="hidden sm:block text-slate-300">|</div>
           <div className="text-slate-600">

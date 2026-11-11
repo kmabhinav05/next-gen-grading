@@ -102,7 +102,7 @@ export const ParentDashboard = () => {
       {/* Ward Selector Pills if multiple children */}
       {childrenCards.length > 1 && (
         <div className="flex items-center gap-2 p-1.5 bg-white/80 rounded-2xl border border-slate-200/80 w-fit">
-          <span className="text-[11px] font-bold text-slate-400 px-3 uppercase tracking-wider">
+          <span className="text-xs font-bold text-slate-400 px-3 uppercase tracking-wider">
             Select Ward:
           </span>
           {childrenCards.map((c, idx) => (
@@ -125,14 +125,14 @@ export const ParentDashboard = () => {
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
           <div>
-            <span className="text-sm sm:text-base font-bold text-[#f59e0b] block tracking-wide">
+            <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
               {getTimeGreeting()},
             </span>
-            <span className="text-xl sm:text-2xl font-bold text-slate-500 block mt-0.5">
-              Welcome in,
+            <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
+              Welcome back,
             </span>
             <div className="flex flex-wrap items-center gap-3 mt-1">
-              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
                 {student.name ? `${student.name}'s Guardian` : 'Parent Guardian'}
               </h1>
               <Link
@@ -153,7 +153,7 @@ export const ParentDashboard = () => {
                 <GraduationCap className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Student Ward</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Student Ward</span>
                 <span className="text-xs font-bold text-slate-900 block leading-tight font-mono">
                   {student.name} ({student.reg_no})
                 </span>
@@ -165,7 +165,7 @@ export const ParentDashboard = () => {
                 <Calendar className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Academic Status</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Academic Status</span>
                 <div className="flex items-center gap-1 leading-tight">
                   <select
                     value={selectedSemester}
@@ -188,7 +188,7 @@ export const ParentDashboard = () => {
                 <BookOpen className="w-3.5 h-3.5 text-slate-600" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Department</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Department</span>
                 <span className="text-xs font-bold text-slate-900 block leading-tight truncate max-w-[200px]" title={student.department}>
                   {student.department}
                 </span>
@@ -202,8 +202,8 @@ export const ParentDashboard = () => {
                 {isAttendanceShortage ? <AlertTriangle className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">PTM Standing</span>
-                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full inline-block leading-tight ${
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">PTM Standing</span>
+                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full inline-block leading-tight ${
                   isAttendanceShortage
                     ? 'bg-red-50 text-red-700 border border-red-200'
                     : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
@@ -222,10 +222,10 @@ export const ParentDashboard = () => {
               <Award className="w-5 h-5 text-amber-500" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {summary.percentage}%
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Ward's Marks</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Ward's Marks</p>
             </div>
           </div>
 
@@ -234,10 +234,10 @@ export const ParentDashboard = () => {
               <ClipboardCheck className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {attendancePerc}%
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Ward's Attendance</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Ward's Attendance</p>
             </div>
           </div>
 
@@ -246,10 +246,10 @@ export const ParentDashboard = () => {
               <BookOpen className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {subjects.length}
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Courses</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Courses</p>
             </div>
           </div>
         </div>
@@ -277,24 +277,25 @@ export const ParentDashboard = () => {
           </div>
 
           <div>
-            <div className="flex items-baseline gap-2 mt-2">
-              <span className="text-3xl font-black text-slate-900 tracking-tight">
+            {/* Value and Label on dedicated separate lines without collision */}
+            <div className="mt-1">
+              <div className="text-3xl font-bold text-slate-900 tracking-tight leading-[1.3]">
                 {summary.percentage}%
-              </span>
-              <span className="text-[11px] text-slate-500 font-medium">Cumulative</span>
+              </div>
+              <div className="text-xs font-semibold text-[#475569] mt-0.5">Cumulative Progress</div>
             </div>
 
-            {/* Custom Vertical Bars Per Subject */}
-            <div className="h-28 flex items-end justify-between gap-2 mt-4 pt-4 border-t border-slate-100 relative">
+            {/* Custom Vertical Bars Per Subject with ample headroom */}
+            <div className="h-28 flex items-end justify-between gap-3 mt-4 pt-6 border-t border-slate-100 relative">
               {subjects.slice(0, 4).map((sub) => {
                 const isPeak = peakSubject && sub.code === peakSubject.code;
                 const totalScore = sub.total_ia || 0;
                 const barHeight = Math.max(28, Math.min(96, Math.round((totalScore / (sub.max_total_ia || 40)) * 96)));
 
                 return (
-                  <div key={sub.code} className="flex flex-col items-center gap-1.5 flex-1 relative">
+                  <div key={sub.code} className="flex flex-col items-center gap-1.5 flex-1 relative group/bar">
                     {isPeak && (
-                      <span className="absolute -top-7 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-[9px] shadow-2xs whitespace-nowrap">
+                      <span className="absolute -top-6 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-xs shadow-2xs whitespace-nowrap opacity-90 group-hover/bar:opacity-100 transition-opacity">
                         Peak {totalScore}
                       </span>
                     )}
@@ -305,8 +306,8 @@ export const ParentDashboard = () => {
                       }`}
                     ></div>
                     <span
-                      className={`text-[10px] font-medium ${
-                        isPeak ? 'text-[#f59e0b] font-bold' : 'text-slate-400'
+                      className={`text-xs ${
+                        isPeak ? 'text-[#b45309] font-bold' : 'text-[#475569] font-medium'
                       }`}
                     >
                       {sub.code}
@@ -345,24 +346,24 @@ export const ParentDashboard = () => {
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-xl font-black text-slate-900 tracking-tight">
+                <span className="text-2xl font-bold text-slate-900 tracking-tight leading-[1.3]">
                   {attendancePerc}%
                 </span>
-                <span className="text-[9px] text-slate-400 font-semibold uppercase">Regularity</span>
+                <span className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">REGULARITY</span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-[#475569]">
             <div className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-slate-400" />
               <span>{subjects.reduce((sum, s) => sum + (s.classes_held || 0), 0)} Sessions</span>
             </div>
             <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              className={`px-2 py-0.5 rounded-full text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
                 isAttendanceShortage
-                  ? 'bg-red-50 text-red-700'
-                  : 'bg-emerald-50 text-emerald-700'
+                  ? 'bg-red-50 text-red-800 border-red-200'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-200'
               }`}
             >
               {isAttendanceShortage ? 'Low Attendance' : 'Good Standing'}
@@ -384,7 +385,7 @@ export const ParentDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">Continuous Assessments</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">100%</span>
+                <span className="text-xs text-emerald-400 font-bold">100%</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -392,7 +393,7 @@ export const ParentDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">Faculty Marks Upload</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">Done</span>
+                <span className="text-xs text-emerald-400 font-bold">Done</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -401,7 +402,7 @@ export const ParentDashboard = () => {
                   <span className="truncate">Attendance Registry</span>
                 </div>
                 <span
-                  className={`text-[10px] font-bold ${
+                  className={`text-xs font-bold ${
                     isAttendanceShortage ? 'text-red-400' : 'text-emerald-400'
                   }`}
                 >
@@ -414,7 +415,7 @@ export const ParentDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">Digital Progress Card</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">Ready</span>
+                <span className="text-xs text-emerald-400 font-bold">Ready</span>
               </div>
             </div>
           </div>
@@ -438,7 +439,7 @@ export const ParentDashboard = () => {
               <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                 Subject Assessments
               </h3>
-              <span className="text-[11px] font-semibold text-slate-400">
+              <span className="text-xs font-semibold text-[#475569]">
                 {subjects.length} Courses
               </span>
             </div>
@@ -451,14 +452,14 @@ export const ParentDashboard = () => {
                 >
                   <div className="flex items-center justify-between font-bold text-slate-800">
                     <span className="truncate">{sub.code}: {sub.name}</span>
-                    <span className="text-[11px] font-mono text-[#f59e0b] ml-2">
+                    <span className="text-xs font-mono font-bold text-amber-700 ml-2">
                       {sub.total_ia ?? '-'}/{sub.max_total_ia}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200/60">
+                  <div className="flex items-center justify-between text-xs text-[#475569] mt-2 pt-2 border-t border-slate-200/60">
                     <span className="truncate">Instructor: {sub.staff_name || 'Department Faculty'}</span>
                     <span
-                      className={`font-semibold px-2 py-0.5 rounded-full text-[10px] ${
+                      className={`font-semibold px-2 py-0.5 rounded-full text-xs ${
                         (sub.attendance_percentage || 0) < 75
                           ? 'bg-red-50 text-red-700'
                           : 'bg-emerald-50 text-emerald-700'
@@ -473,9 +474,9 @@ export const ParentDashboard = () => {
           </div>
 
           {/* Bottom Card Summary Pill */}
-          <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
             <span className="font-semibold text-slate-700">Ward Progress Overall: Good</span>
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
               Verified Records
             </span>
           </div>
@@ -518,7 +519,7 @@ export const ParentDashboard = () => {
                     PTM & Consultation Agenda: <span className="text-emerald-700 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
                   </h3>
                 </div>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
                   Guardian Portal
                 </span>
               </div>
@@ -535,7 +536,7 @@ export const ParentDashboard = () => {
                       delete next[key];
                       setCalendarNotes(next);
                     }}
-                    className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
+                    className="text-amber-600 hover:text-amber-800 text-xs font-bold"
                   >
                     Clear
                   </button>
@@ -544,47 +545,47 @@ export const ParentDashboard = () => {
 
               <div className="space-y-2.5 text-xs">
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">10:00 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">10:00 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Parent-Teacher Meeting (PTM) General Assembly</h4>
-                      <p className="text-[10px] text-slate-300">Auditorium • Continuous Assessment Briefing</p>
+                      <p className="text-xs text-slate-300">Auditorium • Continuous Assessment Briefing</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-slate-700 text-[#ffc83b] font-semibold">
                       Assembly
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">11:30 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">11:30 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Individual Faculty Consultation & Progress Card Signoff</h4>
-                      <p className="text-[10px] text-amber-700">Department Seminar Room 1 • Review with Class Advisor</p>
+                      <p className="text-xs text-amber-800">Department Seminar Room 1 • Review with Class Advisor</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-amber-200 text-amber-900 font-semibold">
                       1-on-1 Review
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">02:00 pm</span>
-                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
+                  <span className="w-16 font-mono text-slate-400 text-xs">02:00 pm</span>
+                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-[#475569] text-xs flex items-center justify-between">
                     <span>Placement Cell & Industry Internship Orientation for Parents & Students</span>
-                    <span className="text-[10px] font-semibold text-slate-400">Media Center</span>
+                    <span className="text-xs font-medium text-[#475569]">Media Center</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">03:45 pm</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">03:45 pm</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">Hostel & Student Welfare Directorate Meeting</h4>
-                      <p className="text-[10px] text-slate-500">Block B Lounge • Student Support Counselors</p>
+                      <p className="text-xs text-[#475569]">Block B Lounge • Student Support Counselors</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
                       Welfare
                     </span>
                   </div>
@@ -593,12 +594,12 @@ export const ParentDashboard = () => {
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
               <div className="flex items-center gap-1.5 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Parent Consultation Slot Open</span>
               </div>
-              <span className="text-[10px] font-semibold text-slate-400">
+              <span className="text-xs font-medium text-[#475569]">
                 Guardian Oversight
               </span>
             </div>

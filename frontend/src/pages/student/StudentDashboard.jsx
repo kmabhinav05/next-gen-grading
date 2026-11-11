@@ -143,14 +143,14 @@ export const StudentDashboard = () => {
       <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
         <div>
           <div>
-            <span className="text-sm sm:text-base font-bold text-[#f59e0b] block tracking-wide">
+            <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
               {timeGreeting},
             </span>
-            <span className="text-xl sm:text-2xl font-bold text-slate-500 block mt-0.5">
-              Welcome in,
+            <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
+              Welcome back,
             </span>
             <div className="flex flex-wrap items-center gap-3 mt-1">
-              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
                 {student.name}
               </h1>
               <Link
@@ -171,7 +171,7 @@ export const StudentDashboard = () => {
                 #
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Register No</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Register No</span>
                 <span className="text-xs font-bold text-slate-900 font-mono block leading-tight">
                   {student.reg_no}
                 </span>
@@ -183,7 +183,7 @@ export const StudentDashboard = () => {
                 <GraduationCap className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Academic Status</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Academic Status</span>
                 <div className="flex items-center gap-1 leading-tight">
                   <select
                     value={selectedSemester}
@@ -206,7 +206,7 @@ export const StudentDashboard = () => {
                 <BookOpen className="w-3.5 h-3.5 text-slate-600" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Department</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Department</span>
                 <span className="text-xs font-bold text-slate-900 block leading-tight truncate max-w-[200px]" title={student.department}>
                   {student.department}
                 </span>
@@ -220,8 +220,8 @@ export const StudentDashboard = () => {
                 {isAttendanceShortage ? <AlertTriangle className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Standing</span>
-                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full inline-block leading-tight ${
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Standing</span>
+                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full inline-block leading-tight ${
                   isAttendanceShortage
                     ? 'bg-red-50 text-red-700 border border-red-200'
                     : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
@@ -240,7 +240,7 @@ export const StudentDashboard = () => {
                 <FolderDown className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block leading-tight">Resources</span>
+                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Resources</span>
                 <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
                   Staff Notes & Locker
                 </span>
@@ -256,10 +256,10 @@ export const StudentDashboard = () => {
               <Award className="w-5 h-5 text-amber-500" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {summary.percentage}%
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Internal Marks</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Internal Marks</p>
             </div>
           </div>
 
@@ -268,10 +268,10 @@ export const StudentDashboard = () => {
               <ClipboardCheck className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {attendancePerc}%
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Attendance</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Attendance</p>
             </div>
           </div>
 
@@ -280,10 +280,10 @@ export const StudentDashboard = () => {
               <BookOpen className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 font-sans tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
                 {subjects.length}
               </span>
-              <p className="text-[11px] text-slate-400 font-medium">Courses</p>
+              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Courses</p>
             </div>
           </div>
         </div>
@@ -311,25 +311,25 @@ export const StudentDashboard = () => {
           </div>
 
           <div>
-            <div className="flex items-baseline gap-2 mt-2">
-              <span className="text-3xl font-black text-slate-900 tracking-tight">
+            {/* Value and Label on dedicated separate lines without collision */}
+            <div className="mt-1">
+              <div className="text-3xl font-bold text-slate-900 tracking-tight leading-[1.3]">
                 {summary.percentage}%
-              </span>
-              <span className="text-[11px] text-slate-500 font-medium">Cumulative</span>
+              </div>
+              <div className="text-xs font-semibold text-[#475569] mt-0.5">Cumulative Performance</div>
             </div>
 
-            {/* Custom Vertical Bars Per Subject */}
-            <div className="h-28 flex items-end justify-between gap-2 mt-4 pt-4 border-t border-slate-100 relative">
-              {subjects.slice(0, 4).map((sub, idx) => {
+            {/* Custom Vertical Bars Per Subject with ample headroom */}
+            <div className="h-28 flex items-end justify-between gap-3 mt-4 pt-6 border-t border-slate-100 relative">
+              {subjects.slice(0, 4).map((sub) => {
                 const isPeak = peakSubject && sub.code === peakSubject.code;
                 const totalScore = sub.total_ia || 0;
-                // Normalize height between 28px and 96px
                 const barHeight = Math.max(28, Math.min(96, Math.round((totalScore / (sub.max_total_ia || 40)) * 96)));
 
                 return (
-                  <div key={sub.code} className="flex flex-col items-center gap-1.5 flex-1 relative">
+                  <div key={sub.code} className="flex flex-col items-center gap-1.5 flex-1 relative group/bar">
                     {isPeak && (
-                      <span className="absolute -top-7 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-[9px] shadow-2xs whitespace-nowrap">
+                      <span className="absolute -top-6 px-1.5 py-0.5 rounded-md bg-[#ffc83b] text-slate-900 font-bold text-xs shadow-2xs whitespace-nowrap opacity-90 group-hover/bar:opacity-100 transition-opacity">
                         Peak {totalScore}
                       </span>
                     )}
@@ -340,8 +340,8 @@ export const StudentDashboard = () => {
                       }`}
                     ></div>
                     <span
-                      className={`text-[10px] font-medium ${
-                        isPeak ? 'text-[#f59e0b] font-bold' : 'text-slate-400'
+                      className={`text-xs ${
+                        isPeak ? 'text-[#b45309] font-bold' : 'text-[#475569] font-medium'
                       }`}
                     >
                       {sub.code}
@@ -380,24 +380,24 @@ export const StudentDashboard = () => {
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-xl font-black text-slate-900 tracking-tight">
+                <span className="text-2xl font-bold text-slate-900 tracking-tight leading-[1.3]">
                   {attendancePerc}%
                 </span>
-                <span className="text-[9px] text-slate-400 font-semibold uppercase">Presence</span>
+                <span className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">PRESENCE</span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-[#475569]">
             <div className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-slate-400" />
               <span>{subjects.reduce((sum, s) => sum + (s.classes_held || 0), 0)} Classes</span>
             </div>
             <span
-              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              className={`px-2 py-0.5 rounded-full text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
                 isAttendanceShortage
-                  ? 'bg-red-50 text-red-700'
-                  : 'bg-emerald-50 text-emerald-700'
+                  ? 'bg-red-50 text-red-800 border-red-200'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-200'
               }`}
             >
               {isAttendanceShortage ? 'Shortage Alert' : 'Good Standing'}
@@ -419,7 +419,7 @@ export const StudentDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">IA1 Marks Published</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">100%</span>
+                <span className="text-xs text-emerald-400 font-bold">100%</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -427,7 +427,7 @@ export const StudentDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">IA2 Marks Published</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">100%</span>
+                <span className="text-xs text-emerald-400 font-bold">100%</span>
               </div>
 
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
@@ -436,7 +436,7 @@ export const StudentDashboard = () => {
                   <span className="truncate">Attendance Threshold</span>
                 </div>
                 <span
-                  className={`text-[10px] font-bold ${
+                  className={`text-xs font-bold ${
                     isAttendanceShortage ? 'text-red-400' : 'text-emerald-400'
                   }`}
                 >
@@ -449,7 +449,7 @@ export const StudentDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 text-[#ffc83b] flex-shrink-0" />
                   <span className="truncate">Digital Progress Card</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">Ready</span>
+                <span className="text-xs text-emerald-400 font-bold">Ready</span>
               </div>
             </div>
           </div>
@@ -471,15 +471,15 @@ export const StudentDashboard = () => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30 tracking-wide uppercase">
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white/20 text-white border border-white/30 tracking-[0.04em] uppercase">
                 Resources Locker
               </span>
               <span className="text-xs text-blue-100 font-medium">Faculty Notes & Uploaded Files</span>
             </div>
-            <h3 className="text-base sm:text-lg font-black tracking-tight mt-0.5">
+            <h3 className="text-base sm:text-lg font-bold tracking-tight mt-0.5 leading-[1.3]">
               Access Staff Lecture Notes & Personal Study Locker
             </h3>
-            <p className="text-xs text-blue-100/90 max-w-xl line-clamp-1 mt-0.5">
+            <p className="text-xs text-blue-100/90 leading-relaxed max-w-[65ch] mt-0.5">
               Download lecture materials, exam question banks from faculty or upload personal study sheets to your cloud locker.
             </p>
           </div>
@@ -505,7 +505,7 @@ export const StudentDashboard = () => {
               <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                 Enrolled Course Scores
               </h3>
-              <span className="text-[11px] font-semibold text-slate-400">
+              <span className="text-xs font-semibold text-[#475569]">
                 {subjects.length} Subjects
               </span>
             </div>
@@ -518,14 +518,14 @@ export const StudentDashboard = () => {
                 >
                   <div className="flex items-center justify-between font-bold text-slate-800">
                     <span className="truncate">{sub.code}: {sub.name}</span>
-                    <span className="text-[11px] font-mono text-[#f59e0b] ml-2">
+                    <span className="text-xs font-mono font-bold text-amber-700 ml-2">
                       {sub.total_ia ?? '-'}/{sub.max_total_ia}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200/60">
+                  <div className="flex items-center justify-between text-xs text-[#475569] mt-2 pt-2 border-t border-slate-200/60">
                     <span className="truncate">Faculty: {sub.staff_name ? `Prof. ${sub.staff_name.replace(/^((Prof\.|Prof|Professor)\s*)+/gi, '').trim()}` : 'Prof. Faculty'}</span>
                     <span
-                      className={`font-semibold px-2 py-0.5 rounded-full text-[10px] ${
+                      className={`font-semibold px-2 py-0.5 rounded-full text-xs ${
                         (sub.attendance_percentage || 0) < 75
                           ? 'bg-red-50 text-red-700'
                           : 'bg-emerald-50 text-emerald-700'
@@ -541,13 +541,13 @@ export const StudentDashboard = () => {
 
           {/* Bottom Summary Bar to level with the other two cards */}
           <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+            <div className="flex items-center gap-1.5 text-[#475569] text-xs">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               <span>Overall Average: <strong className="text-slate-900">{summary.percentage}%</strong></span>
             </div>
             <Link
               to="/student/progress-card"
-              className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+              className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
             >
               <span>Full Card</span>
               <ArrowUpRight className="w-3 h-3" />
@@ -592,7 +592,7 @@ export const StudentDashboard = () => {
                     Classes & Events: <span className="text-indigo-600 font-semibold">{format(selectedCalendarDate, 'EEEE, MMM d, yyyy')}</span>
                   </h3>
                 </div>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
                   Semester 5 Section A
                 </span>
               </div>
@@ -609,7 +609,7 @@ export const StudentDashboard = () => {
                       delete next[key];
                       setCalendarNotes(next);
                     }}
-                    className="text-amber-600 hover:text-amber-800 text-[10px] font-bold"
+                    className="text-amber-600 hover:text-amber-800 text-xs font-bold"
                   >
                     Clear
                   </button>
@@ -618,47 +618,47 @@ export const StudentDashboard = () => {
 
               <div className="space-y-2.5 text-xs mt-3">
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">09:00 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">09:00 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-[#1e293b] text-white flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">CS501: Database Management Systems</h4>
-                      <p className="text-[10px] text-slate-300">Room 304 • Prof. Ramesh Sharma</p>
+                      <p className="text-xs text-slate-300">Room 304 • Prof. Ramesh Sharma</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-700 text-[#ffc83b] font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-slate-700 text-[#ffc83b] font-semibold">
                       Lecture
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">11:00 am</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">11:00 am</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">CS502: Operating Systems Lab</h4>
-                      <p className="text-[10px] text-amber-700">Systems Lab 2 • Practical Evaluation</p>
+                      <p className="text-xs text-amber-800">Systems Lab 2 • Practical Evaluation</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-amber-200 text-amber-900 font-semibold">
                       Lab Practical
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">02:00 pm</span>
-                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-slate-500 text-[11px] flex items-center justify-between">
+                  <span className="w-16 font-mono text-slate-400 text-xs">02:00 pm</span>
+                  <div className="flex-1 p-2 rounded-xl border border-dashed border-slate-200 text-[#475569] text-xs flex items-center justify-between">
                     <span>Parent–Teacher Meeting (PTM) & Digital Progress Card Counseling</span>
-                    <span className="text-[10px] font-semibold text-slate-400">Seminar Hall</span>
+                    <span className="text-xs font-medium text-[#475569]">Seminar Hall</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="w-16 font-mono text-slate-400 text-[11px]">03:45 pm</span>
+                  <span className="w-16 font-mono text-slate-400 text-xs">03:45 pm</span>
                   <div className="flex-1 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 flex items-center justify-between shadow-2xs">
                     <div>
                       <h4 className="font-bold text-xs">CS503: Computer Networks Problem Solving</h4>
-                      <p className="text-[10px] text-slate-500">Room 304 • Prof. Ramesh Sharma</p>
+                      <p className="text-xs text-[#475569]">Room 304 • Prof. Ramesh Sharma</p>
                     </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-blue-50 text-blue-700 font-semibold border border-blue-200">
                       Tutorial
                     </span>
                   </div>
@@ -667,12 +667,12 @@ export const StudentDashboard = () => {
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
               <div className="flex items-center gap-1.5 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Campus Attendance Verified</span>
               </div>
-              <span className="text-[10px] font-semibold text-slate-400">
+              <span className="text-xs font-medium text-[#475569]">
                 4 Academic Sessions Today
               </span>
             </div>
@@ -691,7 +691,7 @@ export const StudentDashboard = () => {
                   Attendance Goal & Leave Simulator
                 </h3>
               </div>
-              <span className="text-[11px] font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full border border-cyan-200">
+              <span className="text-xs font-semibold text-cyan-800 bg-cyan-50 px-2.5 py-0.5 rounded-full border border-cyan-200">
                 Hall Ticket Rule: 75%
               </span>
             </div>
@@ -699,22 +699,22 @@ export const StudentDashboard = () => {
             <div className="space-y-3 text-xs">
               <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                 <div>
-                  <span className="text-[11px] text-slate-400 block font-normal">Current Attendance</span>
+                  <span className="text-xs text-[#475569] block font-normal">Current Attendance</span>
                   <strong className="text-sm font-bold text-slate-900 font-mono">
                     {attendancePerc}% ({summary.total_classes_attended || 34} / {summary.total_classes_held || 40} classes)
                   </strong>
                 </div>
                 {attendancePerc >= 75 ? (
                   <div className="text-right">
-                    <span className="text-[11px] text-emerald-700 font-bold block">Safe Leaves Remaining</span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-black text-xs">
+                    <span className="text-xs text-emerald-800 font-bold block">Safe Leaves Remaining</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">
                       {Math.max(0, Math.floor(((summary.total_classes_attended || 34) - 0.75 * (summary.total_classes_held || 40)) / 0.75))} Classes Can Be Missed
                     </span>
                   </div>
                 ) : (
                   <div className="text-right">
-                    <span className="text-[11px] text-rose-700 font-bold block">Deficit to Reach 75%</span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-black text-xs">
+                    <span className="text-xs text-rose-800 font-bold block">Deficit to Reach 75%</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-xs">
                       Attend next {Math.ceil((0.75 * (summary.total_classes_held || 40) - (summary.total_classes_attended || 34)) / 0.25)} consecutive classes
                     </span>
                   </div>
@@ -723,7 +723,7 @@ export const StudentDashboard = () => {
 
               {/* What-If Slider */}
               <div className="space-y-1.5 pt-1">
-                <div className="flex justify-between text-[11px] text-slate-600 font-semibold">
+                <div className="flex justify-between text-xs text-[#475569] font-semibold">
                   <span>Simulate: Attend next N lectures</span>
                   <span className="text-cyan-700 font-bold">+{extraClassesToSimulate} classes</span>
                 </div>
@@ -735,7 +735,7 @@ export const StudentDashboard = () => {
                   onChange={(e) => setExtraClassesToSimulate(Number(e.target.value))}
                   className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
                 />
-                <div className="text-[11px] text-slate-500 flex items-center justify-between pt-1">
+                <div className="text-xs text-[#475569] flex items-center justify-between pt-1">
                   <span>Projected Attendance:</span>
                   <strong className="text-cyan-800 font-mono font-bold">
                     {(
@@ -759,14 +759,14 @@ export const StudentDashboard = () => {
                   Semester SGPA / Grade Projector
                 </h3>
               </div>
-              <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+              <span className="text-xs font-semibold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
                 Target Simulator
               </span>
             </div>
 
             <div className="space-y-3 text-xs">
               <div className="space-y-1.5">
-                <div className="flex justify-between text-[11px] text-slate-600 font-semibold">
+                <div className="flex justify-between text-xs text-[#475569] font-semibold">
                   <span>Target Overall Percentage</span>
                   <span className="text-amber-800 font-bold font-mono text-xs">{targetScorePercent}%</span>
                 </div>
@@ -783,13 +783,13 @@ export const StudentDashboard = () => {
               {/* Projected Result Card */}
               <div className="p-3 rounded-2xl bg-amber-50/50 border border-amber-200/80 flex items-center justify-between">
                 <div>
-                  <span className="text-[11px] text-amber-800 font-semibold block">Projected Grade Point</span>
-                  <span className="text-lg font-black text-slate-900 font-mono">
+                  <span className="text-xs text-amber-800 font-semibold block">Projected Grade Point</span>
+                  <span className="text-lg font-bold text-slate-900 font-mono leading-[1.3]">
                     {(targetScorePercent / 10).toFixed(1)} / 10.0 SGPA
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[11px] text-slate-500 block">Classification</span>
+                  <span className="text-xs text-[#475569] block">Classification</span>
                   <span className="text-xs font-bold text-amber-900">
                     {targetScorePercent >= 90
                       ? "O (Dean's List)"
@@ -804,7 +804,7 @@ export const StudentDashboard = () => {
                 </div>
               </div>
 
-              <p className="text-[10px] text-slate-400">
+              <p className="text-xs text-[#475569] leading-relaxed max-w-[65ch]">
                 Calculated on institutional credit weightages across enrolled subjects for Semester {student.semester}.
               </p>
             </div>

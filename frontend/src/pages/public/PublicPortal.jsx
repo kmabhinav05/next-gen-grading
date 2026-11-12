@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import DrapeBackground from '../../components/ui/DrapeBackground';
+import Carousel3D from '../../components/ui/Carousel3D';
 import { ThemeToggleHoldButton } from '../../components/common/ThemeToggleHoldButton';
 import {
   GraduationCap,
@@ -19,6 +20,33 @@ import {
   Calculator
 } from 'lucide-react';
 import { playHapticChime } from '../../utils/sound';
+
+const HERO_CAROUSEL_SLIDES = [
+  {
+    id: 'student',
+    image: '/profile-student.png',
+    alt: 'Student role card — Ayaan Khan',
+    badge: 'Student Suite',
+    title: 'Student Portal & LiquidGauge Analytics',
+    subtitle: 'Track live IA marks, 75% eligibility buffers & digital ID cards'
+  },
+  {
+    id: 'staff',
+    image: '/profile-staff.png',
+    alt: 'Faculty role card — Arjun Menon',
+    badge: 'Faculty & Grading',
+    title: 'Faculty Assessment & Excel Batch Upload',
+    subtitle: 'Upload IA spreadsheets, mark sessions & share study materials'
+  },
+  {
+    id: 'admin',
+    image: '/profile-admin.png',
+    alt: 'Administrator role card — Meera Nair',
+    badge: 'Campus Control',
+    title: 'Institutional Oversight & Timetables',
+    subtitle: 'Publish exam rules, verify results & oversee campus broadcasts'
+  }
+];
 
 const PORTAL_MODULES = [
   {
@@ -258,41 +286,49 @@ export const PublicPortal = () => {
         interactive={true}
         className="min-h-[600px] lg:min-h-[660px] border-b border-zinc-200 dark:border-zinc-800"
       >
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center pointer-events-none">
-          <div className="space-y-6 flex flex-col items-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-slate-800 dark:text-zinc-200 shadow-xs pointer-events-auto">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>Next Gen Grading • Academic Assistance &amp; Assessment System</span>
-            </div>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 pointer-events-none">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Side: Hero Copy & Actions */}
+            <div className="lg:col-span-6 space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-slate-800 dark:text-zinc-200 shadow-xs pointer-events-auto">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                <span>Next Gen Grading • Academic Assistance &amp; Assessment System</span>
+              </div>
 
-            <div className="space-y-4">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-                Transparent Grading, Attendance &amp; Campus Collaboration.
-              </h1>
-              <p className="text-base sm:text-lg text-[#334155] dark:text-zinc-300 leading-relaxed max-w-[62ch] mx-auto">
-                Explore all modules before signing in. Built for Administrators, Faculty, Students, and Parents with live IA analytics, 75% eligibility tracking, digital progress cards, and PTM workflows.
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+                  Transparent Grading, Attendance &amp; Campus Collaboration.
+                </h1>
+                <p className="text-base sm:text-lg text-[#334155] dark:text-zinc-300 leading-relaxed max-w-[56ch] mx-auto lg:mx-0">
+                  Explore all modules before signing in. Built for Administrators, Faculty, Students, and Parents with live IA analytics, 75% eligibility tracking, digital progress cards, and PTM workflows.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pointer-events-auto">
+                <Link
+                  to="/login"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold text-sm shadow-sm hover:opacity-90 transition-opacity"
+                >
+                  <span>Sign In to Portal</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <a
+                  href="#portals"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-zinc-300 dark:border-zinc-700 text-slate-800 dark:text-zinc-100 font-bold text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors shadow-xs"
+                >
+                  <span>Read Project Features</span>
+                </a>
+              </div>
+
+              <p className="text-xs font-medium text-[#475569] dark:text-zinc-400">
+                Tip: Sweep your cursor across the curtain or drag any fold behind this section.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3 pointer-events-auto">
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold text-sm shadow-sm hover:opacity-90 transition-opacity"
-              >
-                <span>Sign In to Portal</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a
-                href="#portals"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-zinc-300 dark:border-zinc-700 text-slate-800 dark:text-zinc-100 font-bold text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors shadow-xs"
-              >
-                <span>Read Project Features</span>
-              </a>
+            {/* Right Side: Interactive 3D Carousel */}
+            <div className="lg:col-span-6 w-full flex items-center justify-center pointer-events-auto">
+              <Carousel3D slides={HERO_CAROUSEL_SLIDES} />
             </div>
-
-            <p className="text-xs font-medium text-[#475569] dark:text-zinc-400">
-              Tip: Sweep your cursor across the curtain or drag any fold behind this section.
-            </p>
           </div>
         </div>
       </DrapeBackground>

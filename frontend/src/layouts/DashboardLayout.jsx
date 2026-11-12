@@ -4,7 +4,6 @@ import { Navbar } from '../components/common/Navbar';
 import { BottomNav } from '../components/common/BottomNav';
 import { ChatbotWidget } from '../components/chatbot/ChatbotWidget';
 import { useAuth } from '../context/AuthContext';
-import { Toaster } from 'react-hot-toast';
 
 const THEMES = {
   cream: {
@@ -112,9 +111,6 @@ export const DashboardLayout = () => {
 
       {/* Mobile Bottom Navigation Bar (4-5 most used links per role) */}
       <BottomNav />
-
-      {/* Toast notifications */}
-      <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
     </div>
   );
 };

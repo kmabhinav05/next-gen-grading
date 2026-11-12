@@ -48,7 +48,13 @@ export function Component({
       <div className="absolute inset-0 bg-black/15 backdrop-brightness-[0.98] pointer-events-none" />
 
       {/* Floating Frosted Glass Login Container */}
-      <div className="w-full max-w-[430px] relative z-10">
+      <div className="w-full max-w-[430px] relative z-10 space-y-3">
+        <RouterLink
+          to="/portal"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-semibold backdrop-blur-sm transition-colors"
+        >
+          <span>← Back to Public Portal</span>
+        </RouterLink>
         <div className="relative">
           {/* Frosted Glass Outer Card */}
           <div

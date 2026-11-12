@@ -9,6 +9,7 @@ const lazyNamed = (importer, exportName) =>
   lazy(() => importer().then((mod) => ({ default: mod[exportName] || mod.default })));
 
 // Route-split page chunks so heavy dependencies (Three.js, PDF/Excel reports) load on demand
+const PublicPortal = lazyNamed(() => import('../pages/public/PublicPortal'), 'PublicPortal');
 const Login = lazyNamed(() => import('../pages/auth/Login'), 'Login');
 const Unauthorized = lazyNamed(() => import('../pages/Unauthorized'), 'Unauthorized');
 const NotFound = lazyNamed(() => import('../pages/NotFound'), 'NotFound');
@@ -54,11 +55,11 @@ const RouteFallback = () => (
   </div>
 );
 
-// Root redirect handler
+// Root handler: shows Public Portal before login, or redirects authenticated users to their portal
 const RootRedirect = () => {
   const { user, isAuthenticated, loading } = useAuth();
   if (loading) return null;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <PublicPortal />;
 
   switch (user?.role) {
     case 'ADMIN':
@@ -70,7 +71,7 @@ const RootRedirect = () => {
     case 'PARENT':
       return <Navigate to="/parent/dashboard" replace />;
     default:
-      return <Navigate to="/login" replace />;
+      return <PublicPortal />;
   }
 };
 
@@ -79,6 +80,7 @@ export const AppRoutes = () => {
     <Suspense fallback={<RouteFallback />}>
       <Routes>
       <Route path="/" element={<RootRedirect />} />
+      <Route path="/portal" element={<PublicPortal />} />
       <Route path="/login" element={<Login />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
 

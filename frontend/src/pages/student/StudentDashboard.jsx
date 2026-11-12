@@ -4,9 +4,7 @@ import { Skeleton } from '../../components/common/Skeleton';
 import { getTimeGreeting } from '../../utils/greeting';
 import {
   ArrowUpRight,
-  Award,
   BookOpen,
-  ClipboardCheck,
   CheckCircle2,
   Circle,
   Clock,
@@ -159,153 +157,112 @@ export const StudentDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* 1. HERO HEADER ROW (Matching Reference Design) */}
-      <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
+      {/* 1. HERO HEADER ROW */}
+      <div className="space-y-4 pb-2">
         <div>
-          <div>
-            <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
-              {timeGreeting},
-            </span>
-            <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
-              Welcome back,
-            </span>
-            <div className="flex flex-wrap items-center gap-3 mt-1">
-              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
-                {student.name}
-              </h1>
-              <Link
-                to="/profile"
-                title="View Profile & 3D ID Badge"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
-              >
-                <span>View Profile & ID</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Segmented Student Metric Chips - Proper Cohesive Modern Design */}
-          <div className="flex flex-wrap items-center gap-3 mt-4">
-            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-              <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-mono font-bold text-xs shrink-0">
-                #
-              </div>
-              <div>
-                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Register No</span>
-                <span className="text-xs font-bold text-slate-900 font-mono block leading-tight">
-                  {student.reg_no}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-              <div className="w-7 h-7 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
-                <GraduationCap className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Academic Status</span>
-                <div className="flex items-center gap-1 leading-tight">
-                  <select
-                    value={selectedSemester}
-                    onChange={(e) => setSelectedSemester(Number(e.target.value))}
-                    className="bg-transparent border-none font-bold text-xs text-slate-900 cursor-pointer focus:outline-none p-0 -ml-0.5"
-                  >
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                      <option key={num} value={num}>
-                        Semester {num}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-xs font-bold text-slate-900">• Sec {student.section}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-              <div className="w-7 h-7 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
-                <BookOpen className="w-3.5 h-3.5 text-slate-600" />
-              </div>
-              <div>
-                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Department</span>
-                <span className="text-xs font-bold text-slate-900 block leading-tight truncate max-w-[200px]" title={student.department}>
-                  {student.department}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-              <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
-                isAttendanceShortage ? 'bg-red-50 border border-red-100 text-red-600' : 'bg-emerald-50 border border-emerald-100 text-emerald-600'
-              }`}>
-                {isAttendanceShortage ? <AlertTriangle className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-              </div>
-              <div>
-                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Standing</span>
-                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full inline-block leading-tight ${
-                  isAttendanceShortage
-                    ? 'bg-red-50 text-red-700 border border-red-200'
-                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                }`}>
-                  {isAttendanceShortage ? 'Attendance Shortage Alert' : 'Good Standing'}
-                </span>
-              </div>
-            </div>
-
+          <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
+            {timeGreeting},
+          </span>
+          <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
+            Welcome back,
+          </span>
+          <div className="flex flex-wrap items-center gap-3 mt-1">
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
+              {student.name}
+            </h1>
             <Link
-              to="/student/resources"
-              className="group flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-blue-400 hover:bg-slate-50/50 transition-all cursor-pointer"
-              title="Access Staff Notes & Study Locker"
+              to="/profile"
+              title="View Profile & 3D ID Badge"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
             >
-              <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform shrink-0">
-                <FolderDown className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Resources</span>
-                <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
-                  Staff Notes & Locker
-                </span>
-              </div>
+              <span>View Profile & ID</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
 
-        {/* Big Bold Stats on Right (Matching reference 78, 56, 203) */}
-        <div className="flex items-center gap-6 sm:gap-10 self-start xl:self-auto">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <Award className="w-5 h-5 text-amber-500" />
+        {/* Segmented Student Metric Chips - Proper Cohesive Modern Design */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-mono font-bold text-xs shrink-0">
+              #
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
-                {summary.percentage}%
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Register No</span>
+              <span className="text-xs font-bold text-slate-900 font-mono block leading-tight">
+                {student.reg_no}
               </span>
-              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Internal Marks</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <ClipboardCheck className="w-5 h-5 text-emerald-600" />
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <div className="w-7 h-7 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+              <GraduationCap className="w-3.5 h-3.5" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
-                {attendancePerc}%
-              </span>
-              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Attendance</p>
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Academic Status</span>
+              <div className="flex items-center gap-1 leading-tight">
+                <select
+                  value={selectedSemester}
+                  onChange={(e) => setSelectedSemester(Number(e.target.value))}
+                  className="bg-transparent border-none font-bold text-xs text-slate-900 cursor-pointer focus:outline-none p-0 -ml-0.5"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                    <option key={num} value={num}>
+                      Semester {num}
+                    </option>
+                  ))}
+                </select>
+                <span className="text-xs font-bold text-slate-900">• Sec {student.section}</span>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <BookOpen className="w-5 h-5 text-indigo-600" />
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <div className="w-7 h-7 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
+              <BookOpen className="w-3.5 h-3.5 text-slate-600" />
             </div>
             <div>
-              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
-                {subjects.length}
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Department</span>
+              <span className="text-xs font-bold text-slate-900 block leading-tight truncate max-w-[200px]" title={student.department}>
+                {student.department}
               </span>
-              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Courses</p>
             </div>
           </div>
+
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <div className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
+              isAttendanceShortage ? 'bg-red-50 border border-red-100 text-red-600' : 'bg-emerald-50 border border-emerald-100 text-emerald-600'
+            }`}>
+              {isAttendanceShortage ? <AlertTriangle className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+            </div>
+            <div>
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Standing</span>
+              <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full inline-block leading-tight ${
+                isAttendanceShortage
+                  ? 'bg-red-50 text-red-700 border border-red-200'
+                  : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              }`}>
+                {isAttendanceShortage ? 'Attendance Shortage Alert' : 'Good Standing'}
+              </span>
+            </div>
+          </div>
+
+          <Link
+            to="/student/resources"
+            className="group flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-blue-400 hover:bg-slate-50/50 transition-all cursor-pointer"
+            title="Access Staff Notes & Study Locker"
+          >
+            <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform shrink-0">
+              <FolderDown className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <span className="text-[12.5px] uppercase font-semibold tracking-[0.04em] text-[#475569] block leading-tight">Resources</span>
+              <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+                Staff Notes & Locker
+              </span>
+            </div>
+          </Link>
         </div>
       </div>
 

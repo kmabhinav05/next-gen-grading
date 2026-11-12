@@ -13,7 +13,6 @@ import {
   Circle,
   Clock,
   GraduationCap,
-  FileSpreadsheet,
   Award,
   AlertTriangle,
   Send,
@@ -93,39 +92,37 @@ export const StaffDashboard = () => {
   const filteredSubjects = selectedSemester
     ? assignedSubjects.filter((s) => String(s.semester || s.semester_number) === String(selectedSemester))
     : assignedSubjects;
-  const recentLogs = data?.recent_logs || [];
   const totalEnrolled = assignedSubjects.reduce((acc, s) => acc + (s.enrolled_students || 0), 0) || 6;
   const timeGreeting = getTimeGreeting();
 
   return (
     <div className="space-y-6">
-      {/* 1. HERO HEADER ROW (Matching Reference Design) */}
-      <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
+      {/* 1. HERO HEADER ROW */}
+      <div className="space-y-4 pb-2">
         <div>
-          <div>
-            <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
-              {timeGreeting},
-            </span>
-            <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
-              Welcome back,
-            </span>
-            <div className="flex flex-wrap items-center gap-3 mt-1">
-              <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
-                {data?.staff_name || 'Arjun Menon'}
-              </h1>
-              <Link
-                to="/profile"
-                title="View Profile & 3D ID Badge"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
-              >
-                <span>View Profile & ID</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+          <span className="text-sm sm:text-base font-bold text-[#B45309] block tracking-wide">
+            {timeGreeting},
+          </span>
+          <span className="text-xl sm:text-2xl font-semibold text-[#334155] block mt-0.5">
+            Welcome back,
+          </span>
+          <div className="flex flex-wrap items-center gap-3 mt-1">
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.3]">
+              {data?.staff_name || 'Arjun Menon'}
+            </h1>
+            <Link
+              to="/profile"
+              title="View Profile & 3D ID Badge"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white text-xs font-bold shadow-2xs hover:shadow-xs transition-all"
+            >
+              <span>View Profile & ID</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
+        </div>
 
-          {/* Segmented Teaching Metric Chips - Proper Cohesive Modern Design */}
-          <div className="flex flex-wrap items-center gap-3 mt-4">
+        {/* Segmented Teaching Metric Chips - Proper Cohesive Modern Design */}
+        <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
               <div className="w-7 h-7 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
                 <GraduationCap className="w-3.5 h-3.5 text-blue-600" />
@@ -198,46 +195,6 @@ export const StaffDashboard = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Big Bold Stats on Right (Matching reference 78, 56, 203) */}
-        <div className="flex items-center gap-6 sm:gap-10 self-start xl:self-auto">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <GraduationCap className="w-5 h-5 text-indigo-600" />
-            </div>
-            <div>
-              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
-                {totalEnrolled}
-              </span>
-              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Enrolled</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <BookOpen className="w-5 h-5 text-amber-500" />
-            </div>
-            <div>
-              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
-                {assignedSubjects.length || 2}
-              </span>
-              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Subjects</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-white/80 border border-slate-200/80 text-slate-700 shadow-2xs">
-              <FileSpreadsheet className="w-5 h-5 text-emerald-600" />
-            </div>
-            <div>
-              <span className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight leading-[1.3]">
-                {recentLogs.length || 4}
-              </span>
-              <p className="text-[12.5px] font-semibold text-[#475569] tracking-[0.04em] uppercase">Excel Uploads</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* 2. TOP GRID OF 4 CARDS (Matching Reference Design) */}

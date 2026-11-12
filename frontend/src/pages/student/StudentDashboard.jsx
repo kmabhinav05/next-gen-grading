@@ -736,44 +736,14 @@ export const StudentDashboard = () => {
               </div>
             </div>
 
-            {/* Interactive Slider with Quick Presets */}
+            {/* Interactive Slider */}
             <div className="space-y-2 pt-1">
-              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-[#475569]">
                   {simMode === 'attend'
-                    ? 'Simulate attending next lectures'
-                    : 'Simulate missing upcoming lectures'}
+                    ? `Simulate attending next ${extraClassesToSimulate} ${extraClassesToSimulate === 1 ? 'lecture' : 'lectures'}`
+                    : `Simulate missing upcoming ${extraClassesToSimulate} ${extraClassesToSimulate === 1 ? 'lecture' : 'lectures'}`}
                 </span>
-                <div className="flex items-center gap-1.5">
-                  {[1, 5, 10, 20, 30].map((val) => (
-                    <button
-                      key={val}
-                      type="button"
-                      onClick={() => {
-                        playHapticChime();
-                        setExtraClassesToSimulate(val);
-                      }}
-                      className={`px-2 py-0.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                        extraClassesToSimulate === val
-                          ? simMode === 'attend'
-                            ? 'bg-cyan-600 text-white shadow-2xs'
-                            : 'bg-rose-600 text-white shadow-2xs'
-                          : 'bg-slate-100 text-[#475569] hover:bg-slate-200'
-                      }`}
-                    >
-                      {simMode === 'attend' ? `+${val}` : `-${val}`}
-                    </button>
-                  ))}
-                  <span
-                    className={`ml-1 px-2.5 py-0.5 rounded-full font-bold font-mono text-xs ${
-                      simMode === 'attend'
-                        ? 'bg-cyan-50 text-cyan-800 border border-cyan-200'
-                        : 'bg-rose-50 text-rose-800 border border-rose-200'
-                    }`}
-                  >
-                    {simMode === 'attend' ? `+${extraClassesToSimulate}` : `-${extraClassesToSimulate}`} classes
-                  </span>
-                </div>
               </div>
 
               <input
@@ -881,7 +851,7 @@ export const StudentDashboard = () => {
               </span>
             </div>
 
-            {/* Context Baseline Strip & Quick Target Presets */}
+            {/* Context Baseline Strip */}
             <div className="flex flex-wrap items-center justify-between gap-2.5">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
                 <span className="text-[#475569] font-medium">Current Avg:</span>
@@ -891,26 +861,6 @@ export const StudentDashboard = () => {
                 <span className="ml-1 px-2 py-0.5 rounded-md font-semibold text-xs bg-amber-50 text-amber-900 border border-amber-200">
                   {currentSgpa} SGPA
                 </span>
-              </div>
-
-              <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-100 border border-slate-200/70 text-xs font-semibold">
-                {[75, 85, 90, 95].map((preset) => (
-                  <button
-                    key={preset}
-                    type="button"
-                    onClick={() => {
-                      playHapticChime();
-                      setTargetScorePercent(preset);
-                    }}
-                    className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                      targetScorePercent === preset
-                        ? 'bg-white text-amber-800 shadow-2xs font-bold'
-                        : 'text-[#475569] hover:text-slate-900'
-                    }`}
-                  >
-                    {preset}%
-                  </button>
-                ))}
               </div>
             </div>
 

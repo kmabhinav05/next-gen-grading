@@ -36,16 +36,16 @@ export function Component({
 
   return (
     <div
-      className="min-h-[100dvh] w-full relative overflow-x-hidden flex flex-col items-center justify-center p-4 sm:p-6"
+      className="min-h-[100dvh] w-full relative overflow-x-hidden flex flex-col items-center justify-center p-4 sm:p-6 bg-[#14161f]"
       style={{
-        backgroundImage: "url('/nature-bg.jpg')",
+        backgroundImage: "url('/login-bg.jpg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Soft natural golden hour & depth overlay */}
-      <div className="absolute inset-0 bg-black/15 backdrop-brightness-[0.98] pointer-events-none" />
+      {/* Ambient slate depth overlay for frosted glass legibility */}
+      <div className="absolute inset-0 bg-[#0f1118]/25 pointer-events-none" />
 
       {/* Floating Frosted Glass Login Container */}
       <div className="w-full max-w-[430px] relative z-10 space-y-3">

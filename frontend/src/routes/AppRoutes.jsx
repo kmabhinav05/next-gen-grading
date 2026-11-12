@@ -1,47 +1,58 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ProtectedRoute } from './ProtectedRoute';
 import { DashboardLayout } from '../layouts/DashboardLayout';
+import { Skeleton } from '../components/common/Skeleton';
 
-// Auth Pages (Directly imported for 0ms instant transitions & zero chunk loading errors)
-import { Login } from '../pages/auth/Login';
-import { Unauthorized } from '../pages/Unauthorized';
-import { NotFound } from '../pages/NotFound';
-import { SemesterResults } from '../pages/results/SemesterResults';
+const lazyNamed = (importer, exportName) =>
+  lazy(() => importer().then((mod) => ({ default: mod[exportName] || mod.default })));
+
+// Route-split page chunks so heavy dependencies (Three.js, PDF/Excel reports) load on demand
+const Login = lazyNamed(() => import('../pages/auth/Login'), 'Login');
+const Unauthorized = lazyNamed(() => import('../pages/Unauthorized'), 'Unauthorized');
+const NotFound = lazyNamed(() => import('../pages/NotFound'), 'NotFound');
+const SemesterResults = lazyNamed(() => import('../pages/results/SemesterResults'), 'SemesterResults');
 
 // Admin Pages
-import { AdminDashboard } from '../pages/admin/AdminDashboard';
-import { ManageStudents } from '../pages/admin/ManageStudents';
-import { ManageStaff } from '../pages/admin/ManageStaff';
-import { ManageParents } from '../pages/admin/ManageParents';
-import { ManageSubjects } from '../pages/admin/ManageSubjects';
-import { LinkParentStudent } from '../pages/admin/LinkParentStudent';
-import { AllReports } from '../pages/admin/AllReports';
+const AdminDashboard = lazyNamed(() => import('../pages/admin/AdminDashboard'), 'AdminDashboard');
+const ManageStudents = lazyNamed(() => import('../pages/admin/ManageStudents'), 'ManageStudents');
+const ManageStaff = lazyNamed(() => import('../pages/admin/ManageStaff'), 'ManageStaff');
+const ManageParents = lazyNamed(() => import('../pages/admin/ManageParents'), 'ManageParents');
+const ManageSubjects = lazyNamed(() => import('../pages/admin/ManageSubjects'), 'ManageSubjects');
+const LinkParentStudent = lazyNamed(() => import('../pages/admin/LinkParentStudent'), 'LinkParentStudent');
+const AllReports = lazyNamed(() => import('../pages/admin/AllReports'), 'AllReports');
 
 // Staff Pages
-import { StaffDashboard } from '../pages/staff/StaffDashboard';
-import { UploadMarks } from '../pages/staff/UploadMarks';
-import { EnterAttendance } from '../pages/staff/EnterAttendance';
-import { ClassReport } from '../pages/staff/ClassReport';
-import { StudentProgressCard } from '../pages/staff/StudentProgressCard';
+const StaffDashboard = lazyNamed(() => import('../pages/staff/StaffDashboard'), 'StaffDashboard');
+const UploadMarks = lazyNamed(() => import('../pages/staff/UploadMarks'), 'UploadMarks');
+const EnterAttendance = lazyNamed(() => import('../pages/staff/EnterAttendance'), 'EnterAttendance');
+const ClassReport = lazyNamed(() => import('../pages/staff/ClassReport'), 'ClassReport');
+const StudentProgressCard = lazyNamed(() => import('../pages/staff/StudentProgressCard'), 'StudentProgressCard');
 
 // Student Pages
-import { StudentDashboard } from '../pages/student/StudentDashboard';
-import { MyProgressCard } from '../pages/student/MyProgressCard';
-import { MyAttendance } from '../pages/student/MyAttendance';
-import { StudentResources } from '../pages/student/StudentResources';
+const StudentDashboard = lazyNamed(() => import('../pages/student/StudentDashboard'), 'StudentDashboard');
+const MyProgressCard = lazyNamed(() => import('../pages/student/MyProgressCard'), 'MyProgressCard');
+const MyAttendance = lazyNamed(() => import('../pages/student/MyAttendance'), 'MyAttendance');
+const StudentResources = lazyNamed(() => import('../pages/student/StudentResources'), 'StudentResources');
 
 // Parent Pages
-import { ParentDashboard } from '../pages/parent/ParentDashboard';
-import { ChildProgressCard } from '../pages/parent/ChildProgressCard';
-import { ChildAttendance } from '../pages/parent/ChildAttendance';
+const ParentDashboard = lazyNamed(() => import('../pages/parent/ParentDashboard'), 'ParentDashboard');
+const ChildProgressCard = lazyNamed(() => import('../pages/parent/ChildProgressCard'), 'ChildProgressCard');
+const ChildAttendance = lazyNamed(() => import('../pages/parent/ChildAttendance'), 'ChildAttendance');
 
-// Profile Page (All 4 Portals: 3D ID badge for Faculty/Student, Clean profile for Admin/Parent)
-import { Profile } from '../pages/profile/Profile';
+// Profile & Settings
+const Profile = lazyNamed(() => import('../pages/profile/Profile'), 'Profile');
+const Settings = lazyNamed(() => import('../pages/settings/Settings'), 'Settings');
 
-// Settings Page (All 4 Portals)
-import { Settings } from '../pages/settings/Settings';
+const RouteFallback = () => (
+  <div className="space-y-4 py-4">
+    <Skeleton className="h-16 rounded-3xl" />
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <Skeleton className="h-56 rounded-3xl" count={4} />
+    </div>
+  </div>
+);
 
 // Root redirect handler
 const RootRedirect = () => {
@@ -65,7 +76,8 @@ const RootRedirect = () => {
 
 export const AppRoutes = () => {
   return (
-    <Routes>
+    <Suspense fallback={<RouteFallback />}>
+      <Routes>
       <Route path="/" element={<RootRedirect />} />
       <Route path="/login" element={<Login />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
@@ -280,7 +292,8 @@ export const AppRoutes = () => {
       </Route>
 
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 };
 

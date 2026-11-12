@@ -68,7 +68,7 @@ export const BottomNav = () => {
   return (
     <nav
       aria-label="Mobile Bottom Navigation"
-      className="fixed bottom-0 inset-x-0 z-40 block md:hidden bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] pb-safe transition-all duration-300"
+      className="fixed bottom-0 inset-x-0 z-40 block md:hidden bg-white/95 border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] pb-safe transition-colors duration-200"
     >
       <div className="flex items-center justify-around h-15 max-w-md mx-auto px-2">
         {navLinks.map((item) => {

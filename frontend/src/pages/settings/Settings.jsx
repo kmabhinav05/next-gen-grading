@@ -301,7 +301,7 @@ export const Settings = () => {
       {/* TAB 1: General & UI Preferences */}
       {activeTab === 'general' && (
         <div className="space-y-6">
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
+          <div className="bg-white/90 rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
             <div>
               <h2 className="text-base font-extrabold text-slate-900 tracking-tight">Display & Density Preferences</h2>
               <p className="text-xs text-slate-500 mt-0.5">Customize UI comfort, real-time theme canvas tints, and layout spacing</p>
@@ -429,7 +429,7 @@ export const Settings = () => {
       {/* TAB 2: Academic & Grading Rules */}
       {activeTab === 'academic' && (
         <div className="space-y-6">
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
+          <div className="bg-white/90 rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
             <div>
               <h2 className="text-base font-extrabold text-slate-900 tracking-tight">Institutional Attendance Thresholds</h2>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -535,7 +535,7 @@ export const Settings = () => {
       {/* TAB 3: Notifications & Communication */}
       {activeTab === 'notifications' && (
         <div className="space-y-6">
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
+          <div className="bg-white/90 rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <h2 className="text-base font-extrabold text-slate-900 tracking-tight">Notification Channels & Automated Alerts</h2>
@@ -607,7 +607,7 @@ export const Settings = () => {
       {/* TAB 4: Security & Password */}
       {activeTab === 'security' && (
         <div className="space-y-6">
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
+          <div className="bg-white/90 rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
             <div>
               <h2 className="text-base font-extrabold text-slate-900 tracking-tight">Security Credentials & 2FA</h2>
               <p className="text-xs text-slate-500 mt-0.5">Manage your institutional credentials and device sessions</p>
@@ -738,7 +738,7 @@ export const Settings = () => {
       {/* TAB 5: Data & Backup */}
       {activeTab === 'data' && (
         <div className="space-y-6">
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
+          <div className="bg-white/90 rounded-3xl p-6 border border-slate-200/90 shadow-2xs space-y-6">
             <div>
               <h2 className="text-base font-extrabold text-slate-900 tracking-tight">Institutional Data Management & Backup</h2>
               <p className="text-xs text-slate-500 mt-0.5">Export academic configuration records or reset demo datasets</p>

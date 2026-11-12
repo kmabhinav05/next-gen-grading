@@ -96,7 +96,7 @@ export const DashboardLayout = () => {
     >
       {/* Outer Dashboard Rounded Canvas Shell with Dynamic Theme Tint */}
       <div
-        className={`max-w-[1440px] mx-auto min-h-[92dvh] ${activeTheme.canvas} rounded-[28px] sm:rounded-[38px] p-3.5 sm:p-7 md:p-8 shadow-2xl border transition-all duration-300 flex flex-col justify-between`}
+        className={`max-w-[1440px] mx-auto min-h-[92dvh] ${activeTheme.canvas} rounded-[28px] sm:rounded-[38px] p-3.5 sm:p-7 md:p-8 shadow-2xl border transition-colors duration-200 flex flex-col justify-between`}
       >
         {/* Top Floating Pill Navigation & Mobile Header */}
         <Navbar />

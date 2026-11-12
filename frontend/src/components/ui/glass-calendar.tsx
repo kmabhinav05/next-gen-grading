@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Settings, Plus, Edit2, ChevronLeft, ChevronRight } from "lucide-react";
 import { format, addMonths, subMonths, isSameDay, isToday } from "date-fns";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 // --- TYPE DEFINITIONS ---
@@ -24,7 +23,7 @@ export interface GlassCalendarProps extends React.HTMLAttributes<HTMLDivElement>
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 // --- MAIN COMPONENT ---
-export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps>(
+const GlassCalendarInner = React.forwardRef<HTMLDivElement, GlassCalendarProps>(
   ({ className, selectedDate: propSelectedDate, onDateSelect, onAddNote, onNewEvent, ...props }, ref) => {
     const [currentMonth, setCurrentMonth] = React.useState(propSelectedDate || new Date());
     const [selectedDate, setSelectedDate] = React.useState(propSelectedDate || new Date());
@@ -120,9 +119,9 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
       <div
         ref={ref}
         className={cn(
-          "w-full max-w-[360px] h-full rounded-3xl p-5 shadow-2xl overflow-hidden flex flex-col justify-between",
-          "bg-slate-900/95 backdrop-blur-xl border border-white/10",
-          "text-white font-sans transition-all duration-300",
+          "w-full max-w-[360px] h-full rounded-3xl p-5 shadow-xl overflow-hidden flex flex-col justify-between",
+          "bg-slate-900 border border-white/10",
+          "text-white font-sans transition-colors duration-200",
           className
         )}
         {...props}
@@ -168,15 +167,9 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
         {/* Date Display and Navigation */}
         <div className="my-5 flex items-center justify-between">
           <div>
-            <motion.p
-              key={format(currentMonth, "MMMM-yyyy")}
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/75"
-            >
+            <p className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/75">
               {format(currentMonth, "MMMM")}
-            </motion.p>
+            </p>
             <span className="text-xs text-white/40 font-mono font-medium">
               {format(currentMonth, "yyyy")} • Selected: {format(selectedDate, "MMM d")}
             </span>
@@ -214,25 +207,19 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
         </div>
 
         {/* 7-Column Days Grid (Full month calendar matching Windows 11 flyout) */}
-        <motion.div
-          key={`${viewMode}-${format(currentMonth, "yyyy-MM")}-${viewMode === "weekly" ? format(selectedDate, "yyyy-ww") : ""}`}
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.18 }}
-          className="grid grid-cols-7 gap-y-2 place-items-center"
-        >
+        <div className="grid grid-cols-7 gap-y-2 place-items-center">
           {displayDays.map((day) => {
-            const isSelected = isSameDay(day.date, selectedDate);
+            const isSelected = day.isSelected;
             const isCurrentMonth = day.isCurrentMonth;
-            const isCurrentToday = isToday(day.date);
+            const isCurrentToday = day.isToday;
 
             return (
               <button
-                key={format(day.date, "yyyy-MM-dd")}
+                key={`${day.date.getFullYear()}-${day.date.getMonth()}-${day.date.getDate()}`}
                 type="button"
                 onClick={() => handleDateClick(day.date)}
                 className={cn(
-                  "relative flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold select-none cursor-pointer transition-all duration-150",
+                  "relative flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold select-none cursor-pointer transition-colors duration-150",
                   isSelected
                     ? "bg-cyan-400 text-slate-950 font-extrabold shadow-lg shadow-cyan-400/35 scale-105 ring-2 ring-cyan-300/40"
                     : isCurrentMonth
@@ -240,7 +227,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
                     : "text-white/25 hover:text-white/60 hover:bg-white/5",
                   isCurrentToday && !isSelected && "ring-1 ring-cyan-400/40"
                 )}
-                title={format(day.date, "EEEE, MMMM d, yyyy")}
+                title={day.date.toDateString()}
               >
                 {day.date.getDate()}
                 {isCurrentToday && !isSelected && (
@@ -249,7 +236,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
               </button>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* Divider */}
         <div className="mt-4 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
@@ -267,7 +254,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
           <button
             type="button"
             onClick={() => onNewEvent?.(selectedDate)}
-            className="flex items-center space-x-1.5 rounded-xl bg-gradient-to-r from-pink-500/20 to-orange-400/20 border border-white/15 px-3 py-1.5 text-xs font-bold text-white shadow-md transition-all hover:bg-white/10 active:scale-95 cursor-pointer"
+            className="flex items-center space-x-1.5 rounded-xl bg-gradient-to-r from-pink-500/20 to-orange-400/20 border border-white/15 px-3 py-1.5 text-xs font-bold text-white shadow-md transition-colors hover:bg-white/10 active:scale-95 cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>New Event</span>
@@ -278,6 +265,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
   }
 );
 
-GlassCalendar.displayName = "GlassCalendar";
+GlassCalendarInner.displayName = "GlassCalendar";
 
+export const GlassCalendar = React.memo(GlassCalendarInner);
 export default GlassCalendar;

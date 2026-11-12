@@ -520,7 +520,7 @@ export const StaffDashboard = () => {
             {/* Bottom Status Bar */}
             <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
               <div className="flex items-center gap-1.5 font-medium">
-                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
                 <span>Faculty Schedule Synchronized</span>
               </div>
               <span className="text-xs font-semibold text-slate-400">
@@ -533,7 +533,7 @@ export const StaffDashboard = () => {
 
       {/* 3. STAFF SHORTAGE & REMEDIAL ADVISORY CENTER */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+        <div className="bg-white/90 rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-600" />
@@ -555,7 +555,7 @@ export const StaffDashboard = () => {
           </button>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+        <div className="bg-white/90 rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <ClipboardCheck className="w-4 h-4 text-indigo-600" />
@@ -578,7 +578,7 @@ export const StaffDashboard = () => {
       </div>
 
       {/* 4. PARENT COMMUNICATIONS & PTM CONSULTATION INBOX */}
-      <div className="bg-white/90 backdrop-blur-md rounded-[32px] p-6 border border-slate-200/80 shadow-2xs space-y-5">
+      <div className="bg-white/90 rounded-[32px] p-6 border border-slate-200/80 shadow-2xs space-y-5">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
@@ -589,7 +589,7 @@ export const StaffDashboard = () => {
                 <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-[1.3] flex items-center gap-2">
                   <span>Parent Communications & PTM Consultation Inbox</span>
                   {communications.filter((c) => c.status === 'Pending').length > 0 && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold uppercase tracking-wider animate-pulse">
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold uppercase tracking-wider">
                       {communications.filter((c) => c.status === 'Pending').length} Pending Action
                     </span>
                   )}

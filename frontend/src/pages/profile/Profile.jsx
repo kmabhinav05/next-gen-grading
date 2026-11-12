@@ -120,11 +120,11 @@ export const Profile = () => {
             <div className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 rounded-[32px] border border-amber-500/20 shadow-xl overflow-hidden p-2">
               {/* Top Interactive Ribbon */}
               <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 backdrop-blur-md border border-amber-500/30 shadow-md">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-amber-500/30 shadow-md">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span className="text-[11px] font-semibold text-amber-200">Metallic Gold Pass</span>
                 </div>
-                <span className="text-[10px] font-medium text-slate-300 bg-slate-800/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-slate-700/60 hidden sm:inline">
+                <span className="text-[10px] font-medium text-slate-300 bg-slate-800/60 px-2.5 py-1 rounded-full border border-slate-700/60 hidden sm:inline">
                   Drag to swing • Click to flip
                 </span>
               </div>
@@ -150,7 +150,7 @@ export const Profile = () => {
               </div>
 
               {/* Bottom Fixed Status Bar (Customization removed as requested) */}
-              <div className="bg-slate-900/90 backdrop-blur-md rounded-[20px] border border-amber-500/25 px-4 py-3 mx-2 mb-2 flex items-center justify-between text-xs">
+              <div className="bg-slate-900/90 rounded-[20px] border border-amber-500/25 px-4 py-3 mx-2 mb-2 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50"></span>
                   <span className="font-bold text-slate-200">Official Metallic Finish</span>
@@ -166,7 +166,7 @@ export const Profile = () => {
         {/* Right / Main Column: Detailed Academic Profile Information */}
         <div className={is3DCardSupported ? "lg:col-span-7 space-y-6" : "space-y-6"}>
           {/* User Hero Identity Card */}
-          <div className="bg-white/90 backdrop-blur-md rounded-[32px] p-6 border border-slate-200/90 shadow-2xs">
+          <div className="bg-white/90 rounded-[32px] p-6 border border-slate-200/90 shadow-2xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary-600 via-indigo-600 to-cyan-500 text-white flex items-center justify-center text-2xl font-black shadow-md">
@@ -213,7 +213,7 @@ export const Profile = () => {
           </div>
 
           {/* Academic & Placement Details */}
-          <div className="bg-white/90 backdrop-blur-md rounded-[32px] p-6 border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="bg-white/90 rounded-[32px] p-6 border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                 <Layers className="w-4 h-4 text-primary-600" />

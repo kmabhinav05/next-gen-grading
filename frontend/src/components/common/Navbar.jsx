@@ -217,6 +217,7 @@ export const Navbar = () => {
               activeHref={currentActiveHref}
               linkComponent={RouterLink}
               theme={isDark ? 'dark' : 'light'}
+              surface="solid"
               layout="split"
               itemStyle="pill"
               hoverEffect="fill"
@@ -236,7 +237,7 @@ export const Navbar = () => {
             <Link
               to="/settings"
               title="System Settings & Preferences"
-              className="p-2.5 rounded-full bg-white/80 border border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-white shadow-2xs hover:shadow-xs transition-all flex items-center justify-center backdrop-blur-md min-h-[44px] min-w-[44px]"
+              className="p-2.5 rounded-full bg-white/95 border border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-white shadow-2xs transition-colors flex items-center justify-center min-h-[44px] min-w-[44px]"
             >
               <SettingsIcon className="w-4 h-4" />
             </Link>
@@ -246,11 +247,11 @@ export const Navbar = () => {
               type="button"
               onClick={() => setShowNotifications(!showNotifications)}
               title="Notifications"
-              className="p-2.5 rounded-full bg-white/80 border border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-white shadow-2xs hover:shadow-xs transition-all flex items-center justify-center relative backdrop-blur-md min-h-[44px] min-w-[44px]"
+              className="p-2.5 rounded-full bg-white/95 border border-slate-200/80 text-slate-500 hover:text-slate-800 hover:bg-white shadow-2xs transition-colors flex items-center justify-center relative min-h-[44px] min-w-[44px]"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-white absolute top-1.5 right-1.5 animate-pulse"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-white absolute top-1.5 right-1.5"></span>
               )}
             </button>
 
@@ -259,7 +260,7 @@ export const Navbar = () => {
               <Link
                 to="/profile"
                 title={isProfileSupported ? "View Profile & 3D Digital ID Badge" : "View Profile & Account Details"}
-                className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all backdrop-blur-md group min-h-[44px]"
+                className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/95 border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-colors group min-h-[44px]"
               >
                 <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs group-hover:scale-105 transition-transform">
                   {user?.full_name ? user.full_name[0] : (user?.username ? user.username[0].toUpperCase() : 'U')}
@@ -283,7 +284,7 @@ export const Navbar = () => {
                 type="button"
                 onClick={logout}
                 title="Sign out"
-                className="p-2.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-full border border-slate-200/80 bg-white/80 shadow-2xs hover:shadow-xs transition-all backdrop-blur-md min-h-[44px] min-w-[44px]"
+                className="p-2.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-full border border-slate-200/80 bg-white/95 shadow-2xs transition-colors min-h-[44px] min-w-[44px]"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -292,7 +293,7 @@ export const Navbar = () => {
         </div>
 
         {/* MOBILE TOPBAR (< lg breakpoint) */}
-        <div className="flex lg:hidden items-center justify-between gap-3 p-2 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs backdrop-blur-md">
+        <div className="flex lg:hidden items-center justify-between gap-3 p-2 rounded-2xl bg-white/95 border border-slate-200/80 shadow-2xs">
           {/* Left: Hamburger Drawer Trigger + Logo */}
           <div className="flex items-center gap-2.5">
             <button

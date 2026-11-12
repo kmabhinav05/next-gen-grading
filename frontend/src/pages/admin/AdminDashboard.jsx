@@ -492,7 +492,7 @@ export const AdminDashboard = () => {
             {/* Bottom Status Bar */}
             <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
               <div className="flex items-center gap-1.5 font-medium">
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                 <span>Directorate Agenda Synchronized</span>
               </div>
               <span className="text-xs font-medium text-[#475569]">
@@ -504,7 +504,7 @@ export const AdminDashboard = () => {
       </div>
 
       {/* 4. INSTITUTIONAL PARENT COMMUNICATIONS & ABSENCE CENTRAL REGISTER */}
-      <div className="bg-white/90 backdrop-blur-md rounded-[32px] p-6 border border-slate-200/80 shadow-2xs space-y-5">
+      <div className="bg-white/90 rounded-[32px] p-6 border border-slate-200/80 shadow-2xs space-y-5">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
@@ -515,7 +515,7 @@ export const AdminDashboard = () => {
                 <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-[1.3] flex items-center gap-2">
                   <span>Parent Communications, PTM & Absence Central Oversight</span>
                   {communications.filter((c) => c.status === 'Pending').length > 0 && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold uppercase tracking-wider animate-pulse">
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold uppercase tracking-wider">
                       {communications.filter((c) => c.status === 'Pending').length} Pending Review
                     </span>
                   )}
@@ -682,10 +682,10 @@ export const AdminDashboard = () => {
       </div>
 
       {/* 5. ADMIN SYSTEM HEALTH & SETTINGS STRIP */}
-      <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4 text-xs">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             <span className="font-bold text-slate-800">COE Engine Online</span>
             <span className="text-slate-400 font-mono text-xs">Latency 12ms</span>
           </div>

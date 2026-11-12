@@ -596,7 +596,7 @@ export const ParentDashboard = () => {
             {/* Bottom Status Bar */}
             <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#475569]">
               <div className="flex items-center gap-1.5 font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                 <span>Parent Consultation Slot Open</span>
               </div>
               <span className="text-xs font-medium text-[#475569]">
@@ -609,7 +609,7 @@ export const ParentDashboard = () => {
 
       {/* 3. PARENT ACTION CENTER: FACULTY CONSULTATION & ABSENCE INTIMATION */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+        <div className="bg-white/90 rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-emerald-600" />
@@ -631,7 +631,7 @@ export const ParentDashboard = () => {
           </button>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
+        <div className="bg-white/90 rounded-[28px] p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between space-y-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <FileCheck className="w-4 h-4 text-primary-600" />

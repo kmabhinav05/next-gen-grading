@@ -5,7 +5,7 @@ export const SemesterResults = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="bg-gradient-to-r from-primary-900 via-indigo-900 to-slate-900 text-white p-8 rounded-3xl shadow-lg border border-primary-800">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-amber-300 border border-white/10 mb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-semibold text-amber-300 border border-white/10 mb-4">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Upcoming Module • Next Gen Feature</span>
         </div>

@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { User, Lock, Eye, EyeOff, Check, Sparkles, ArrowRight } from 'lucide-react';
 import { Link as RouterLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -23,23 +22,6 @@ export function Component({
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-
-  // 3D smooth tilt effect
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-250, 250], [8, -8]);
-  const rotateY = useTransform(mouseX, [-250, 250], [-8, 8]);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left - rect.width / 2);
-    mouseY.set(e.clientY - rect.top - rect.height / 2);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,24 +47,14 @@ export function Component({
       {/* Soft natural golden hour & depth overlay */}
       <div className="absolute inset-0 bg-black/15 backdrop-brightness-[0.98] pointer-events-none" />
 
-      {/* Floating Frosted Glass Login Container with Fast Smooth Fade-in */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        className="w-full max-w-[430px] relative z-10"
-      >
-        <motion.div
-          style={{ rotateX, rotateY }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          className="relative transition-transform duration-200 ease-out"
-        >
+      {/* Floating Frosted Glass Login Container */}
+      <div className="w-full max-w-[430px] relative z-10">
+        <div className="relative">
           {/* Frosted Glass Outer Card */}
           <div
             className={cn(
               "relative rounded-[36px] p-7 sm:p-9",
-              "bg-white/[0.14] backdrop-blur-2xl",
+              "bg-white/[0.16] backdrop-blur-md",
               "border border-white/40 border-t-white/60",
               "shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.6)]",
               "text-white font-sans overflow-hidden"
@@ -218,8 +190,8 @@ export function Component({
 
             </form>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 }

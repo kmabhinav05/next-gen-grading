@@ -132,7 +132,7 @@ export const ChildAttendance = () => {
       {/* 2. STATS & COMPLIANCE 4-CARD GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Radial Dial Meter */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Aggregate Attendance</span>
             <span
@@ -182,7 +182,7 @@ export const ChildAttendance = () => {
         </div>
 
         {/* Card 2: Lecture Distribution */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Lectures Attended</span>
             <Clock className="w-4 h-4 text-slate-400" />
@@ -203,7 +203,7 @@ export const ChildAttendance = () => {
         </div>
 
         {/* Card 3: Safe Leave Cushion */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Attendance Cushion</span>
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
@@ -238,7 +238,7 @@ export const ChildAttendance = () => {
         </div>
 
         {/* Card 4: Course Compliance Status */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Course Compliance</span>
             <BookOpen className="w-4 h-4 text-indigo-600" />
@@ -273,7 +273,7 @@ export const ChildAttendance = () => {
       )}
 
       {/* 3. VISUAL ATTENDANCE BREAKDOWN TABLE & PROGRESS BARS */}
-      <div className="bg-white/90 backdrop-blur-md rounded-[32px] border border-slate-200/80 shadow-2xs overflow-hidden">
+      <div className="bg-white/90 rounded-[32px] border border-slate-200/80 shadow-2xs overflow-hidden">
         <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h3 className="text-sm font-bold text-slate-900 tracking-tight">

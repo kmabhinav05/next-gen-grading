@@ -98,6 +98,7 @@ export default defineConfig({
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'charts': ['chart.js', 'react-chartjs-2'],
           'motion': ['framer-motion'],
+          'three-vendor': ['three'],
           'icons': ['lucide-react', 'react-icons'],
           'query': ['@tanstack/react-query']
         }

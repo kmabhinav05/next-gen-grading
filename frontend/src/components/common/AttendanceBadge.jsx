@@ -21,7 +21,7 @@ export const AttendanceBadge = ({ percentage, showLabel = true, size = 'md' }) =
 
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full border ${colorClasses} ${sizeClasses}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`}></span>
+      <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></span>
       <span>{pct}%</span>
       {showLabel && <span className="opacity-75">({label})</span>}
     </span>

@@ -187,7 +187,7 @@ export const MyAttendance = () => {
       {/* 2. STATS & COMPLIANCE 4-CARD GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Radial Dial Meter */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Overall Attendance</span>
             <span
@@ -237,7 +237,7 @@ export const MyAttendance = () => {
         </div>
 
         {/* Card 2: Lecture Distribution */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Lectures Logged</span>
             <Clock className="w-4 h-4 text-slate-400" />
@@ -258,7 +258,7 @@ export const MyAttendance = () => {
         </div>
 
         {/* Card 3: Safe Leave Cushion */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Attendance Cushion</span>
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
@@ -293,7 +293,7 @@ export const MyAttendance = () => {
         </div>
 
         {/* Card 4: Course Compliance Status */}
-        <div className="bg-white/90 backdrop-blur-md rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
+        <div className="bg-white/90 rounded-[28px] p-5 shadow-2xs border border-slate-200/80 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-800">Course Compliance</span>
             <BookOpen className="w-4 h-4 text-indigo-600" />
@@ -328,7 +328,7 @@ export const MyAttendance = () => {
       )}
 
       {/* 3. VISUAL ATTENDANCE BREAKDOWN: DUAL-VIEW REGISTRY */}
-      <div className="bg-white/95 backdrop-blur-md rounded-[32px] border border-slate-200/90 shadow-sm overflow-hidden transition-all duration-300">
+      <div className="bg-white/95 rounded-[32px] border border-slate-200/90 shadow-sm overflow-hidden transition-all duration-300">
         {/* Header Controls: Filters & View Switcher */}
         <div className="p-5 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-gradient-to-r from-slate-50/60 via-white to-slate-50/40">
           <div>

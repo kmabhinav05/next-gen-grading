@@ -8,20 +8,13 @@ import {
   Users,
   BookOpen,
   ShieldCheck,
-  Award,
   ClipboardCheck,
   FileSpreadsheet,
   FolderDown,
   MessageSquare,
   Sparkles,
   ArrowRight,
-  Lock,
-  User,
-  Eye,
-  EyeOff,
   CheckCircle2,
-  Layers,
-  Activity,
   FileText,
   Calculator
 } from 'lucide-react';
@@ -143,9 +136,6 @@ export const PublicPortal = () => {
   const { login, isAuthenticated, role } = useAuth();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activePortalId, setActivePortalId] = useState('STUDENT');
 
@@ -187,22 +177,6 @@ export const PublicPortal = () => {
     }
   };
 
-  const handlePortalLogin = async (e) => {
-    e.preventDefault();
-    if (!email.trim() || !password) return;
-    setIsLoading(true);
-    try {
-      const loggedUser = await login(email.trim(), password);
-      if (loggedUser?.role) {
-        redirectByRole(loggedUser.role);
-      }
-    } catch {
-      // Handled with toast inside AuthContext
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleQuickRoleLogin = async (demoRole) => {
     const credentials = {
       ADMIN: { u: 'admin', p: 'admin123' },
@@ -234,14 +208,9 @@ export const PublicPortal = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <img src="/logo.png" alt="Next Gen Grading" className="w-8 h-8 object-contain" />
-            <div>
-              <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white block leading-none">
-                Next Gen Grading
-              </span>
-              <span className="text-xs text-[#475569] dark:text-zinc-400 font-medium">
-                Public Academic Portal
-              </span>
-            </div>
+            <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white leading-none">
+              Next Gen Grading
+            </span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[#475569] dark:text-zinc-300">
@@ -274,7 +243,7 @@ export const PublicPortal = () => {
                 to="/login"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition-opacity"
               >
-                <span>Full Login Page</span>
+                <span>Portal Login</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
@@ -287,146 +256,43 @@ export const PublicPortal = () => {
         wind={0.95}
         pleat={34}
         interactive={true}
-        className="min-h-[640px] lg:min-h-[700px] border-b border-zinc-200 dark:border-zinc-800"
+        className="min-h-[600px] lg:min-h-[660px] border-b border-zinc-200 dark:border-zinc-800"
       >
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 pointer-events-none">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Hero Intro & Project Overview */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-slate-800 dark:text-zinc-200 shadow-xs pointer-events-auto">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span>Next Gen Grading • Academic Assistance &amp; Assessment System</span>
-              </div>
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center pointer-events-none">
+          <div className="space-y-6 flex flex-col items-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-slate-800 dark:text-zinc-200 shadow-xs pointer-events-auto">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <span>Next Gen Grading • Academic Assistance &amp; Assessment System</span>
+            </div>
 
-              <div className="space-y-4">
-                <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-                  Transparent Grading, Attendance &amp; Campus Collaboration.
-                </h1>
-                <p className="text-base sm:text-lg text-[#334155] dark:text-zinc-300 leading-relaxed max-w-[62ch]">
-                  Explore all modules before signing in. Built for Administrators, Faculty, Students, and Parents with live IA analytics, 75% eligibility tracking, digital progress cards, and PTM workflows.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 pointer-events-auto">
-                <a
-                  href="#portals"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold text-sm shadow-sm hover:opacity-90 transition-opacity"
-                >
-                  <span>Read Project Features</span>
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-                <Link
-                  to="/login"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-zinc-300 dark:border-zinc-700 text-slate-800 dark:text-zinc-100 font-bold text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors shadow-xs"
-                >
-                  <span>Go to Login Screen</span>
-                </Link>
-              </div>
-
-              <p className="text-xs font-medium text-[#475569] dark:text-zinc-400">
-                Tip: Sweep your cursor across the curtain or drag any fold behind this section.
+            <div className="space-y-4">
+              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+                Transparent Grading, Attendance &amp; Campus Collaboration.
+              </h1>
+              <p className="text-base sm:text-lg text-[#334155] dark:text-zinc-300 leading-relaxed max-w-[62ch] mx-auto">
+                Explore all modules before signing in. Built for Administrators, Faculty, Students, and Parents with live IA analytics, 75% eligibility tracking, digital progress cards, and PTM workflows.
               </p>
             </div>
 
-            {/* Direct Public Portal Sign-In Card */}
-            <div className="lg:col-span-5 pointer-events-auto">
-              <div className="rounded-[28px] bg-white/95 dark:bg-zinc-900/95 border border-zinc-200 dark:border-zinc-800 p-6 sm:p-7 shadow-xl space-y-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
-                      Portal Sign In
-                    </h2>
-                    <p className="text-xs text-[#475569] dark:text-zinc-400 mt-1">
-                      Login directly from the public portal or use instant demo roles.
-                    </p>
-                  </div>
-                  <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
-                    <Lock className="w-4 h-4" />
-                  </div>
-                </div>
-
-                <form onSubmit={handlePortalLogin} className="space-y-3.5">
-                  <div>
-                    <label htmlFor="portal-username" className="text-xs font-semibold text-[#475569] dark:text-zinc-300 block mb-1">
-                      Username or Email
-                    </label>
-                    <div className="relative">
-                      <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                      <input
-                        id="portal-username"
-                        type="text"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="e.g. student1, staff_sharma, admin"
-                        autoComplete="username"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="portal-password" className="text-xs font-semibold text-[#475569] dark:text-zinc-300 block mb-1">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                      <input
-                        id="portal-password"
-                        type={showPassword ? 'text' : 'password'}
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter your password"
-                        autoComplete="current-password"
-                        className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 cursor-pointer"
-                      >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-slate-950 text-white font-bold text-sm transition-colors shadow-sm cursor-pointer disabled:opacity-70"
-                  >
-                    {isLoading ? 'Signing in...' : 'Sign In to Dashboard'}
-                  </button>
-                </form>
-
-                {/* Instant Role Demo Access */}
-                <div className="pt-3 border-t border-zinc-200/80 dark:border-zinc-800 space-y-2.5">
-                  <span className="text-xs font-semibold uppercase tracking-[0.04em] text-[#475569] dark:text-zinc-400 block">
-                    Quick Demo Role Sign-In
-                  </span>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {[
-                      { key: 'STUDENT', label: 'Student' },
-                      { key: 'STAFF', label: 'Staff' },
-                      { key: 'PARENT', label: 'Parent' },
-                      { key: 'ADMIN', label: 'Admin' }
-                    ].map((btn) => (
-                      <button
-                        key={btn.key}
-                        type="button"
-                        disabled={isLoading}
-                        onClick={() => handleQuickRoleLogin(btn.key)}
-                        className="px-2.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-xs font-bold transition-colors cursor-pointer"
-                      >
-                        {btn.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-wrap items-center justify-center gap-3 pointer-events-auto">
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold text-sm shadow-sm hover:opacity-90 transition-opacity"
+              >
+                <span>Sign In to Portal</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <a
+                href="#portals"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-zinc-300 dark:border-zinc-700 text-slate-800 dark:text-zinc-100 font-bold text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors shadow-xs"
+              >
+                <span>Read Project Features</span>
+              </a>
             </div>
+
+            <p className="text-xs font-medium text-[#475569] dark:text-zinc-400">
+              Tip: Sweep your cursor across the curtain or drag any fold behind this section.
+            </p>
           </div>
         </div>
       </DrapeBackground>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import DrapeBackground from '../../components/ui/DrapeBackground';
 import Carousel3D from '../../components/ui/Carousel3D';
-import { ThemeToggleHoldButton } from '../../components/common/ThemeToggleHoldButton';
+import PublicNavbar from '../../components/common/PublicNavbar';
 import {
   GraduationCap,
   Users,
@@ -230,54 +230,15 @@ export const PublicPortal = () => {
     PORTAL_MODULES.find((m) => m.id === activePortalId) || PORTAL_MODULES[0];
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans transition-colors duration-200">
-      {/* Top Public Navigation Header */}
-      <header className="sticky top-0 z-40 border-b border-zinc-200/80 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2.5 shrink-0">
-            <img src="/logo.png" alt="Next Gen Grading" className="w-8 h-8 object-contain" />
-            <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white leading-none">
-              Next Gen Grading
-            </span>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[#475569] dark:text-zinc-300">
-            <a href="#portals" className="hover:text-slate-950 dark:hover:text-white transition-colors">
-              Role Portals
-            </a>
-            <a href="#features" className="hover:text-slate-950 dark:hover:text-white transition-colors">
-              Core Functions
-            </a>
-            <a href="#workflow" className="hover:text-slate-950 dark:hover:text-white transition-colors">
-              Workflow
-            </a>
-          </nav>
-
-          <div className="flex items-center gap-2.5">
-            <div className="hidden sm:block">
-              <ThemeToggleHoldButton size="sm" />
-            </div>
-            {isAuthenticated ? (
-              <button
-                type="button"
-                onClick={() => redirectByRole(role)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition-opacity cursor-pointer"
-              >
-                <span>Open Dashboard</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            ) : (
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-950 text-xs font-bold hover:opacity-90 transition-opacity"
-              >
-                <span>Portal Login</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
+    <div
+      id="home"
+      className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans transition-colors duration-200 scroll-smooth"
+    >
+      {/* Top Capsule Navigation Header matching worker public portal design */}
+      <PublicNavbar
+        isAuthenticated={isAuthenticated}
+        onOpenDashboard={() => redirectByRole(role)}
+      />
 
       {/* Hero Section powered by KokonutUI Interactive DrapeBackground */}
       <DrapeBackground
@@ -288,36 +249,68 @@ export const PublicPortal = () => {
       >
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 pointer-events-none">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left Side: Hero Copy & Actions */}
+            {/* Left Side: Hero Copy, Actions & Institutional Stats */}
             <div className="lg:col-span-6 space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-slate-800 dark:text-zinc-200 shadow-xs pointer-events-auto">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span>Next Gen Grading • Academic Assistance &amp; Assessment System</span>
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Learn From Today • Academic Department Assistance</span>
               </div>
 
               <div className="space-y-4">
                 <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-                  Transparent Grading, Attendance &amp; Campus Collaboration.
+                  The Best Way For{' '}
+                  <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+                    Your Learning
+                  </span>{' '}
+                  &amp; Grading.
                 </h1>
                 <p className="text-base sm:text-lg text-[#334155] dark:text-zinc-300 leading-relaxed max-w-[56ch] mx-auto lg:mx-0">
-                  Explore all modules before signing in. Built for Administrators, Faculty, Students, and Parents with live IA analytics, 75% eligibility tracking, digital progress cards, and PTM workflows.
+                  Our academic department assistance system delivers automated grading, batch Excel IA marks ingestion, mandatory 75% attendance tracking, and digital progress cards for students, faculty, and parents.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pointer-events-auto">
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold text-sm shadow-sm hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold text-sm shadow-[0_8px_20px_-6px_rgba(245,158,11,0.55)] transition-all"
                 >
-                  <span>Sign In to Portal</span>
+                  <span>Explore Portals</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <a
-                  href="#portals"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-zinc-300 dark:border-zinc-700 text-slate-800 dark:text-zinc-100 font-bold text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors shadow-xs"
+                  href="#about"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/95 dark:bg-zinc-900/95 border border-zinc-300 dark:border-zinc-700 text-slate-800 dark:text-zinc-100 font-bold text-sm hover:bg-white dark:hover:bg-zinc-800 transition-colors shadow-xs"
                 >
                   <span>Read Project Features</span>
                 </a>
+              </div>
+
+              {/* Public Portal Key Stats Bar */}
+              <div className="grid grid-cols-3 gap-4 sm:gap-6 px-5 py-3.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-zinc-200 dark:border-white/10 shadow-xs pointer-events-auto w-full max-w-md">
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-amber-600 dark:text-amber-400 leading-tight">
+                    10+
+                  </p>
+                  <p className="text-[11px] font-medium text-slate-600 dark:text-zinc-400">
+                    Institutions
+                  </p>
+                </div>
+                <div className="border-x border-zinc-200 dark:border-white/10 px-3">
+                  <p className="text-xl sm:text-2xl font-extrabold text-amber-600 dark:text-amber-400 leading-tight">
+                    500+
+                  </p>
+                  <p className="text-[11px] font-medium text-slate-600 dark:text-zinc-400">
+                    Students Managed
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-amber-600 dark:text-amber-400 leading-tight">
+                    100%
+                  </p>
+                  <p className="text-[11px] font-medium text-slate-600 dark:text-zinc-400">
+                    Automated PTM
+                  </p>
+                </div>
               </div>
 
               <p className="text-xs font-medium text-[#475569] dark:text-zinc-400">
@@ -333,17 +326,17 @@ export const PublicPortal = () => {
         </div>
       </DrapeBackground>
 
-      {/* Section 1: Role-Based Portals Explorer */}
-      <section id="portals" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
-        <div className="space-y-2 max-w-[70ch]">
+      {/* Section 1 (#about & #portals): Platform Capabilities & Role-Based Portals Explorer */}
+      <section id="about" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10 scroll-mt-20">
+        <div id="portals" className="space-y-2 max-w-[70ch]">
           <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
-            4 Dedicated Workspaces
+            Platform Capabilities • 4 Dedicated Workspaces
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
-            Role Portals &amp; Functional Modules
+            Built for Effortless Academic Excellence
           </h2>
           <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-400 leading-relaxed">
-            Every stakeholder receives tailored dashboards, permission-guarded routes, and specialized academic workflows. Select any portal tab below to inspect its built-in functions.
+            Empowering administrators, faculty, students, and parents with seamless role-tailored portals, batch Excel schema validation, real-time attendance analytics, and automated digital progress cards.
           </p>
         </div>
 
@@ -417,7 +410,7 @@ export const PublicPortal = () => {
       </section>
 
       {/* Section 2: Core System Functions Grid */}
-      <section id="features" className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 py-16">
+      <section id="features" className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 py-16 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="space-y-2 max-w-[70ch]">
             <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
@@ -427,7 +420,7 @@ export const PublicPortal = () => {
               Core Features &amp; Project Functions
             </h2>
             <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-400 leading-relaxed">
-              Designed for accuracy, instant feedback, and transparent communication between departments and families.
+              High-throughput Excel ingestion, automated 75% attendance compliance audits, interactive physics simulators, and PTM-ready digital progress cards.
             </p>
           </div>
 
@@ -455,66 +448,88 @@ export const PublicPortal = () => {
         </div>
       </section>
 
-      {/* Section 3: Academic Workflow */}
-      <section id="workflow" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
+      {/* Section 3: Workflow Pipeline (#how-it-works) */}
+      <section id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10 scroll-mt-20">
         <div className="space-y-2 max-w-[70ch]">
           <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
-            End-to-End Flow
+            End-to-End Pipeline
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
             How Next Gen Grading Works
           </h2>
+          <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-400 leading-relaxed">
+            Three streamlined steps from spreadsheet assessment ingestion to verified attendance statistics and digital progress cards.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
-              step: '01',
-              title: 'Configure & Enroll',
-              text: 'Administrators manage students, faculty, courses, and parent–ward linkages across semesters and sections.'
+              step: '01 / INGESTION',
+              title: 'Upload Assessment Marks',
+              text: 'Faculty download pre-populated Excel templates with department course codes and upload IA1 & IA2 marks with automated row validation.',
+              metric: 'Zero database commit errors on parse'
             },
             {
-              step: '02',
-              title: 'Ingest IA Marks & Attendance',
-              text: 'Faculty upload IA1 & IA2 Excel spreadsheets, log lecture attendance, and flag students falling under 75% compliance.'
+              step: '02 / ANALYTICS',
+              title: 'Compute Attendance & Stats',
+              text: 'The engine automatically calculates attendance percentages from stored session registers, LiquidGauge projections, and flags shortage cases.',
+              metric: 'Real-time 75% threshold audit'
             },
             {
-              step: '03',
-              title: 'Simulate, Review & Connect',
-              text: 'Students and Parents inspect progress cards, forecast SGPA and safe leaves with LiquidGauge, access notes, and schedule PTMs.'
+              step: '03 / PUBLISH',
+              title: 'Generate Progress Cards',
+              text: 'Official digital progress cards with institutional summaries are ready for instant student review, parent access, and PTM consultations.',
+              metric: 'Instant portal sync & printable cards'
             }
           ].map((item) => (
             <div
               key={item.step}
-              className="rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 space-y-3 shadow-2xs"
+              className="rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 flex flex-col justify-between gap-4 shadow-2xs"
             >
-              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 inline-block">
-                STEP {item.step}
-              </span>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">{item.title}</h3>
-              <p className="text-sm text-[#475569] dark:text-zinc-400 leading-relaxed">{item.text}</p>
+              <div className="space-y-3">
+                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-zinc-100 dark:text-slate-950 inline-block">
+                  {item.step}
+                </span>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                <p className="text-sm text-[#475569] dark:text-zinc-400 leading-relaxed">{item.text}</p>
+              </div>
+              <p className="pt-3 border-t border-zinc-200/70 dark:border-zinc-800 text-xs font-semibold text-amber-700 dark:text-amber-400">
+                {item.metric}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <footer className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#475569] dark:text-zinc-400">
-          <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Next Gen Grading" className="w-6 h-6 object-contain" />
-            <span className="font-bold text-slate-900 dark:text-white">Next Gen Grading</span>
-            <span>• Institutional Academic Assistance Platform</span>
+      {/* Footer CTA & Contact (#contact) */}
+      <footer id="contact" className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 py-10 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#475569] dark:text-zinc-400">
+          <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+            <div className="flex items-center gap-2">
+              <img src="/logo.png" alt="Next Gen Grading" className="w-6 h-6 object-contain" />
+              <span className="font-bold text-slate-900 dark:text-white">
+                Next Gen Grading • Academic Department Assistance
+              </span>
+            </div>
+            <span className="hidden sm:inline">•</span>
+            <span>© 2026 Next Gen Grading. All rights reserved.</span>
           </div>
-          <div className="flex items-center gap-4 font-semibold">
-            <a href="#portals" className="hover:text-slate-900 dark:hover:text-white">
-              Portals
+          <div className="flex flex-wrap items-center justify-center gap-4 font-semibold">
+            <a href="#home" className="hover:text-slate-900 dark:hover:text-white">
+              Home
+            </a>
+            <a href="#about" className="hover:text-slate-900 dark:hover:text-white">
+              About
             </a>
             <a href="#features" className="hover:text-slate-900 dark:hover:text-white">
               Features
             </a>
-            <Link to="/login" className="text-slate-900 dark:text-white hover:underline">
-              Sign In →
+            <a href="#how-it-works" className="hover:text-slate-900 dark:hover:text-white">
+              How It Works
+            </a>
+            <Link to="/login" className="text-teal-700 dark:text-teal-400 hover:underline">
+              Portal Login →
             </Link>
           </div>
         </div>

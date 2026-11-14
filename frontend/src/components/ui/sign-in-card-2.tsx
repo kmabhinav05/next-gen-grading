@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { User, Lock, Eye, EyeOff, Check, Sparkles, ArrowRight } from 'lucide-react';
 import { Link as RouterLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import Grainient from './Grainient';
 
 export interface SignInCardProps {
   onLoginSubmit?: (credentials: { email: string; password: string; rememberMe: boolean }) => void;
@@ -35,17 +36,22 @@ export function Component({
   };
 
   return (
-    <div
-      className="min-h-[100dvh] w-full relative overflow-x-hidden flex flex-col items-center justify-center p-4 sm:p-6 bg-[#14161f]"
-      style={{
-        backgroundImage: "url('/login-bg.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      {/* Ambient slate depth overlay for frosted glass legibility */}
-      <div className="absolute inset-0 bg-[#0f1118]/25 pointer-events-none" />
+    <div className="min-h-[100dvh] w-full relative overflow-hidden flex flex-col items-center justify-center p-4 sm:p-6 bg-[#0f1117]">
+      {/* Live Interactive Grainient Canvas from React Bits */}
+      <div className="absolute inset-0 w-full h-full pointer-events-auto">
+        <Grainient
+          colors={['#0f1117', '#1c1917', '#78350f', '#d97706', '#f59e0b', '#fed7aa']}
+          angle={55}
+          flow={0.8}
+          silk={0.35}
+          grainAmount={0.07}
+          interactive={true}
+          clickSwirl={true}
+        />
+      </div>
+
+      {/* Ambient vignette layer for login card focus */}
+      <div className="absolute inset-0 bg-black/25 pointer-events-none" />
 
       {/* Floating Frosted Glass Login Container */}
       <div className="w-full max-w-[430px] relative z-10 space-y-3">

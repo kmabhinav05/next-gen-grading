@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import DrapeBackground from '../../components/ui/DrapeBackground';
 import Carousel3D from '../../components/ui/Carousel3D';
+import AnimatedContent from '../../components/ui/AnimatedContent';
 import PublicNavbar from '../../components/common/PublicNavbar';
 import {
   GraduationCap,
@@ -258,7 +259,15 @@ export const PublicPortal = () => {
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Side: Hero Copy, Actions & Institutional Stats */}
-            <div className="lg:col-span-6 space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
+            <AnimatedContent
+              distance={60}
+              direction="vertical"
+              duration={0.85}
+              ease="power3.out"
+              trigger="mount"
+              delay={0.1}
+              className="lg:col-span-6 space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left"
+            >
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-slate-800 dark:text-zinc-200 shadow-xs pointer-events-auto">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                 <span>Learn From Today • Academic Department Assistance</span>
@@ -324,31 +333,50 @@ export const PublicPortal = () => {
               <p className="text-xs font-medium text-[#475569] dark:text-zinc-400">
                 Tip: Sweep your cursor across the curtain or drag any fold anywhere on this page.
               </p>
-            </div>
+            </AnimatedContent>
 
             {/* Right Side: Interactive 3D Carousel */}
-            <div className="lg:col-span-6 w-full flex items-center justify-center pointer-events-auto">
+            <AnimatedContent
+              distance={60}
+              direction="horizontal"
+              reverse={false}
+              duration={0.9}
+              ease="power3.out"
+              trigger="mount"
+              delay={0.25}
+              className="lg:col-span-6 w-full flex items-center justify-center pointer-events-auto"
+            >
               <Carousel3D slides={HERO_CAROUSEL_SLIDES} />
-            </div>
+            </AnimatedContent>
           </div>
         </section>
 
         {/* Section 1 (#about & #portals): Platform Capabilities & Role-Based Portals Explorer */}
         <section id="about" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10 scroll-mt-20">
-          <div id="portals" className="space-y-2 max-w-[70ch]">
-            <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
-              Platform Capabilities • 4 Dedicated Workspaces
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
-              Built for Effortless Academic Excellence
-            </h2>
-            <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed">
-              Empowering administrators, faculty, students, and parents with seamless role-tailored portals, batch Excel schema validation, real-time attendance analytics, and automated digital progress cards.
-            </p>
-          </div>
+          <AnimatedContent distance={40} direction="vertical" duration={0.8} ease="power3.out" threshold={0.15}>
+            <div id="portals" className="space-y-2 max-w-[70ch]">
+              <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
+                Platform Capabilities • 4 Dedicated Workspaces
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
+                Built for Effortless Academic Excellence
+              </h2>
+              <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed">
+                Empowering administrators, faculty, students, and parents with seamless role-tailored portals, batch Excel schema validation, real-time attendance analytics, and automated digital progress cards.
+              </p>
+            </div>
+          </AnimatedContent>
 
           {/* Interactive Portal Selector Pills */}
-          <div className="flex flex-wrap gap-2.5 pointer-events-auto">
+          <AnimatedContent
+            distance={35}
+            direction="vertical"
+            duration={0.8}
+            ease="power3.out"
+            threshold={0.15}
+            delay={0.1}
+            className="flex flex-wrap gap-2.5 pointer-events-auto"
+          >
             {PORTAL_MODULES.map((mod) => {
               const Icon = mod.icon;
               const isSelected = activePortalId === mod.id;
@@ -371,67 +399,79 @@ export const PublicPortal = () => {
                 </button>
               );
             })}
-          </div>
+          </AnimatedContent>
 
           {/* Selected Portal Detailed Spotlight Card */}
-          <div className="rounded-[28px] bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md border border-zinc-200/80 dark:border-white/10 p-6 sm:p-8 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pointer-events-auto">
-            <div className="lg:col-span-5 space-y-4">
-              <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${selectedPortal.accent}`}>
-                {selectedPortal.badge}
-              </span>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-[1.3]">
-                {selectedPortal.title}
-              </h3>
-              <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed max-w-[60ch]">
-                {selectedPortal.summary}
-              </p>
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickRoleLogin(selectedPortal.id)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                >
-                  <span>Preview {selectedPortal.title}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+          <AnimatedContent distance={50} direction="vertical" duration={0.85} ease="power3.out" threshold={0.15} delay={0.15}>
+            <div className="rounded-[28px] bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md border border-zinc-200/80 dark:border-white/10 p-6 sm:p-8 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pointer-events-auto">
+              <div className="lg:col-span-5 space-y-4">
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${selectedPortal.accent}`}>
+                  {selectedPortal.badge}
+                </span>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-[1.3]">
+                  {selectedPortal.title}
+                </h3>
+                <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed max-w-[60ch]">
+                  {selectedPortal.summary}
+                </p>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => handleQuickRoleLogin(selectedPortal.id)}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                  >
+                    <span>Preview {selectedPortal.title}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="lg:col-span-7 space-y-3">
+                <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#475569] dark:text-zinc-400 block">
+                  Key Functions Included
+                </span>
+                <ul className="space-y-2.5">
+                  {selectedPortal.functions.map((fn, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/75 dark:bg-zinc-950/70 border border-zinc-200/70 dark:border-white/10 text-sm text-slate-800 dark:text-zinc-200 backdrop-blur-sm"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                      <span>{fn}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-
-            <div className="lg:col-span-7 space-y-3">
-              <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#475569] dark:text-zinc-400 block">
-                Key Functions Included
-              </span>
-              <ul className="space-y-2.5">
-                {selectedPortal.functions.map((fn, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/75 dark:bg-zinc-950/70 border border-zinc-200/70 dark:border-white/10 text-sm text-slate-800 dark:text-zinc-200 backdrop-blur-sm"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                    <span>{fn}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          </AnimatedContent>
         </section>
 
         {/* Section 2 (#features): Core System Functions Grid */}
         <section id="features" className="relative border-t border-zinc-200/60 dark:border-white/10 py-16 scroll-mt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            <div className="space-y-2 max-w-[70ch]">
-              <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
-                System Capabilities
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
-                Core Features &amp; Project Functions
-              </h2>
-              <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed">
-                High-throughput Excel ingestion, automated 75% attendance compliance audits, interactive physics simulators, and PTM-ready digital progress cards.
-              </p>
-            </div>
+            <AnimatedContent distance={40} direction="vertical" duration={0.8} ease="power3.out" threshold={0.15}>
+              <div className="space-y-2 max-w-[70ch]">
+                <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
+                  System Capabilities
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
+                  Core Features &amp; Project Functions
+                </h2>
+                <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed">
+                  High-throughput Excel ingestion, automated 75% attendance compliance audits, interactive physics simulators, and PTM-ready digital progress cards.
+                </p>
+              </div>
+            </AnimatedContent>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pointer-events-auto">
+            <AnimatedContent
+              distance={50}
+              direction="vertical"
+              duration={0.7}
+              ease="power3.out"
+              stagger={0.08}
+              threshold={0.1}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pointer-events-auto"
+            >
               {CORE_CAPABILITIES.map((cap, idx) => {
                 const Icon = cap.icon;
                 return (
@@ -451,25 +491,35 @@ export const PublicPortal = () => {
                   </div>
                 );
               })}
-            </div>
+            </AnimatedContent>
           </div>
         </section>
 
         {/* Section 3 (#how-it-works): Workflow Pipeline */}
         <section id="how-it-works" className="relative border-t border-zinc-200/60 dark:border-white/10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10 scroll-mt-20">
-          <div className="space-y-2 max-w-[70ch]">
-            <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
-              End-to-End Pipeline
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
-              How Next Gen Grading Works
-            </h2>
-            <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed">
-              Three streamlined steps from spreadsheet assessment ingestion to verified attendance statistics and digital progress cards.
-            </p>
-          </div>
+          <AnimatedContent distance={40} direction="vertical" duration={0.8} ease="power3.out" threshold={0.15}>
+            <div className="space-y-2 max-w-[70ch]">
+              <span className="text-[12.5px] font-semibold uppercase tracking-[0.04em] text-[#B45309] dark:text-amber-400 block">
+                End-to-End Pipeline
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.3]">
+                How Next Gen Grading Works
+              </h2>
+              <p className="text-sm sm:text-base text-[#475569] dark:text-zinc-300 leading-relaxed">
+                Three streamlined steps from spreadsheet assessment ingestion to verified attendance statistics and digital progress cards.
+              </p>
+            </div>
+          </AnimatedContent>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pointer-events-auto">
+          <AnimatedContent
+            distance={50}
+            direction="vertical"
+            duration={0.75}
+            ease="power3.out"
+            stagger={0.12}
+            threshold={0.1}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 pointer-events-auto"
+          >
             {[
               {
                 step: '01 / INGESTION',
@@ -506,13 +556,20 @@ export const PublicPortal = () => {
                 </p>
               </div>
             ))}
-          </div>
+          </AnimatedContent>
         </section>
 
         {/* Section 4 (#contact): Dedicated Contact & Department Inquiries */}
         <section id="contact" className="relative border-t border-zinc-200/60 dark:border-white/10 py-16 scroll-mt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto text-center space-y-6">
+            <AnimatedContent
+              distance={45}
+              direction="vertical"
+              duration={0.85}
+              ease="power3.out"
+              threshold={0.15}
+              className="max-w-3xl mx-auto text-center space-y-6"
+            >
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-slate-800 dark:text-zinc-200 shadow-xs pointer-events-auto">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                 <span>Academic Department Assistance 🏛️</span>
@@ -579,7 +636,7 @@ export const PublicPortal = () => {
                   <span>Send Direct Inquiry</span>
                 </a>
               </div>
-            </div>
+            </AnimatedContent>
           </div>
         </section>
 

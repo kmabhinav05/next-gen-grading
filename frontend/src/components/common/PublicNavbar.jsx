@@ -103,7 +103,7 @@ export const PublicNavbar = React.memo(function PublicNavbar({
   const isDark = mode === 'dark';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-200/80 dark:border-white/10 bg-white/95 dark:bg-[#181920]/95 transition-colors duration-200">
+    <header className="sticky top-0 z-40 border-b border-zinc-200/80 dark:border-white/10 bg-white/85 dark:bg-[#181920]/85 backdrop-blur-md transition-colors duration-200 pointer-events-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Left: Brand Wordmark */}
         <Link to="/" className="flex items-center gap-2.5 shrink-0">

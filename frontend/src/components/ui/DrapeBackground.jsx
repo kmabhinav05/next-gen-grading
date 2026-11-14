@@ -533,7 +533,9 @@ export default function DrapeBackground({
       const p = local(event);
       const index = nearest(p.x, p.y);
       if (index < 0) return;
-      event.preventDefault();
+      if (event.pointerType === 'mouse') {
+        event.preventDefault();
+      }
       root.setPointerCapture(event.pointerId);
       forces.grab = { index, ...p };
       forces.hand.on = false;
@@ -547,11 +549,11 @@ export default function DrapeBackground({
     };
 
     if (interactive && !reduceMotion) {
-      root.addEventListener('pointermove', onMove);
-      root.addEventListener('pointerleave', onLeave);
+      window.addEventListener('pointermove', onMove, { passive: true });
+      window.addEventListener('pointerleave', onLeave);
       root.addEventListener('pointerdown', onDown);
-      root.addEventListener('pointerup', onUp);
-      root.addEventListener('pointercancel', onUp);
+      window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onUp);
     }
 
     return () => {
@@ -560,11 +562,11 @@ export default function DrapeBackground({
       intersection.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
       window.clearInterval(colorTimer);
-      root.removeEventListener('pointermove', onMove);
-      root.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerleave', onLeave);
       root.removeEventListener('pointerdown', onDown);
-      root.removeEventListener('pointerup', onUp);
-      root.removeEventListener('pointercancel', onUp);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
       renderer.destroy();
     };
   }, [wind, pleat, interactive]);
